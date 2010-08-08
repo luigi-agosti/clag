@@ -1,0 +1,12 @@
+h1. Appengine library to easily share data with Android applications
+
+This is meant to be a easy to use library that will give you the ability to easily produce data for an Android application to consume and facilitate all the work of sync and update.
+
+In the future will integrate the ability to push message to the android application as well.
+
+h2. Design
+
+TODO 
+
+h2. Example
+
