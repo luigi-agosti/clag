@@ -7,32 +7,36 @@ h2. How to use it
 
 To use this library is very easy... Include it in your project class path, and in the web.xml make sure to have the configuration that contains.
 
-this is a easy sample: 
+this is a easy <a href="http://code.google.com/p/facebook-group-feed/source/browse/trunk/war/WEB-INF/web.xml">sample</a> around line 90
 
+<pre>
+<code>
 	<servlet>
                 <servlet-name>clag</servlet-name>
                 <servlet-class>novoda.clag.servlet.DataController</servlet-class>
                 <init-param>
-            <param-name>introspector</param-name>
-            <param-value>novoda.clag.introspector.jdo.JdoIntrospector</param-value>
-        </init-param>
-        <init-param>
-            <param-name>provider</param-name>
-            <param-value>novoda.clag.provider.gae.GaeContentProvider</param-value>
-        </init-param>
-        <init-param>
-            <param-name>converter</param-name>
-            <param-value>novoda.clag.converter.json.JsonConverter</param-value>
-        </init-param>
-        <init-param>
-            <param-name>contentClasses</param-name>
-            <param-value>org.ls.fgf.shared.Story</param-value> <!-- comma separated list of classes -->
-        </init-param>
-        </servlet> 
+			<param-name>introspector</param-name>
+			<param-value>novoda.clag.introspector.jdo.JdoIntrospector</param-value>
+		</init-param>
+		<init-param>
+			<param-name>provider</param-name>
+			<param-value>novoda.clag.provider.gae.GaeContentProvider</param-value>
+		</init-param>
+		<init-param>
+			<param-name>converter</param-name>
+			<param-value>novoda.clag.converter.json.JsonConverter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contentClasses</param-name>
+			<param-value>org.ls.fgf.shared.Story</param-value>
+		</init-param>
+	</servlet> 
         <servlet-mapping>
                 <servlet-name>clag</servlet-name>
                 <url-pattern>/data/*</url-pattern>
         </servlet-mapping>
+</code>
+</pre>
 
 
 h2. Design
@@ -47,7 +51,7 @@ The design is not complicated at all, there is a servlet, a converter, introspec
 
 h2. Example
 
-If you want to see and example code you can look at url[http://code.google.com/p/facebook-group-feed/].
+If you want to see and example code you can look at this<a href="http://code.google.com/p/facebook-group-feed/">example</a>
 
 h2. Will Do
 
