@@ -60,3 +60,4 @@ h2. Will Do
 * Check possible integration with google chrome extension.
 
 
+Please fill free to ask questions and give has critics.
