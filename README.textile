@@ -1,12 +1,60 @@
-h1. Appengine library to easily share data with Android applications
+h1. CLAG
 
+If you have an app engine project and you want to expose your data in a different format like, json this library may help you.
 This is meant to be a easy to use library that will give you the ability to easily produce data for an Android application to consume and facilitate all the work of sync and update.
 
-In the future will integrate the ability to push message to the android application as well.
+h2. How to use it
+
+To use this library is very easy... Include it in your project class path, and in the web.xml make sure to have the configuration that contains.
+
+this is a easy sample: 
+
+	<servlet>
+                <servlet-name>clag</servlet-name>
+                <servlet-class>novoda.clag.servlet.DataController</servlet-class>
+                <init-param>
+            <param-name>introspector</param-name>
+            <param-value>novoda.clag.introspector.jdo.JdoIntrospector</param-value>
+        </init-param>
+        <init-param>
+            <param-name>provider</param-name>
+            <param-value>novoda.clag.provider.gae.GaeContentProvider</param-value>
+        </init-param>
+        <init-param>
+            <param-name>converter</param-name>
+            <param-value>novoda.clag.converter.json.JsonConverter</param-value>
+        </init-param>
+        <init-param>
+            <param-name>contentClasses</param-name>
+            <param-value>org.ls.fgf.shared.Story</param-value> <!-- comma separated list of classes -->
+        </init-param>
+        </servlet> 
+        <servlet-mapping>
+                <servlet-name>clag</servlet-name>
+                <url-pattern>/data/*</url-pattern>
+        </servlet-mapping>
+
 
 h2. Design
 
-TODO 
+The design is not complicated at all, there is a servlet, a converter, introspector and a provider.
+
+* Servlet : has the responsabilities to initialize and redirect calls to the provider.
+* Converter : a converter is responsible to translate the Entity/Property into some format for example json.
+* Introspector : a introspector is used during the initialization to parse and extract from contentClasses a definition (Entity/Property) that can be then used for the generation of the schema or during the convertion.
+* Provider : it is a simple wrapper around the data. 
+ 
 
 h2. Example
+
+If you want to see and example code you can look at url[http://code.google.com/p/facebook-group-feed/].
+
+h2. Will Do
+
+* Expose data as csv, xml
+* Insert and Updates to complete integration with android
+
+
+
+
 
