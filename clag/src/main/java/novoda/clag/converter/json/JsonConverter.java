@@ -14,13 +14,17 @@ import com.google.appengine.repackaged.org.json.JSONStringer;
  */
 public class JsonConverter implements Converter {
 	
-	private static final String TABLE = "table";
+	private static final String TABLE = "name";
 
 	private static final String COLUMNS = "columns";
 	
 	private static final String NAME = "name";
 
 	private static final String TYPE = "type";
+	
+	private static final String KEY = "key";
+	
+	private static final String KEY_VALUE = "true";
 
 	@Override
 	public String convert(Entity entity) {
@@ -29,7 +33,11 @@ public class JsonConverter implements Converter {
 			jsonStringer.object().key(TABLE).value(entity.getName()).key(COLUMNS).array();
 			for(Property md : entity.getMetaDatas()) {
 				jsonStringer.object().key(NAME).value(md.getName())
-					.key(TYPE).value(md.getType()).endObject();
+					.key(TYPE).value(md.getType());
+				if(md.getIsKey()) {
+					jsonStringer.key(KEY).value(KEY_VALUE);
+				}
+				jsonStringer.endObject();
 			}
 			return jsonStringer.endArray().endObject().toString();
 		} catch(Exception e) {

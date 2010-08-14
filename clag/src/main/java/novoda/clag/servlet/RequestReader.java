@@ -1,6 +1,7 @@
 package novoda.clag.servlet;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,6 +22,13 @@ public class RequestReader extends RequestWrapper {
 		String SORT_ORDER = "sortOrder";
 	}
 	
+	public RequestReader() {
+	}
+	
+	public RequestReader(Map<String, String[]> request) {
+		super(request);
+	}
+	
 	public RequestReader(HttpServletRequest request) {
 		super(request);
 	}
@@ -30,11 +38,27 @@ public class RequestReader extends RequestWrapper {
 	}
 
 	public boolean isSchema() {
-		return getParameterAsBoolean(Parameter.SCHEMA, false);
+		boolean contains = getParameterAsBooleanIfContained(Parameter.SCHEMA);
+		if(contains) {
+			return contains;
+		} else {
+			return getParameterAsBoolean(Parameter.SCHEMA, false);
+		}
 	}
 
 	public String getName() {
-		return getParameterAsString(Parameter.NAME);
+		String uri = getUri();
+		if(uri != null) {
+			int index = uri.lastIndexOf("/");
+			int terminalIndex = uri.lastIndexOf("?");
+			if(index > 0 && index + 1 < uri.length()) {
+				if(terminalIndex>0) {
+					return uri.substring(index + 1, terminalIndex);
+				}
+				return uri.substring(index + 1);
+			}
+		}
+		return null;
 	}
 
 	public String getSortOrder() {

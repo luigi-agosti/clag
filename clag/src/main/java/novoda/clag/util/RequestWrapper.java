@@ -14,9 +14,16 @@ public class RequestWrapper {
 	protected static final String DELIMITER = ",";
 	
 	private Map<String, String[]> parameterMap;
+	
+	private String uri;
+	
+	public RequestWrapper() {
+		
+	}
 
 	@SuppressWarnings("unchecked")
 	public RequestWrapper(HttpServletRequest request) {
+		this.uri = request.getRequestURI();
 		this.parameterMap = request.getParameterMap();
 	}
 
@@ -59,6 +66,10 @@ public class RequestWrapper {
         return returnValue;
     }
     
+    protected boolean getParameterAsBooleanIfContained(String parameterName) {
+        return parameterMap.containsKey(parameterName);
+    }
+    
     protected String getParameterAsString(String parameterName, String defaultValue) {
         String returnValue = defaultValue;
         String[] parameterValues = parameterMap.get(parameterName);
@@ -92,6 +103,14 @@ public class RequestWrapper {
     	} catch(ParseException pe) {
     		throw new RuntimeException("Impossible to parse string " + value + " to date");
     	}
+    }
+    
+    protected String getUri() {
+    	return uri;
+    }
+    
+    public void setUri(String uri) {
+    	this.uri = uri;
     }
     
 }

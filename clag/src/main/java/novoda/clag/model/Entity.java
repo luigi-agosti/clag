@@ -36,6 +36,10 @@ public class Entity {
 		mds.put(name, new Property.Builder(name).type(type).build()); 
 	}
 	
+	public void addKey(String name, String type) {
+		mds.put(name, new Property.Builder(name).type(type).isKey(true).build()); 
+	}
+	
 	public Collection<Property> getMetaDatas(){
 		return mds.values();
 	}

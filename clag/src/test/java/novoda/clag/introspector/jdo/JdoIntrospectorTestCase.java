@@ -1,6 +1,7 @@
 package novoda.clag.introspector.jdo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -38,6 +39,7 @@ public class JdoIntrospectorTestCase {
 		assertEquals(Introspector.Type.STRING, entity.getMetaData("caption").getType());
 		assertTrue(entity.contains("copy"));
 		assertEquals(Introspector.Type.STRING, entity.getMetaData("copy").getType());
+		
 	}
 
 	@Test
@@ -46,7 +48,16 @@ public class JdoIntrospectorTestCase {
 	}
 
 	@Test
-	public void shouldTheMapHaveTheId(){
-			
+	public void shouldTheMapHaveTheKey(){
+		Entity entity = new JdoIntrospector().getMetaDataSet(Story.class);
+		assertNotNull(entity);
+		
+		assertTrue(entity.contains("mediaHref"));
+		assertEquals(Introspector.Type.STRING, entity.getMetaData("mediaHref").getType());
+		assertFalse(entity.getMetaData("mediaHref").getIsKey());
+		
+		assertTrue(entity.contains("id"));
+		assertEquals(Introspector.Type.INTEGER, entity.getMetaData("id").getType());
+		assertTrue(entity.getMetaData("id").getIsKey());
 	}
 }

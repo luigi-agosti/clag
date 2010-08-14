@@ -45,8 +45,8 @@ public abstract class AbstractContentProvider implements ContentProvider {
 	public void add(Class<?> clazz) {
 		Entity entity = introspector.getMetaDataSet(clazz);
 		if(entity != null) {
-			logger.debug("Adding Entity : " + entity.getName());
-			entities.put(entity.getName(), entity);
+			logger.debug("Adding Entity : " + clazz.getSimpleName() + "," + clazz);
+			entities.put(clazz.getSimpleName(), entity);
 		} else {
 			throw new RuntimeException("Faild to getThe entity description out of the class " + clazz);
 		}
@@ -54,6 +54,10 @@ public abstract class AbstractContentProvider implements ContentProvider {
 	
 	@Override
 	public Entity schema(String name) {
+		if(!entities.containsKey(name)) {
+			logger.warn("Schema for entity name : " + name + " CANNOT be found!");
+			return null;
+		}
 		return entities.get(name);
 	}
 	
