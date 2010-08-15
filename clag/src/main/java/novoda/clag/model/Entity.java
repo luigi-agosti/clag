@@ -20,8 +20,17 @@ public class Entity {
 	
 	private String name;
 	
-	public Entity(String name) {
+	private String className;
+	
+	public Entity(String className, String name) {
+		this.className = className;
 		this.name = name;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Entity(Class clazz) {
+		this.className = clazz.getName();
+		this.name = clazz.getSimpleName();
 	}
 
 	public void add(String name, Property metaData) {
@@ -68,5 +77,13 @@ public class Entity {
 		for(Property md : mds.values()) {
 			logger.debug(md);
 		}
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public String getClassName() {
+		return className;
 	}
 }

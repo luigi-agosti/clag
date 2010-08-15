@@ -31,6 +31,6 @@ public interface Introspector {
 	 *  
 	 * @return
 	 */
-	Entity getMetaDataSet(@SuppressWarnings("unchecked") Class classToParse);
+	Entity extractMetaEntity(@SuppressWarnings("unchecked") Class classToParse);
 
 }

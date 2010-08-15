@@ -18,13 +18,13 @@ public class JdoIntrospectorTestCase {
 	
 	@Test
 	public void shouldGetNullResult() {
-		Entity jdo = new JdoIntrospector().getMetaDataSet(null);
+		Entity jdo = new JdoIntrospector().extractMetaEntity(null);
 		assertNull(jdo);
 	}
 	
 	@Test
 	public void shouldTheMapHaveTheStringMembersThatAreDeclaredWithAnnotationPersistent(){
-		Entity entity = new JdoIntrospector().getMetaDataSet(Story.class);
+		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));
@@ -43,13 +43,24 @@ public class JdoIntrospectorTestCase {
 	}
 
 	@Test
-	public void shouldTheMapHaveTheLongMembersThatAreDeclaredWithAnnotationPersistent(){
-		
+	public void shouldMetaEntityGiveBackCorrectNameClass(){
+		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
+		assertNotNull(entity);
+		assertNotNull(entity.getClassName());
+		assertEquals(Story.class.getName(), entity.getClassName());
+	}
+
+	@Test
+	public void shouldMetaEntityGiveBackCorrectName(){
+		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
+		assertNotNull(entity);
+		assertNotNull(entity.getName());
+		assertEquals(Story.class.getSimpleName(), entity.getName());
 	}
 
 	@Test
 	public void shouldTheMapHaveTheKey(){
-		Entity entity = new JdoIntrospector().getMetaDataSet(Story.class);
+		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));

@@ -43,7 +43,7 @@ public abstract class AbstractContentProvider implements ContentProvider {
 	
 	@Override
 	public void add(Class<?> clazz) {
-		Entity entity = introspector.getMetaDataSet(clazz);
+		Entity entity = introspector.extractMetaEntity(clazz);
 		if(entity != null) {
 			logger.debug("Adding Entity : " + clazz.getSimpleName() + "," + clazz);
 			entities.put(clazz.getSimpleName(), entity);

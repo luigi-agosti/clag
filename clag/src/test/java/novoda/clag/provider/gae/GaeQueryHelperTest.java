@@ -125,22 +125,5 @@ public class GaeQueryHelperTest {
 		assertEquals("x1", queryHelper.getFilters("property1 = ?, property2 = ?", new String[]{"x1", "x2"}).get(0).value);
 		assertEquals("x2", queryHelper.getFilters("property1 = ?, property2 = ?", new String[]{"x1", "x2"}).get(1).value);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

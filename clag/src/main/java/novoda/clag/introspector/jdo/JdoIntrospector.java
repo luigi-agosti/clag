@@ -3,6 +3,7 @@ package novoda.clag.introspector.jdo;
 import java.lang.reflect.Field;
 
 import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
 import novoda.clag.introspector.AbstractIntrospector;
 import novoda.clag.model.Entity;
@@ -19,8 +20,13 @@ public class JdoIntrospector extends AbstractIntrospector {
 	@Override
 	protected void filterFields(Field field, Entity mds) {
 		if(field.getAnnotation(Persistent.class) != null) {
-			logger.debug("adding property to map : <" + field.getName() + "," + getType(field.getType().getName()) + ">");
-			mds.add(field.getName(), getType(field.getType().getName()));
+			if(field.getAnnotation(PrimaryKey.class) != null) {
+				logger.debug("Adding field key : " + field.getName());
+				mds.addKey(field.getName(), getType(field.getType().getName()));
+			} else {
+				logger.debug("Adding field : " + field.getName());
+				mds.add(field.getName(), getType(field.getType().getName()));				
+			}
 		}
 	}
 }

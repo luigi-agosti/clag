@@ -1,8 +1,6 @@
 package novoda.clag.introspector;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,20 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import novoda.clag.model.Entity;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author luigi.agosti
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractIntrospector implements Introspector {
-
-	private static final Logger logger = Logger.getLogger(AbstractIntrospector.class);
 	
 	private static Map<String, String> TYPE_MAP = new HashMap<String, String>();
     static {
@@ -38,11 +29,11 @@ public abstract class AbstractIntrospector implements Introspector {
     }
 	
 	@Override
-	public Entity getMetaDataSet(Class classToParse) {
+	public Entity extractMetaEntity(Class classToParse) {
 		if(classToParse == null) {
 			return null;
 		}
-		Entity mds = new Entity(classToParse.getName());
+		Entity mds = new Entity(classToParse.getName(), classToParse.getSimpleName());
 		List<Field> allFields = new ArrayList<Field>();
 
 		allFields.addAll(Arrays.asList(classToParse.getDeclaredFields()));
@@ -55,21 +46,30 @@ public abstract class AbstractIntrospector implements Introspector {
 				allFields.addAll(Arrays.asList(superClass.getDeclaredFields()));
 			}
 		}
-		
-		for(Field field : allFields) {
-			if(field.getAnnotation(Persistent.class) != null) {
-				logger.debug("type : " + field.getType().getName());
-				logger.debug("adding property to map : <" + field.getName() + "," + getType(field.getType().getName()) + ">");
-				if(field.getAnnotation(PrimaryKey.class) != null) {
-					mds.addKey(field.getName(), getType(field.getType().getName()));
-				} else {
-					mds.add(field.getName(), getType(field.getType().getName()));
-				}
-			}
+		List<Class> classes = new ArrayList<Class>();
+		getClasses(classToParse, classes);
+		for(Field field : getFields(classes)) {
+			filterFields(field, mds);
 		}
 		return mds;
 	}
 	
 	protected abstract void filterFields(Field field, Entity mds);
+	
+	protected void getClasses(Class clazz, List<Class> classes) {
+		Class superClass = clazz.getSuperclass();
+		if(superClass != null) {
+			getClasses(superClass, classes);
+		}
+		classes.add(clazz);
+	}
+	
+	protected List<Field> getFields(List<Class> classes) {
+		List<Field> allFields = new ArrayList<Field>();
+		for(Class clazz : classes) {
+			allFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+		}
+		return allFields;
+	}
 	
 }

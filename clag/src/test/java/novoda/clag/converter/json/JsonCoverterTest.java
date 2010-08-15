@@ -75,7 +75,7 @@ public class JsonCoverterTest {
 	}
 
 	private Entity getSampleEntity() {
-		Entity entity = new Entity("Example");
+		Entity entity = new Entity("novoda.clag.Example", "Example");
 		entity.add(new Property.Builder("title").type(Introspector.Type.STRING)
 				.build());
 		entity.add(new Property.Builder("description").type(
