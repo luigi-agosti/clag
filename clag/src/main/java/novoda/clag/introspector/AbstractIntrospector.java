@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import novoda.clag.model.Entity;
+import novoda.clag.model.MetaEntity;
 
 /**
  * @author luigi.agosti
@@ -29,11 +29,11 @@ public abstract class AbstractIntrospector implements Introspector {
     }
 	
 	@Override
-	public Entity extractMetaEntity(Class classToParse) {
+	public MetaEntity extractMetaEntity(Class classToParse) {
 		if(classToParse == null) {
 			return null;
 		}
-		Entity mds = new Entity(classToParse.getName(), classToParse.getSimpleName());
+		MetaEntity mds = new MetaEntity(classToParse.getName(), classToParse.getSimpleName());
 		List<Field> allFields = new ArrayList<Field>();
 
 		allFields.addAll(Arrays.asList(classToParse.getDeclaredFields()));
@@ -54,7 +54,7 @@ public abstract class AbstractIntrospector implements Introspector {
 		return mds;
 	}
 	
-	protected abstract void filterFields(Field field, Entity mds);
+	protected abstract void filterFields(Field field, MetaEntity mds);
 	
 	protected void getClasses(Class clazz, List<Class> classes) {
 		Class superClass = clazz.getSuperclass();

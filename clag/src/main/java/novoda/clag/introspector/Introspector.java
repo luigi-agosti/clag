@@ -1,7 +1,7 @@
 
 package novoda.clag.introspector;
 
-import novoda.clag.model.Entity;
+import novoda.clag.model.MetaEntity;
 
 /**
  * @author luigi.agosti
@@ -31,6 +31,6 @@ public interface Introspector {
 	 *  
 	 * @return
 	 */
-	Entity extractMetaEntity(@SuppressWarnings("unchecked") Class classToParse);
+	MetaEntity extractMetaEntity(@SuppressWarnings("unchecked") Class classToParse);
 
 }

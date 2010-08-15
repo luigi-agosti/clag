@@ -2,7 +2,7 @@ package novoda.clag.mock;
 
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
-import novoda.clag.model.Entity;
+import novoda.clag.model.MetaEntity;
 
 /**
  * @author luigi.agosti
@@ -10,12 +10,12 @@ import novoda.clag.model.Entity;
 public class MockConverter implements Converter {
 
 	@Override
-	public String convert(Entity entity) {
+	public String convert(MetaEntity entity) {
 		return "convert mds";
 	}
 
 	@Override
-	public String convert(Cursor cursor, Entity entity) {
+	public String convert(Cursor cursor, MetaEntity entity) {
 		return "convert cursor";
 	}
 	

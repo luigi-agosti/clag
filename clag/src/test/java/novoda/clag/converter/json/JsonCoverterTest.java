@@ -1,11 +1,14 @@
 package novoda.clag.converter.json;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.Date;
+
 import novoda.clag.converter.Converter;
 import novoda.clag.introspector.Introspector;
 import novoda.clag.model.Cursor;
-import novoda.clag.model.Entity;
-import novoda.clag.model.Property;
+import novoda.clag.model.MetaEntity;
+import novoda.clag.model.MetaProperty;
 
 import org.junit.Test;
 
@@ -13,20 +16,18 @@ import org.junit.Test;
  * @author luigi.agosti
  */
 public class JsonCoverterTest {
-	
+
 	private Converter converter = new JsonConverter();
 
 	@Test
 	public void convertMetaDataSet() {
 		String result = converter.convert(getSampleEntity());
 
-		assertEquals(
-				"{\"name\":\"Example\",\"columns\":["
-						+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
-						+ "{\"name\":\"title\",\"type\":\"text\"}"
-						+ ",{\"name\":\"description\",\"type\":\"text\"}"
-						+ ",{\"name\":\"cost\",\"type\":\"integer\"}"
-						+ "]}", result);
+		assertEquals("{\"name\":\"Example\",\"columns\":["
+				+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
+				+ "{\"name\":\"title\",\"type\":\"text\"}"
+				+ ",{\"name\":\"description\",\"type\":\"text\"}"
+				+ ",{\"name\":\"cost\",\"type\":\"integer\"}" + "]}", result);
 	}
 
 	@Test
@@ -43,6 +44,17 @@ public class JsonCoverterTest {
 		assertEquals(
 				"[{\"title\":\"title value\",\"description\":\"description value\",\"cost\":1,\"id\":1}]",
 				result);
+	}
+
+	@Test
+	public void convertCursorWithDateField() {
+		Cursor cursor = new Cursor();
+		cursor.add("date", new Date(1));
+		cursor.next();
+
+		String result = converter.convert(cursor, getSampleEntity());
+
+		assertEquals("[{\"date\":1}]", result);
 	}
 
 	@Test
@@ -74,17 +86,17 @@ public class JsonCoverterTest {
 		assertEquals("[]", result);
 	}
 
-	private Entity getSampleEntity() {
-		Entity entity = new Entity("novoda.clag.Example", "Example");
-		entity.add(new Property.Builder("title").type(Introspector.Type.STRING)
-				.build());
-		entity.add(new Property.Builder("description").type(
+	private MetaEntity getSampleEntity() {
+		MetaEntity entity = new MetaEntity("novoda.clag.Example", "Example");
+		entity.add(new MetaProperty.Builder("title").type(
 				Introspector.Type.STRING).build());
-		entity.add(new Property.Builder("cost").type(Introspector.Type.INTEGER)
-				.build());
-		entity.add(new Property.Builder("id").type(Introspector.Type.INTEGER).isKey(true)
-				.build());
+		entity.add(new MetaProperty.Builder("description").type(
+				Introspector.Type.STRING).build());
+		entity.add(new MetaProperty.Builder("cost").type(
+				Introspector.Type.INTEGER).build());
+		entity.add(new MetaProperty.Builder("id").type(
+				Introspector.Type.INTEGER).isKey(true).build());
 		return entity;
 	}
-	
+
 }

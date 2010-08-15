@@ -7,7 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import novoda.clag.introspector.Introspector;
 import novoda.clag.introspector.jdo.sample.Story;
-import novoda.clag.model.Entity;
+import novoda.clag.model.MetaEntity;
 
 import org.junit.Test;
 
@@ -18,33 +18,33 @@ public class JdoIntrospectorTestCase {
 	
 	@Test
 	public void shouldGetNullResult() {
-		Entity jdo = new JdoIntrospector().extractMetaEntity(null);
+		MetaEntity jdo = new JdoIntrospector().extractMetaEntity(null);
 		assertNull(jdo);
 	}
 	
 	@Test
 	public void shouldTheMapHaveTheStringMembersThatAreDeclaredWithAnnotationPersistent(){
-		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaData("mediaHref").getType());
+		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaHref").getType());
 		assertTrue(entity.contains("groupId"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaData("groupId").getType());
+		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("groupId").getType());
 		assertTrue(entity.contains("title"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaData("title").getType());
+		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("title").getType());
 		assertTrue(entity.contains("mediaImageHref"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaData("mediaImageHref").getType());
+		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaImageHref").getType());
 		assertTrue(entity.contains("caption"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaData("caption").getType());
+		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("caption").getType());
 		assertTrue(entity.contains("copy"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaData("copy").getType());
+		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("copy").getType());
 		
 	}
 
 	@Test
 	public void shouldMetaEntityGiveBackCorrectNameClass(){
-		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
 		assertNotNull(entity);
 		assertNotNull(entity.getClassName());
 		assertEquals(Story.class.getName(), entity.getClassName());
@@ -52,7 +52,7 @@ public class JdoIntrospectorTestCase {
 
 	@Test
 	public void shouldMetaEntityGiveBackCorrectName(){
-		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
 		assertNotNull(entity);
 		assertNotNull(entity.getName());
 		assertEquals(Story.class.getSimpleName(), entity.getName());
@@ -60,15 +60,15 @@ public class JdoIntrospectorTestCase {
 
 	@Test
 	public void shouldTheMapHaveTheKey(){
-		Entity entity = new JdoIntrospector().extractMetaEntity(Story.class);
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaData("mediaHref").getType());
-		assertFalse(entity.getMetaData("mediaHref").getIsKey());
+		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaHref").getType());
+		assertFalse(entity.getMetaProperty("mediaHref").getIsKey());
 		
 		assertTrue(entity.contains("id"));
-		assertEquals(Introspector.Type.INTEGER, entity.getMetaData("id").getType());
-		assertTrue(entity.getMetaData("id").getIsKey());
+		assertEquals(Introspector.Type.INTEGER, entity.getMetaProperty("id").getType());
+		assertTrue(entity.getMetaProperty("id").getIsKey());
 	}
 }

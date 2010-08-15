@@ -6,7 +6,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import novoda.clag.introspector.AbstractIntrospector;
-import novoda.clag.model.Entity;
+import novoda.clag.model.MetaEntity;
 
 import org.apache.log4j.Logger;
 
@@ -18,7 +18,7 @@ public class JdoIntrospector extends AbstractIntrospector {
 	private static final Logger logger = Logger.getLogger(JdoIntrospector.class);
 
 	@Override
-	protected void filterFields(Field field, Entity mds) {
+	protected void filterFields(Field field, MetaEntity mds) {
 		if(field.getAnnotation(Persistent.class) != null) {
 			if(field.getAnnotation(PrimaryKey.class) != null) {
 				logger.debug("Adding field key : " + field.getName());

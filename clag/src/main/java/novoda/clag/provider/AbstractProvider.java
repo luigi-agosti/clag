@@ -1,0 +1,95 @@
+package novoda.clag.provider;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import novoda.clag.introspector.Introspector;
+import novoda.clag.model.Cursor;
+import novoda.clag.model.Options;
+import novoda.clag.model.MetaEntity;
+
+import org.apache.log4j.Logger;
+
+/**
+ * @author luigi.agosti
+ */
+public abstract class AbstractProvider implements Provider {
+
+	protected static final Logger logger = Logger
+			.getLogger(AbstractProvider.class);
+
+	protected Map<String, MetaEntity> entities = new HashMap<String, MetaEntity>();
+
+	protected Introspector introspector;
+
+	@Override
+	public void isConfigured() {
+		logger.debug("Checking configuration");
+		if (introspector == null) {
+			throw new RuntimeException(
+					"Introspector has not been set in the content provider");
+		} else {
+			logger.debug("Introspector is set.");
+		}
+		if (entities.isEmpty()) {
+			throw new RuntimeException(
+					"No Entity has been set in the content provider");
+		} else {
+			for (String entityKey : entities.keySet()) {
+				logger.debug("Entities are : " + entityKey);
+			}
+		}
+	}
+
+	@Override
+	public void setIntrospector(Introspector introspector) {
+		this.introspector = introspector;
+	}
+
+	@Override
+	public void add(Class<?> clazz) {
+		MetaEntity entity = introspector.extractMetaEntity(clazz);
+		if (entity != null) {
+			logger.debug("Adding Entity : " + clazz.getSimpleName() + ","
+					+ clazz);
+			entities.put(clazz.getSimpleName(), entity);
+		} else {
+			throw new RuntimeException(
+					"Faild to getThe entity description out of the class "
+							+ clazz);
+		}
+	}
+
+	@Override
+	public MetaEntity schema(String name) {
+		if (!entities.containsKey(name)) {
+			logger.warn("Schema for entity name : " + name
+					+ " CANNOT be found!");
+			return null;
+		}
+		return entities.get(name);
+	}
+
+	@Override
+	public Cursor query(String name, String[] projection, String selection,
+			String[] selectionArgs, String sortOrder) {
+		return query(name, projection, selection, selectionArgs, sortOrder,
+				schema(name));
+	}
+
+	@Override
+	public Cursor query(String name, String[] projection, String selection,
+			String[] selectionArgs, String sortOrder, MetaEntity entity) {
+		return query(name, projection, selection, selectionArgs, sortOrder,
+				entity, Options.getDefault());
+	}
+
+	@Override
+	public Cursor query(String name, String[] projection, String selection,
+			String[] selectionArgs, String sortOrder,
+			Options dataLimitation) {
+		return query(name, projection, selection, selectionArgs, sortOrder,
+				schema(name), dataLimitation);
+	}
+
+}

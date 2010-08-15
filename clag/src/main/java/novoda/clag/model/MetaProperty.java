@@ -6,7 +6,7 @@ package novoda.clag.model;
  * @author luigi.agosti
  * 
  */
-public class Property {
+public class MetaProperty {
 
 	private String name;
 
@@ -52,10 +52,10 @@ public class Property {
 	 * Builder
 	 */
 	public static final class Builder {
-		private Property md;
+		private MetaProperty md;
 
 		public Builder(String name) {
-			md = new Property();
+			md = new MetaProperty();
 			md.setName(name);
 		}
 
@@ -74,7 +74,7 @@ public class Property {
 			return this;
 		}
 
-		public Property build() {
+		public MetaProperty build() {
 			return md;
 		}
 	}

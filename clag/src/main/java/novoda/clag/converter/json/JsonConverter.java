@@ -1,11 +1,12 @@
 package novoda.clag.converter.json;
 
+import java.util.Date;
 import java.util.Map;
 
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
-import novoda.clag.model.Entity;
-import novoda.clag.model.Property;
+import novoda.clag.model.MetaEntity;
+import novoda.clag.model.MetaProperty;
 
 import com.google.appengine.repackaged.org.json.JSONStringer;
 
@@ -27,11 +28,11 @@ public class JsonConverter implements Converter {
 	private static final String KEY_VALUE = "true";
 
 	@Override
-	public String convert(Entity entity) {
+	public String convert(MetaEntity entity) {
 		try {
 			JSONStringer jsonStringer = new JSONStringer();
 			jsonStringer.object().key(TABLE).value(entity.getName()).key(COLUMNS).array();
-			for(Property md : entity.getMetaDatas()) {
+			for(MetaProperty md : entity.getMetaProperties()) {
 				jsonStringer.object().key(NAME).value(md.getName())
 					.key(TYPE).value(md.getType());
 				if(md.getIsKey()) {
@@ -46,14 +47,19 @@ public class JsonConverter implements Converter {
 	}
 
 	@Override
-	public String convert(Cursor cursor, Entity entity) {
+	public String convert(Cursor cursor, MetaEntity entity) {
 		try {
 			JSONStringer jsonStringer = new JSONStringer();
 			jsonStringer.array();
 			for(Map<String, Object> row : cursor.getRows()) {
 				jsonStringer.object();
 				for(String key : row.keySet()){
-					jsonStringer.key(key).value(row.get(key));
+					Object obj = row.get(key);
+					if(obj instanceof Date) {
+						jsonStringer.key(key).value(((Date)obj).getTime());
+					} else {
+						jsonStringer.key(key).value(row.get(key));
+					}
 				}
 				jsonStringer.endObject();
 			}

@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import novoda.clag.introspector.jdo.sample.Story;
-import novoda.clag.model.Entity;
+import novoda.clag.model.MetaEntity;
 
 @SuppressWarnings("unchecked")
 public class AbstractIntrospectorTest {
@@ -18,7 +18,7 @@ public class AbstractIntrospectorTest {
 	public void shouldGetAllTheClassesOfTheHierarchy() {
 		AbstractIntrospector ai = new AbstractIntrospector() {
 			@Override
-			protected void filterFields(Field field, Entity mds) {
+			protected void filterFields(Field field, MetaEntity mds) {
 			}
 		};
 		
