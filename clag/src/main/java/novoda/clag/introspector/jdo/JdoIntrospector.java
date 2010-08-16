@@ -1,11 +1,14 @@
 package novoda.clag.introspector.jdo;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import novoda.clag.introspector.AbstractIntrospector;
+import novoda.clag.introspector.annotation.IsChild;
+import novoda.clag.introspector.annotation.IsParent;
 import novoda.clag.model.MetaEntity;
 
 import org.apache.log4j.Logger;
@@ -28,5 +31,19 @@ public class JdoIntrospector extends AbstractIntrospector {
 				mds.add(field.getName(), getType(field.getType().getName()));				
 			}
 		}
+	}
+
+	@Override
+	protected MetaEntity analyseClass(Class clazz) {
+		MetaEntity mds = new MetaEntity(clazz.getName(), clazz.getSimpleName());
+		if(clazz.getAnnotation(IsChild.class) != null) {
+			IsChild a = (IsChild)clazz.getAnnotation(IsChild.class);
+			String parent = a.of();
+			
+			
+		} else if(clazz.getAnnotation(IsParent.class) != null) {
+			//TODO
+		}
+		return mds;
 	}
 }

@@ -20,6 +20,12 @@ public class AbstractIntrospectorTest {
 			@Override
 			protected void filterFields(Field field, MetaEntity mds) {
 			}
+
+			@Override
+			protected MetaEntity analyseClass(Class clazz) {
+				// TODO Auto-generated method stub
+				return null;
+			}
 		};
 		
 		List<Class> classes = new ArrayList<Class>();

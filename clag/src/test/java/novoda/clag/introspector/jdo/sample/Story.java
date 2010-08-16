@@ -3,10 +3,13 @@ package novoda.clag.introspector.jdo.sample;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
+import novoda.clag.introspector.annotation.IsChild;
+
 /**
  * @author Luigi Agosti <luigi.agosti@gmail.com>
  */
 @PersistenceCapable
+@IsChild(of="Group", through="groupId")
 public class Story extends FacebookModel {
 	
 	private static final long serialVersionUID = 1L;
