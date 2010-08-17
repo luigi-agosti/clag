@@ -7,6 +7,7 @@ import novoda.clag.introspector.jdo.sample.Page;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.MetaEntity;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -21,8 +22,9 @@ public class RelationOnJdoIntrospectorTestCase {
 		assertNull(entity.getParent());
 	}
 	
+	@Ignore
 	@Test
-	public void shouldParentNotNull(){
+	public void shouldBeParentNotNull(){
 		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
 		assertNotNull(entity);
 		

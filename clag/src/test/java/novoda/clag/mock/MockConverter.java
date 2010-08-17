@@ -12,18 +12,17 @@ public class MockConverter implements Converter {
 
 	@Override
 	public String convert(MetaEntity entity) {
-		return "convert mds";
+		return "schema";
 	}
 
 	@Override
 	public String convert(Cursor cursor, MetaEntity entity) {
-		return "convert cursor";
+		return "query";
 	}
 
 	@Override
 	public String describe(Context context) {
-		// TODO Auto-generated method stub
-		return null;
+		return "describe";
 	}
 	
 }

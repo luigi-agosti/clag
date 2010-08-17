@@ -1,6 +1,7 @@
 package novoda.clag.servlet.config;
 
 import novoda.clag.servlet.context.Context;
+import novoda.clag.servlet.context.ServiceInfo;
 import novoda.clag.util.Configurable;
 
 public interface Configurator extends Configurable {
@@ -18,5 +19,7 @@ public interface Configurator extends Configurable {
 	}
 
 	Context getContext();
+
+	ServiceInfo getServiceInfo();
 
 }

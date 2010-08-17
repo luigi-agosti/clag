@@ -9,6 +9,8 @@ import novoda.clag.introspector.Introspector;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
+import novoda.clag.provider.Provider;
+import novoda.clag.provider.gae.GaeProvider;
 import novoda.clag.servlet.context.Context;
 import novoda.clag.servlet.context.RestContext;
 import novoda.clag.servlet.context.ServiceInfo;
@@ -20,17 +22,19 @@ import org.junit.Test;
  */
 public class JsonCoverterTest {
 
+	private static final String EXAMPLE_JSON = "{\"name\":\"Example\",\"columns\":["
+		+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
+		+ "{\"name\":\"title\",\"type\":\"text\"}"
+		+ ",{\"name\":\"description\",\"type\":\"text\"}"
+		+ ",{\"name\":\"cost\",\"type\":\"integer\"}" + "]}";
+	
 	private Converter converter = new JsonConverter();
 
 	@Test
 	public void convertMetaDataSet() {
 		String result = converter.convert(getSampleEntity());
 
-		assertEquals("{\"name\":\"Example\",\"columns\":["
-				+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
-				+ "{\"name\":\"title\",\"type\":\"text\"}"
-				+ ",{\"name\":\"description\",\"type\":\"text\"}"
-				+ ",{\"name\":\"cost\",\"type\":\"integer\"}" + "]}", result);
+		assertEquals(EXAMPLE_JSON, result);
 	}
 
 	@Test
@@ -98,18 +102,39 @@ public class JsonCoverterTest {
 	@Test
 	public void describe() {
 		Context context = new RestContext();
+		context.setProvider(getSampleProvider());
 		ServiceInfo serviceInfo = new ServiceInfo();
+		serviceInfo.setName("testApplication");
+		serviceInfo.setVersion("1");
 		context.setServiceInfo(serviceInfo);
 		String result = converter.describe(context);
 		assertEquals(
-			"{name:\"\",version:\"\",status:\"\"," +
-				"services:\"\"[" +
-					"{}" +
+			"{\"name\":\"testApplication\",\"version\":\"1\"," +
+				"\"services\":[" +
+					"{\"get\":[\"Example\"]}" +
 				"]," +
-				"schema:\"[" +
-					"{}" +
-				"]\"" +
-			"]}", result);
+				"\"schema\":[" +
+					EXAMPLE_JSON +
+				"]" +
+			"}", result);
+	}
+
+	@Test
+	public void describeWithNoProvider() {
+		Context context = new RestContext();
+		ServiceInfo serviceInfo = new ServiceInfo();
+		serviceInfo.setName("testApplication");
+		serviceInfo.setVersion("1");
+		context.setServiceInfo(serviceInfo);
+		String result = converter.describe(context);
+		assertEquals(
+				"{\"name\":\"testApplication\",\"version\":\"1\"}", result);
+	}
+	
+	private Provider getSampleProvider() {
+		Provider provider = new GaeProvider();
+		provider.add(getSampleEntity());
+		return provider;
 	}
 
 	private MetaEntity getSampleEntity() {

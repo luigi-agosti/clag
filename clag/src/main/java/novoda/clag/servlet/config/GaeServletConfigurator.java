@@ -13,11 +13,14 @@ import novoda.clag.provider.Provider;
 import novoda.clag.provider.gae.GaeProvider;
 import novoda.clag.servlet.context.Context;
 import novoda.clag.servlet.context.RestContext;
+import novoda.clag.servlet.context.ServiceInfo;
 
 import org.apache.log4j.Logger;
 
+import com.google.appengine.api.utils.SystemProperty;
+
 @SuppressWarnings("unchecked")
-public class ServletConfigurator implements Configurator {
+public class GaeServletConfigurator implements Configurator {
 
 	private static final Logger logger = Logger.getLogger(Configurator.class);
 	
@@ -38,7 +41,7 @@ public class ServletConfigurator implements Configurator {
 	
 	private Converter converter;
 	
-	public ServletConfigurator(ServletConfig config) {
+	public GaeServletConfigurator(ServletConfig config) {
 		init(config);
 	}
 	
@@ -126,6 +129,14 @@ public class ServletConfigurator implements Configurator {
 			logger.error("IllegalAccessException while getting interpreter instance : ", e);
 			throw new RuntimeException("Interpreter is wrong");
 		}
+	}
+
+	@Override
+	public ServiceInfo getServiceInfo() {
+		ServiceInfo info = new ServiceInfo();
+		info.setName(SystemProperty.applicationId.get());
+		info.setVersion(SystemProperty.applicationVersion.get());
+		return info;
 	}
 	
 }

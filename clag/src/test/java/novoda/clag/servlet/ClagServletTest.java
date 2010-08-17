@@ -11,11 +11,9 @@ import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.mock.MockProvider;
 import novoda.clag.mock.MockConverter;
 import novoda.clag.servlet.config.Configurator;
-import novoda.clag.servlet.context.Context;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -65,7 +63,7 @@ public class ClagServletTest {
 		WebResponse response = sc.getResponse(request);
 		assertNotNull("No response received", response);
 		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "convert cursor", response.getText());
+		assertEquals("requested resource", "query", response.getText());
 	}
 
 	@Test
@@ -75,7 +73,7 @@ public class ClagServletTest {
 		WebResponse response = sc.getResponse(request);
 		assertNotNull("No response received", response);
 		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "convert cursor", response.getText());
+		assertEquals("requested resource", "query", response.getText());
 	}
 
 	@Test
@@ -86,7 +84,7 @@ public class ClagServletTest {
 		WebResponse response = sc.getResponse(request);
 		assertNotNull("No response received", response);
 		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "convert cursor", response.getText());
+		assertEquals("requested resource", "query", response.getText());
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -105,7 +103,7 @@ public class ClagServletTest {
 		WebResponse response = sc.getResponse(request);
 		assertNotNull("No response received", response);
 		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "convert mds", response.getText());
+		assertEquals("requested resource", "schema", response.getText());
 	}
 	
 	@Test
@@ -115,7 +113,7 @@ public class ClagServletTest {
 		WebResponse response = sc.getResponse(request);
 		assertNotNull("No response received", response);
 		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "convert mds", response.getText());
+		assertEquals("requested resource", "schema", response.getText());
 	}
 
 	@Test
@@ -125,7 +123,17 @@ public class ClagServletTest {
 		WebResponse response = sc.getResponse(request);
 		assertNotNull("No response received", response);
 		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "convert mds", response.getText());
+		assertEquals("requested resource", "schema", response.getText());
+	}
+
+	@Test
+	public void shouldRespondWithDescribe() throws IOException, SAXException {
+		request = new GetMethodWebRequest(
+		"http://test.meterware.com/data/");
+		WebResponse response = sc.getResponse(request);
+		assertNotNull("No response received", response);
+		assertEquals("content type", "text/plain", response.getContentType());
+		assertEquals("requested resource", "describe", response.getText());
 	}
 
 }

@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import novoda.clag.servlet.action.Describe;
 import novoda.clag.servlet.action.Query;
 import novoda.clag.servlet.action.Schema;
 import novoda.clag.servlet.config.Configurator;
-import novoda.clag.servlet.config.ServletConfigurator;
+import novoda.clag.servlet.config.GaeServletConfigurator;
 import novoda.clag.servlet.context.Context;
 
 import org.apache.log4j.Logger;
@@ -37,7 +38,7 @@ public class ClagServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		configurator = new ServletConfigurator(config);
+		configurator = new GaeServletConfigurator(config);
 	}
 
 	@Override
@@ -47,15 +48,21 @@ public class ClagServlet extends HttpServlet {
 		Context context = configurator.getContext();
 		context.setRequest(req);
 		String result = null;
-		if (context.isSchema()) {
-			logger.debug("Executing schema");
-			result = new Schema().execute(context);
-		} else if (context.isQuery()) {
-			logger.debug("Executing query");
-			result = new Query().execute(context);
-		} else {
-			throw new RuntimeException("Type not implemented!"
-					+ req.getRequestURI());
+		String name = context.getName();
+		if(name != null && name.length() > 0){
+			if (context.isSchema()) {
+				logger.debug("Executing schema");
+				result = new Schema().execute(context);
+			} else if (context.isQuery()) {
+				logger.debug("Executing query");
+				result = new Query().execute(context);
+			} else {
+				throw new RuntimeException("No action implemented for " + name);
+			}
+		} else {			
+			logger.debug("Executing describe");
+			context.setServiceInfo(configurator.getServiceInfo());
+			result = new Describe().execute(context);
 		}
 		logger.debug("request executed, sending back the result");
 		resp.setContentType(CONTENT_TYPE);

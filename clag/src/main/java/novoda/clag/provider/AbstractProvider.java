@@ -1,12 +1,13 @@
 package novoda.clag.provider;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import novoda.clag.introspector.Introspector;
 import novoda.clag.model.Cursor;
-import novoda.clag.model.Options;
 import novoda.clag.model.MetaEntity;
+import novoda.clag.model.Options;
 
 import org.apache.log4j.Logger;
 
@@ -55,8 +56,18 @@ public abstract class AbstractProvider implements Provider {
 			entities.put(clazz.getSimpleName(), entity);
 		} else {
 			throw new RuntimeException(
-					"Faild to getThe entity description out of the class "
+					"Faild to get entity description out of the class "
 							+ clazz);
+		}
+	}
+	
+	@Override
+	public void add(MetaEntity entity) {
+		if (entity != null && entity.getName() != null) {
+			entities.put(entity.getName(), entity);
+		} else {
+			throw new RuntimeException(
+					"Faild to get entity information : name or entityt are null");
 		}
 	}
 
@@ -68,6 +79,11 @@ public abstract class AbstractProvider implements Provider {
 			return null;
 		}
 		return entities.get(name);
+	}
+	
+	@Override
+	public Collection<MetaEntity> schema() {
+		return entities.values();
 	}
 
 	@Override
