@@ -71,4 +71,5 @@ public class JdoIntrospectorTestCase {
 		assertEquals(Introspector.Type.INTEGER, entity.getMetaProperty("id").getType());
 		assertTrue(entity.getMetaProperty("id").getIsKey());
 	}
+	
 }

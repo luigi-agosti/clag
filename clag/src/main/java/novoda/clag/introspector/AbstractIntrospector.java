@@ -33,9 +33,11 @@ public abstract class AbstractIntrospector implements Introspector {
 		if(classToParse == null) {
 			return null;
 		}
-		MetaEntity mds = new MetaEntity(classToParse.getName(), classToParse.getSimpleName());
+		
+		MetaEntity me = analyseClass(classToParse);
 		List<Field> allFields = new ArrayList<Field>();
-
+		
+		
 		allFields.addAll(Arrays.asList(classToParse.getDeclaredFields()));
 		Class superClass = classToParse.getSuperclass();
 		if(superClass != null) {
@@ -49,12 +51,14 @@ public abstract class AbstractIntrospector implements Introspector {
 		List<Class> classes = new ArrayList<Class>();
 		getClasses(classToParse, classes);
 		for(Field field : getFields(classes)) {
-			filterFields(field, mds);
+			filterFields(field, me);
 		}
-		return mds;
+		return me;
 	}
 	
 	protected abstract void filterFields(Field field, MetaEntity mds);
+	
+	protected abstract MetaEntity analyseClass(Class clazz);
 	
 	protected void getClasses(Class clazz, List<Class> classes) {
 		Class superClass = clazz.getSuperclass();

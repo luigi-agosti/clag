@@ -1,7 +1,9 @@
 package novoda.clag.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +25,10 @@ public class MetaEntity {
 	private String className;
 	
 	private String keyProperty;
+	
+	private String parent;
+	
+	private List<String> children;
 	
 	public MetaEntity(String className, String name) {
 		this.className = className;
@@ -102,5 +108,16 @@ public class MetaEntity {
 
 	public String getKeyProperty() {
 		return keyProperty;
+	}
+
+	public List<String> getChildren() {
+		if(children == null) {
+			return new ArrayList<String>();
+		}
+		return children;
+	}
+
+	public String getParent() {
+		return parent;
 	}
 }
