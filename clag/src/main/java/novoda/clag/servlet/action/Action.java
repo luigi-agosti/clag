@@ -4,6 +4,6 @@ import novoda.clag.servlet.context.Context;
 
 public interface Action {
 	
-	String execute(Context interpreter); 
+	String execute(Context context); 
 
 }

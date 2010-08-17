@@ -7,6 +7,7 @@ import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
+import novoda.clag.servlet.context.Context;
 
 import com.google.appengine.repackaged.org.json.JSONStringer;
 
@@ -64,6 +65,17 @@ public class JsonConverter implements Converter {
 				jsonStringer.endObject();
 			}
 			return jsonStringer.endArray().toString();
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public String describe(Context context) {
+		try {
+			JSONStringer jsonStringer = new JSONStringer();
+			jsonStringer.object().endObject();
+			return jsonStringer.toString();
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}

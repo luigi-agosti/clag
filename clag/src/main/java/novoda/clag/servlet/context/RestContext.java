@@ -22,6 +22,8 @@ public class RestContext extends RequestWrapper implements Context {
 	
 	private Converter converter;
 	
+	private ServiceInfo serviceInfo;
+	
 	public RestContext() {
 	}
 	
@@ -105,6 +107,16 @@ public class RestContext extends RequestWrapper implements Context {
 		dl.setLimit(getParameterAsInt(Parameter.LIMIT, Options.DEFAULT_LIMIT));
 		dl.setOffset(getParameterAsInt(Parameter.OFFSET, Options.DEFAULT_OFFSET));
 		return dl;
+	}
+
+	@Override
+	public void setServiceInfo(ServiceInfo serviceInfo) {
+		this.serviceInfo = serviceInfo;
+	}
+
+	@Override
+	public ServiceInfo getServiceInfo() {
+		return serviceInfo;
 	}
 
 }

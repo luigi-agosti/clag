@@ -9,6 +9,9 @@ import novoda.clag.introspector.Introspector;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
+import novoda.clag.servlet.context.Context;
+import novoda.clag.servlet.context.RestContext;
+import novoda.clag.servlet.context.ServiceInfo;
 
 import org.junit.Test;
 
@@ -84,6 +87,29 @@ public class JsonCoverterTest {
 		String result = converter.convert(new Cursor(), getSampleEntity());
 
 		assertEquals("[]", result);
+	}
+	
+	@Test
+	public void describeWithNullContext() {
+		String result = converter.describe(null);
+		assertEquals("{}", result);
+	}
+
+	@Test
+	public void describe() {
+		Context context = new RestContext();
+		ServiceInfo serviceInfo = new ServiceInfo();
+		context.setServiceInfo(serviceInfo);
+		String result = converter.describe(context);
+		assertEquals(
+			"{name:\"\",version:\"\",status:\"\"," +
+				"services:\"\"[" +
+					"{}" +
+				"]," +
+				"schema:\"[" +
+					"{}" +
+				"]\"" +
+			"]}", result);
 	}
 
 	private MetaEntity getSampleEntity() {

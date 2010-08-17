@@ -46,5 +46,9 @@ public interface Context {
 	void setRequest(HttpServletRequest req);
 	
 	Options getFetchOptions();
+	
+	ServiceInfo getServiceInfo();
+
+	void setServiceInfo(ServiceInfo serviceInfo);
 
 }
