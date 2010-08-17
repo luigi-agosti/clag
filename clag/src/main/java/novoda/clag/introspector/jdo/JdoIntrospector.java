@@ -1,6 +1,5 @@
 package novoda.clag.introspector.jdo;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 import javax.jdo.annotations.Persistent;
@@ -33,16 +32,17 @@ public class JdoIntrospector extends AbstractIntrospector {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected MetaEntity analyseClass(Class clazz) {
 		MetaEntity mds = new MetaEntity(clazz.getName(), clazz.getSimpleName());
-		if(clazz.getAnnotation(IsChild.class) != null) {
+		if(clazz.isAnnotationPresent(IsChild.class)) {
 			IsChild a = (IsChild)clazz.getAnnotation(IsChild.class);
 			String parent = a.of();
-			
-			
+			String parentId = a.through();
+			mds.addParent(parent, parentId);
 		} else if(clazz.getAnnotation(IsParent.class) != null) {
-			//TODO
+			
 		}
 		return mds;
 	}

@@ -37,7 +37,6 @@ public abstract class AbstractIntrospector implements Introspector {
 		MetaEntity me = analyseClass(classToParse);
 		List<Field> allFields = new ArrayList<Field>();
 		
-		
 		allFields.addAll(Arrays.asList(classToParse.getDeclaredFields()));
 		Class superClass = classToParse.getSuperclass();
 		if(superClass != null) {

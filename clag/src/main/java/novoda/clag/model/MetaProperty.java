@@ -15,6 +15,10 @@ public class MetaProperty {
 	private boolean isKey;
 
 	private boolean canBeNull;
+	
+	private String parent;
+	
+	private String child;
 
 	public String getName() {
 		return name;
@@ -48,6 +52,29 @@ public class MetaProperty {
 		this.canBeNull = canBeNull;
 	}
 
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	public String getParent() {
+		return parent;
+	}
+	
+	public void setChild(String child) {
+		this.child = child;
+	}
+
+	public String getChild() {
+		return child;
+	}
+	
+	public boolean isParent() {
+		if(parent != null) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Builder
 	 */
@@ -63,6 +90,11 @@ public class MetaProperty {
 			md.setType(type);
 			return this;
 		}
+		
+		public Builder parent(String parent) {
+			md.setParent(parent);
+			return this;
+		}
 
 		public Builder isKey(boolean isKey) {
 			md.setIsKey(isKey);
@@ -71,6 +103,11 @@ public class MetaProperty {
 
 		public Builder canBeNull(boolean canBeNull) {
 			md.setCanBeNull(canBeNull);
+			return this;
+		}
+		
+		public Builder child(String property) {
+			md.setChild(property);
 			return this;
 		}
 

@@ -26,9 +26,9 @@ public class MetaEntity {
 	
 	private String keyProperty;
 	
-	private String parent;
+	private String parentProperty;
 	
-	private List<String> children;
+	private List<String> childProperties;
 	
 	public MetaEntity(String className, String name) {
 		this.className = className;
@@ -45,23 +45,34 @@ public class MetaEntity {
 		if(property.getIsKey()){
 			setKeyProperty(property.getName());
 		}
-		mds.put(name, property); 
+		if(property.isParent()) {
+			setParentProperty(property.getName());
+		}
+		if(mds.containsKey(name)) {
+			MetaProperty oldProperty = mds.get(name);
+			property.setParent(oldProperty.getParent());
+		}
+		mds.put(name, property);
 	}
 
 	public void add(MetaProperty property) {
-		if(property.getIsKey()){
-			setKeyProperty(property.getName());
-		}
-		mds.put(property.getName(), property); 
+		add(property.getName(), property); 
 	}
 
 	public void add(String name, String type) {
-		mds.put(name, new MetaProperty.Builder(name).type(type).build()); 
+		add(name, new MetaProperty.Builder(name).type(type).build()); 
+	}
+	
+	public void addParent(String parent, String property) {
+		add(new MetaProperty.Builder(property).parent(parent).build());
+	}
+	
+	public void addChild(String parent, String property) {
+		add(new MetaProperty.Builder(property).child(parent).build());
 	}
 	
 	public void addKey(String name, String type) {
-		mds.put(name, new MetaProperty.Builder(name).type(type).isKey(true).build());
-		setKeyProperty(name); 
+		add(new MetaProperty.Builder(name).type(type).isKey(true).build());
 	}
 	
 	public Collection<MetaProperty> getMetaProperties(){
@@ -110,14 +121,19 @@ public class MetaEntity {
 		return keyProperty;
 	}
 
-	public List<String> getChildren() {
-		if(children == null) {
+	public List<String> getChildProperties() {
+		if(childProperties == null) {
 			return new ArrayList<String>();
 		}
-		return children;
+		return childProperties;
 	}
 
-	public String getParent() {
-		return parent;
+	public String getParentProperty() {
+		return parentProperty;
 	}
+	
+	public void setParentProperty(String parentProperty) {
+		this.parentProperty = parentProperty;
+	}
+
 }
