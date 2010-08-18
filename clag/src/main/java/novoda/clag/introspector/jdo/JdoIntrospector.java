@@ -24,10 +24,10 @@ public class JdoIntrospector extends AbstractIntrospector {
 		if(field.getAnnotation(Persistent.class) != null) {
 			if(field.getAnnotation(PrimaryKey.class) != null) {
 				logger.debug("Adding field key : " + field.getName());
-				mds.addKey(field.getName(), getType(field.getType().getName()));
+				mds.addKey(field.getName(), getType(field.getType()));
 			} else {
 				logger.debug("Adding field : " + field.getName());
-				mds.add(field.getName(), getType(field.getType().getName()));				
+				mds.add(field.getName(), getType(field.getType()));				
 			}
 		}
 	}
@@ -39,10 +39,14 @@ public class JdoIntrospector extends AbstractIntrospector {
 		if(clazz.isAnnotationPresent(IsChild.class)) {
 			IsChild a = (IsChild)clazz.getAnnotation(IsChild.class);
 			String parent = a.of();
-			String parentId = a.through();
-			mds.addParent(parent, parentId);
-		} else if(clazz.getAnnotation(IsParent.class) != null) {
-			
+			String property = a.through();
+			mds.addParent(parent, property);
+		}
+		if(clazz.isAnnotationPresent(IsParent.class)) {
+			IsParent a = (IsParent)clazz.getAnnotation(IsParent.class);
+			String child = a.of();
+			String property = a.through();
+			mds.addChild(child, property);
 		}
 		return mds;
 	}

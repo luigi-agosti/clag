@@ -1,6 +1,5 @@
 package novoda.clag.servlet.action;
 
-import novoda.clag.converter.Converter;
 import novoda.clag.servlet.context.Context;
 
 public class Describe implements Action {

@@ -74,6 +74,14 @@ public class MetaProperty {
 		}
 		return false;
 	}
+	
+	public boolean isChild() {
+		if(child != null) {
+			return true;
+		}
+		return false;
+	}
+
 
 	/**
 	 * Builder
@@ -115,5 +123,4 @@ public class MetaProperty {
 			return md;
 		}
 	}
-
 }

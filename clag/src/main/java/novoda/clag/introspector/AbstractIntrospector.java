@@ -22,10 +22,11 @@ public abstract class AbstractIntrospector implements Introspector {
             TYPE_MAP.put(Integer.class.getName(), Introspector.Type.INTEGER);
             TYPE_MAP.put(Long.class.getName(), Introspector.Type.INTEGER);
             TYPE_MAP.put(Date.class.getName(), Introspector.Type.INTEGER);
+            TYPE_MAP.put(List.class.getName(), Introspector.Type.STRING);
     }
-    
-    public static final String getType(String name) {
-    	return TYPE_MAP.get(name);
+
+    public static final String getType(Class<?> clazz) {
+    	return TYPE_MAP.get(clazz.getName());
     }
 	
 	@Override

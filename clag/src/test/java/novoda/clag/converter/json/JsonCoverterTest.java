@@ -2,6 +2,7 @@ package novoda.clag.converter.json;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import novoda.clag.converter.Converter;
@@ -62,6 +63,17 @@ public class JsonCoverterTest {
 		String result = converter.convert(cursor, getSampleEntity());
 
 		assertEquals("[{\"date\":1}]", result);
+	}
+
+	@Test
+	public void convertCursorWithListOfString() {
+		Cursor cursor = new Cursor();
+		cursor.add("groupIds", Arrays.asList("1", "2"));
+		cursor.next();
+		
+		String result = converter.convert(cursor, getSampleEntity());
+		
+		assertEquals("[{\"groupIds\":[\"1\",\"2\"]}]", result);
 	}
 
 	@Test

@@ -2,7 +2,14 @@ package novoda.clag.provider.gae;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import novoda.clag.introspector.jdo.JdoIntrospector;
+import novoda.clag.introspector.jdo.sample.Page;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
@@ -112,6 +119,31 @@ public class GaeProviderTest {
 		assertNotNull(cursor.getRows());
 		assertEquals(1, cursor.getRows().size());
 		assertEquals(key2.getId(), cursor.getRows().get(0).get("id"));
+	}
+	
+	@Test
+	public void shouldGetListProperty() {
+		Entity e = new Entity(Page.class.getSimpleName());
+		e.setProperty("groupIds", Arrays.asList("1", "2"));
+		ds.put(e);
+		
+		provider.setIntrospector(new JdoIntrospector());
+		provider.add(Page.class);
+
+		Options options = new Options();
+		options.setLimit(1);
+		
+		Cursor cursor = provider.query(Page.class.getSimpleName(), null, null,
+				null, null, options);
+		
+		assertNotNull(cursor);
+		assertNotNull(cursor.getRows());
+		assertEquals(1, cursor.getRows().size());
+		
+		Map<String, Object> properties = cursor.getRows().get(0);
+		assertNotNull(properties);
+		assertTrue(properties.containsKey("groupIds"));
+		assertEquals(Arrays.asList("1", "2"), properties.get("groupIds"));
 	}
 
 }

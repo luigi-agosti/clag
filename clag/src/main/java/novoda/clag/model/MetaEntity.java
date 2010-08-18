@@ -28,7 +28,7 @@ public class MetaEntity {
 	
 	private String parentProperty;
 	
-	private List<String> childProperties;
+	private List<String> childProperties = new ArrayList<String>();
 	
 	public MetaEntity(String className, String name) {
 		this.className = className;
@@ -48,11 +48,19 @@ public class MetaEntity {
 		if(property.isParent()) {
 			setParentProperty(property.getName());
 		}
+		if(property.isChild()) {
+			addChildProperty(property.getName());
+		}
 		if(mds.containsKey(name)) {
 			MetaProperty oldProperty = mds.get(name);
 			property.setParent(oldProperty.getParent());
+			property.setChild(oldProperty.getChild());
 		}
 		mds.put(name, property);
+	}
+
+	private void addChildProperty(String childProperty) {
+		childProperties.add(childProperty);
 	}
 
 	public void add(MetaProperty property) {
@@ -67,8 +75,8 @@ public class MetaEntity {
 		add(new MetaProperty.Builder(property).parent(parent).build());
 	}
 	
-	public void addChild(String parent, String property) {
-		add(new MetaProperty.Builder(property).child(parent).build());
+	public void addChild(String child, String property) {
+		add(new MetaProperty.Builder(property).child(child).build());
 	}
 	
 	public void addKey(String name, String type) {
@@ -122,9 +130,6 @@ public class MetaEntity {
 	}
 
 	public List<String> getChildProperties() {
-		if(childProperties == null) {
-			return new ArrayList<String>();
-		}
 		return childProperties;
 	}
 

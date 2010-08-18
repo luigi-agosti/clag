@@ -59,7 +59,7 @@ public class JsonConverter implements Converter {
 					Object obj = row.get(key);
 					if (obj instanceof Date) {
 						jsonStringer.key(key).value(((Date) obj).getTime());
-					} else {
+					}  else {
 						jsonStringer.key(key).value(row.get(key));
 					}
 				}
