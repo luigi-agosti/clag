@@ -26,19 +26,6 @@ public class RelationOnJdoIntrospectorTestCase {
 	}
 	
 	@Test
-	public void shouldBeParentNotNull(){
-		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
-		assertNotNull(entity);
-		
-		assertNotNull(entity.getParentProperty());
-		assertEquals("groupId", entity.getParentProperty());
-		MetaProperty mp = entity.getMetaProperty("groupId");
-		assertNotNull(mp);
-		assertNotNull("Group", mp.getParent());
-		assertNotNull(Introspector.Type.STRING, mp.getType());
-	}
-	
-	@Test
 	public void shouldHaveParentThrourghHieraecky(){
 		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Group.class);
 		assertNotNull(entity);
@@ -62,15 +49,6 @@ public class RelationOnJdoIntrospectorTestCase {
 		assertNotNull(mp);
 		assertNotNull("Page", mp.getParent());
 		assertNotNull(Introspector.Type.INTEGER, mp.getType());
-		
-		assertNotNull(entity.getChildProperties());
-		assertEquals(1, entity.getChildProperties().size());
-		assertEquals("groupIds", entity.getChildProperties().get(0));
-		mp = entity.getMetaProperty("groupIds");
-		assertNotNull(mp);
-		assertEquals("Group", mp.getChild());
-		assertEquals(Introspector.Type.STRING, mp.getType());
-		
 	}
 	
 	

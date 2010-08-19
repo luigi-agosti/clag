@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import novoda.clag.introspector.annotation.IsHidden;
 import novoda.clag.model.MetaEntity;
 
 /**
@@ -34,26 +35,20 @@ public abstract class AbstractIntrospector implements Introspector {
 		if(classToParse == null) {
 			return null;
 		}
-		
 		MetaEntity me = analyseClass(classToParse);
-		List<Field> allFields = new ArrayList<Field>();
-		
-		allFields.addAll(Arrays.asList(classToParse.getDeclaredFields()));
-		Class superClass = classToParse.getSuperclass();
-		if(superClass != null) {
-			allFields.addAll(Arrays.asList(superClass.getDeclaredFields()));
-			
-			superClass = superClass.getSuperclass();
-			if(superClass != null) {
-				allFields.addAll(Arrays.asList(superClass.getDeclaredFields()));
-			}
-		}
 		List<Class> classes = new ArrayList<Class>();
 		getClasses(classToParse, classes);
 		for(Field field : getFields(classes)) {
-			filterFields(field, me);
+			if(field.getAnnotation(IsHidden.class) == null) {
+				filterFields(field, me);
+			}
 		}
 		return me;
+	}
+	
+	@Override
+	public void linking(List<MetaEntity> metaEntities) {
+		
 	}
 	
 	protected abstract void filterFields(Field field, MetaEntity mds);
