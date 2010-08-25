@@ -9,9 +9,9 @@ import novoda.clag.servlet.context.Context;
  */
 public interface Converter {
 
-	String convert(MetaEntity mds);
+	String convert(MetaEntity mds, Context context);
 
-	String convert(Cursor cursor, MetaEntity mds);
+	String convert(Cursor cursor, MetaEntity mds, Context context);
 
 	String describe(Context context);
 

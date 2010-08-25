@@ -38,10 +38,10 @@ public class JsonConverter implements Converter {
 	private static final String GET = "get";
 
 	@Override
-	public String convert(MetaEntity entity) {
+	public String convert(MetaEntity entity, Context context) {
 		try {
 			JSONStringer jsonStringer = new JSONStringer();
-			converEntity(jsonStringer, entity);
+			converEntity(jsonStringer, entity, context, true);
 			return jsonStringer.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -49,7 +49,7 @@ public class JsonConverter implements Converter {
 	}
 
 	@Override
-	public String convert(Cursor cursor, MetaEntity entity) {
+	public String convert(Cursor cursor, MetaEntity entity, Context context) {
 		try {
 			JSONStringer jsonStringer = new JSONStringer();
 			jsonStringer.array();
@@ -95,7 +95,7 @@ public class JsonConverter implements Converter {
 				
 					jsonStringer.key(SCHEMA).array();
 					for(MetaEntity entity: context.getProvider().schema()) {
-						converEntity(jsonStringer, entity);
+						converEntity(jsonStringer, entity, context, true);
 					}
 					jsonStringer.endArray();
 				}
@@ -106,7 +106,7 @@ public class JsonConverter implements Converter {
 		}
 	}
 
-	private void converEntity(JSONStringer jsonStringer, MetaEntity entity)
+	private void converEntity(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
 			throws Exception {
 		jsonStringer.object().key(TABLE).value(entity.getName()).key(COLUMNS)
 				.array();
@@ -118,7 +118,20 @@ public class JsonConverter implements Converter {
 			}
 			jsonStringer.endObject();
 		}
-		jsonStringer.endArray().endObject();
+		jsonStringer.endArray();
+		
+		if(recursive) {
+			jsonStringer.key("children").array();
+			for(String name: entity.getRelations()) {
+				MetaProperty mp = entity.getMetaProperty(name);
+				if(entity.getName().equals(mp.getOwner())) {
+					recursive = false;
+				}
+				converEntity(jsonStringer, context.getProvider().schema(mp.getOwner()), context, recursive);
+			}
+			jsonStringer.endArray();
+		}
+		jsonStringer.endObject();
 	}
 
 }

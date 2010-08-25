@@ -6,13 +6,12 @@ import java.util.List;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import novoda.clag.introspector.annotation.IsChild;
+import novoda.clag.introspector.annotation.IsKey;
 
 /**
  * @author Luigi Agosti <luigi.agosti@gmail.com>
  */
 @PersistenceCapable
-@IsChild(of="Page", through="parentKeyId")
 public class Page extends Model {
 
 	private static final long serialVersionUID = 1L;
@@ -22,7 +21,11 @@ public class Page extends Model {
 	@Persistent private String description;
 	@Persistent private String headline;
 	@Persistent private String relativeUrl;
-	@Persistent private Long parentKeyId;
+	
+	@IsKey(from="Page",include=false)
+	@Persistent 
+	private Long parentKeyId;
+	
 	@Persistent private Long order;
 	@Persistent private String color;
 	@Persistent private Date modifiedDate;

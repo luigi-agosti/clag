@@ -3,15 +3,12 @@ package novoda.clag.introspector.jdo.sample;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import novoda.clag.introspector.annotation.IsChild;
-
 /**
  * @author Luigi Agosti <luigi.agosti@gmail.com>
  * 
  * This is representing a group or a page in facebook.
  */
 @PersistenceCapable
-@IsChild(of="Page", through="pageId")
 public class Group extends FacebookModel {
 
 	private static final long serialVersionUID = 1L;

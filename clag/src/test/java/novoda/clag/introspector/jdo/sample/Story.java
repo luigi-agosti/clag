@@ -3,7 +3,6 @@ package novoda.clag.introspector.jdo.sample;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import novoda.clag.introspector.annotation.IsChild;
 import novoda.clag.introspector.annotation.IsHidden;
 
 /**

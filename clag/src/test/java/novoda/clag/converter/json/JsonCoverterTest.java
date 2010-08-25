@@ -27,13 +27,14 @@ public class JsonCoverterTest {
 		+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
 		+ "{\"name\":\"title\",\"type\":\"text\"}"
 		+ ",{\"name\":\"description\",\"type\":\"text\"}"
-		+ ",{\"name\":\"cost\",\"type\":\"integer\"}" + "]}";
+		+ ",{\"name\":\"cost\",\"type\":\"integer\"}],\"children\":[]}";
 	
 	private Converter converter = new JsonConverter();
+	private Context context = new RestContext();
 
 	@Test
 	public void convertMetaDataSet() {
-		String result = converter.convert(getSampleEntity());
+		String result = converter.convert(getSampleEntity(), context);
 
 		assertEquals(EXAMPLE_JSON, result);
 	}
@@ -47,7 +48,7 @@ public class JsonCoverterTest {
 		cursor.add("id", 1);
 		cursor.next();
 
-		String result = converter.convert(cursor, getSampleEntity());
+		String result = converter.convert(cursor, getSampleEntity(), context);
 
 		assertEquals(
 				"[{\"title\":\"title value\",\"description\":\"description value\",\"cost\":1,\"id\":1}]",
@@ -60,7 +61,7 @@ public class JsonCoverterTest {
 		cursor.add("date", new Date(1));
 		cursor.next();
 
-		String result = converter.convert(cursor, getSampleEntity());
+		String result = converter.convert(cursor, getSampleEntity(), context);
 
 		assertEquals("[{\"date\":1}]", result);
 	}
@@ -71,7 +72,7 @@ public class JsonCoverterTest {
 		cursor.add("groupIds", Arrays.asList("1", "2"));
 		cursor.next();
 		
-		String result = converter.convert(cursor, getSampleEntity());
+		String result = converter.convert(cursor, getSampleEntity(), context);
 		
 		assertEquals("[{\"groupIds\":[\"1\",\"2\"]}]", result);
 	}
@@ -90,7 +91,7 @@ public class JsonCoverterTest {
 		cursor.add("id", 2);
 		cursor.next();
 
-		String result = converter.convert(cursor, getSampleEntity());
+		String result = converter.convert(cursor, getSampleEntity(), context);
 
 		assertEquals(
 				"[{\"title\":\"title value\",\"description\":\"description value\",\"cost\":1,\"id\":1},"
@@ -100,7 +101,7 @@ public class JsonCoverterTest {
 
 	@Test
 	public void convertCursorWithoutObject() {
-		String result = converter.convert(new Cursor(), getSampleEntity());
+		String result = converter.convert(new Cursor(), getSampleEntity(), context);
 
 		assertEquals("[]", result);
 	}
@@ -129,6 +130,25 @@ public class JsonCoverterTest {
 					EXAMPLE_JSON +
 				"]" +
 			"}", result);
+	}
+	
+	@Test
+	public void convertWithSelfRelationWithTheOwnerOfTheRelation() {
+		Context context = new RestContext();
+		MetaEntity me = getSampleEntity();
+		me.addRelation("parentId", "Example", "Example1", "text", true);
+		Provider provider = new GaeProvider();
+		provider.add(me);
+		context.setProvider(provider);
+		
+		String result = converter.convert(me, context);
+		assertEquals(
+			"{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}," +
+				"{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
+				"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]," +
+					"\"children\":[{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}" +
+					",{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
+					"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]}]}", result);
 	}
 
 	@Test

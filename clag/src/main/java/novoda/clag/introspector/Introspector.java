@@ -1,7 +1,7 @@
 
 package novoda.clag.introspector;
 
-import java.util.List;
+import java.util.Map;
 
 import novoda.clag.model.MetaEntity;
 
@@ -43,6 +43,6 @@ public interface Introspector {
 	 * 
 	 * @param metaEntities
 	 */
-	void linking(List<MetaEntity> metaEntities);
+	void linking(Map<String, MetaEntity> metaEntities);
 
 }

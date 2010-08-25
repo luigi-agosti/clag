@@ -11,12 +11,12 @@ import novoda.clag.servlet.context.Context;
 public class MockConverter implements Converter {
 
 	@Override
-	public String convert(MetaEntity entity) {
+	public String convert(MetaEntity entity, Context context) {
 		return "schema";
 	}
 
 	@Override
-	public String convert(Cursor cursor, MetaEntity entity) {
+	public String convert(Cursor cursor, MetaEntity entity, Context context) {
 		return "query";
 	}
 

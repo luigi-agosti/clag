@@ -5,9 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-
 import novoda.clag.introspector.Introspector;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.MetaEntity;
@@ -73,37 +70,14 @@ public class JdoIntrospectorTest {
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaHref").getType());
-		assertFalse(entity.getMetaProperty("mediaHref").getIsKey());
+		MetaProperty mp = entity.getMetaProperty("mediaHref");
+		assertEquals(Introspector.Type.STRING, mp.getType());
+		assertFalse(mp.getIsKey());
 		
 		assertTrue(entity.contains("id"));
-		assertEquals(Introspector.Type.INTEGER, entity.getMetaProperty("id").getType());
-		assertTrue(entity.getMetaProperty("id").getIsKey());
-	}
-	
-	@Test
-	public void shouldDuplicateInformationAboutRelationshipWithTheLinkage(){
-		//a child of b   -> linker as to reconstruct that b is parent of a with a property name that
-		//is constructed 
-		MetaEntity e1 = new MetaEntity("A", "a");
-		e1.addParent("B", "B_id");
-		MetaEntity e2 = new MetaEntity("B", "b");
-		
-		new JdoIntrospector().linking(Arrays.asList(e1, e2));
-		
-		assertEquals(1, e2.getChildProperties().size());
-		assertEquals("A_id", e2.getChildProperties().get(0));
-		MetaProperty mp = e2.getMetaProperty("A_id");
-		assertNotNull(mp);
-		assertEquals("A", mp.getChild());
-	}
-	
-	@Test(expected = RuntimeException.class)
-	public void shouldFailIfAnEntityRequiredByTheLinkageIsMissing() {
-		MetaEntity e1 = new MetaEntity("A", "a");
-		e1.addParent("B", "B_id");
-		
-		new JdoIntrospector().linking(Arrays.asList(e1));
+		mp = entity.getMetaProperty("id");
+		assertEquals(Introspector.Type.INTEGER, mp.getType());
+		assertTrue(mp.getIsKey());
 	}
 	
 }

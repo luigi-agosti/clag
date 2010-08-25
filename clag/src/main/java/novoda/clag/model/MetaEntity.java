@@ -26,9 +26,7 @@ public class MetaEntity {
 	
 	private String keyProperty;
 	
-	private String parentProperty;
-	
-	private List<String> childProperties = new ArrayList<String>();
+	private List<String> relations = new ArrayList<String>();
 	
 	public MetaEntity(String className, String name) {
 		this.className = className;
@@ -43,13 +41,9 @@ public class MetaEntity {
 
 	public void add(String name, MetaProperty property) {
 		if(property.getIsKey()){
-			setKeyProperty(property.getName());
-		}
-		if(property.isParent()) {
-			setParentProperty(property.getName());
-		}
-		if(property.isChild()) {
-			addChildProperty(property.getName());
+			setKeyProperty(name);
+		} else if (property.isRelation()) {
+			relations.add(name);
 		}
 		if(mds.containsKey(name)) {
 			MetaProperty oldProperty = mds.get(name);
@@ -57,10 +51,6 @@ public class MetaEntity {
 			property.setChild(oldProperty.getChild());
 		}
 		mds.put(name, property);
-	}
-
-	private void addChildProperty(String childProperty) {
-		childProperties.add(childProperty);
 	}
 
 	public void add(MetaProperty property) {
@@ -81,6 +71,10 @@ public class MetaEntity {
 	
 	public void addKey(String name, String type) {
 		add(new MetaProperty.Builder(name).type(type).isKey(true).build());
+	}
+	
+	public void addRelation(String through, String owner, String from, String type, boolean include) {
+		add(new MetaProperty.Builder(through).owner(owner).type(type).isRelation(true, from, include).build());
 	}
 	
 	public Collection<MetaProperty> getMetaProperties(){
@@ -129,16 +123,12 @@ public class MetaEntity {
 		return keyProperty;
 	}
 
-	public List<String> getChildProperties() {
-		return childProperties;
+	public List<String> getRelations() {
+		return relations;
 	}
 
-	public String getParentProperty() {
-		return parentProperty;
-	}
-	
-	public void setParentProperty(String parentProperty) {
-		this.parentProperty = parentProperty;
+	public void resetRelations() {
+		relations = new ArrayList<String>(); 
 	}
 
 }

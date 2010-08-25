@@ -1,11 +1,14 @@
 package novoda.clag.introspector.jdo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import novoda.clag.introspector.Introspector;
-import novoda.clag.introspector.jdo.sample.FacebookModel;
-import novoda.clag.introspector.jdo.sample.Group;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import novoda.clag.introspector.jdo.sample.Page;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.MetaEntity;
@@ -18,54 +21,87 @@ import org.junit.Test;
  */
 public class RelationOnJdoIntrospectorTestCase {
 	
-	@Test
-	public void shouldParentReturnNullIfDoesntHaveIt(){
-		MetaEntity entity = new JdoIntrospector().extractMetaEntity(FacebookModel.class);
-		assertNotNull(entity);
-		assertNull(entity.getParentProperty());
-	}
+	private JdoIntrospector introspector = new JdoIntrospector();
 	
 	@Test
-	public void shouldHaveParentThrourghHieraecky(){
-		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Group.class);
-		assertNotNull(entity);
-		
-		assertNotNull(entity.getParentProperty());
-		assertEquals("pageId", entity.getParentProperty());
-		MetaProperty mp = entity.getMetaProperty("pageId");
+	public void shouldGetKeyInTheDeclaringEntity() {
+		MetaEntity me = introspector.extractMetaEntity(Story.class);
+		List<String> relations = me.getRelations();
+		assertNotNull(relations);
+		assertEquals(1, relations.size());
+		assertTrue(relations.contains("pageId"));
+		MetaProperty mp = me.getMetaProperty("pageId");
 		assertNotNull(mp);
-		assertNotNull("Page", mp.getParent());
-		assertNotNull(Introspector.Type.INTEGER, mp.getType());
+		assertEquals("Page", mp.getFrom());
+		assertTrue(mp.isInclude());
 	}
 	
 	@Test
-	public void shouldHaveParentAndChildsThrourghHieraecky(){
-		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Page.class);
-		assertNotNull(entity);
-		
-		assertNotNull(entity.getParentProperty());
-		assertEquals("parentKeyId", entity.getParentProperty());
-		MetaProperty mp = entity.getMetaProperty("parentKeyId");
+	public void shouldGetKeyInTheDeclaringEntitySelfReference() {
+		MetaEntity me = introspector.extractMetaEntity(Page.class);
+		List<String> relations = me.getRelations();
+		assertNotNull(relations);
+		assertEquals(1, relations.size());
+		assertTrue(relations.contains("parentKeyId"));
+		MetaProperty mp = me.getMetaProperty("parentKeyId");
 		assertNotNull(mp);
-		assertNotNull("Page", mp.getParent());
-		assertNotNull(Introspector.Type.INTEGER, mp.getType());
-	}
-	
-	
-	@Test
-	public void shouldChildrenNotNullEvenIfDoesntHave(){
-		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
-		assertNotNull(entity);
-		assertNotNull(entity.getChildProperties());
-		assertEquals(0, entity.getChildProperties().size());
+		assertEquals("Page", mp.getFrom());
+		assertFalse(mp.isInclude());
 	}
 	
 	@Test
-	public void shouldHaveChildren(){
-		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Group.class);
-		assertNotNull(entity);
-		assertNotNull(entity.getChildProperties());
-		assertEquals(0, entity.getChildProperties().size());
+	public void shouldMoveRelations() {
+		Map<String, MetaEntity> map = new HashMap<String, MetaEntity>();
+		MetaEntity mePage = introspector.extractMetaEntity(Page.class);
+		map.put(Page.class.getSimpleName(), mePage);
+		MetaEntity meStory = introspector.extractMetaEntity(Story.class);
+		map.put(Story.class.getSimpleName(), meStory);
+		
+		introspector.linking(map);
+		
+		assertNotNull(map);
+		
+		assertEquals(2, map.values().size());
+		MetaEntity page = map.get(Page.class.getSimpleName());
+		assertNotNull(page);
+		assertEquals("Page", page.getName());
+		List<String> relations =  page.getRelations();
+		assertNotNull(relations);
+		assertEquals(2, relations.size());
+		assertEquals("pageId", relations.get(0));
+		assertEquals("Page", map.get("Page").getMetaProperty(relations.get(0)).getFrom());
+		assertEquals("Story", map.get("Page").getMetaProperty(relations.get(0)).getOwner());
+		assertEquals("parentKeyId", relations.get(1));
+		assertEquals("Page", map.get("Page").getMetaProperty(relations.get(1)).getFrom());
+		assertEquals("Page", map.get("Page").getMetaProperty(relations.get(1)).getOwner());
+		
+		MetaEntity story = map.get(Story.class.getSimpleName());
+		assertNotNull(story);
+		assertEquals("Story", story.getName());
+		relations =  story.getRelations();
+		assertNotNull(relations);
+		assertEquals(0, relations.size());
+		
 	}
+	
+	@Test
+	public void shouldRemoveRelationsIfTargetsAreNotInTheWatchingList() {
+		Map<String, MetaEntity> map = new HashMap<String, MetaEntity>();
+		MetaEntity meStory = introspector.extractMetaEntity(Story.class);
+		map.put(Story.class.getSimpleName(), meStory);
+		
+		MetaEntity story = map.get(Story.class.getSimpleName());
+		
+		introspector.linking(map);
+		
+		assertNotNull(map);
+		
+		assertNotNull(story);
+		assertEquals("Story", story.getName());
+		List<String> relations =  story.getRelations();
+		assertNotNull(relations);
+		assertEquals(0, relations.size());
+	}
+	
 	
 }

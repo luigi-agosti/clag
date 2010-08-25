@@ -10,6 +10,7 @@ import java.util.Map;
 
 import novoda.clag.introspector.annotation.IsHidden;
 import novoda.clag.model.MetaEntity;
+import novoda.clag.model.MetaProperty;
 
 /**
  * @author luigi.agosti
@@ -47,8 +48,35 @@ public abstract class AbstractIntrospector implements Introspector {
 	}
 	
 	@Override
-	public void linking(List<MetaEntity> metaEntities) {
+	public void linking(Map<String, MetaEntity> metaEntities) {
+		Map<String, List<MetaProperty>> relations = new HashMap<String, List<MetaProperty>>();
+		for(String key : metaEntities.keySet()) {
+			MetaEntity me = metaEntities.get(key);
+			for(String rKey : me.getRelations()) {
+				MetaProperty mp = me.getMetaProperty(rKey);
+				if(relations.containsKey(mp.getFrom())) {
+					relations.get(mp.getFrom()).add(mp);
+				} else {
+					List<MetaProperty> rs = new ArrayList<MetaProperty>();
+					rs.add(mp);
+					relations.put(mp.getFrom(), rs);
+				}
+			}			
+		}
 		
+		for(String key : metaEntities.keySet()) {
+			MetaEntity me = metaEntities.get(key);
+			me.resetRelations();
+		}
+		
+		for(String key : relations.keySet()) {
+			if(metaEntities.containsKey(key)) {
+				MetaEntity me = metaEntities.get(key);
+				for(MetaProperty mp : relations.get(key)) {
+					me.addRelation(mp.getName(), mp.getOwner(), mp.getFrom(), mp.getType(), mp.isInclude());
+				}
+			}
+		}
 	}
 	
 	protected abstract void filterFields(Field field, MetaEntity mds);
