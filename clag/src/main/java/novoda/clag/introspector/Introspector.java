@@ -1,6 +1,8 @@
 
 package novoda.clag.introspector;
 
+import java.util.Map;
+
 import novoda.clag.model.MetaEntity;
 
 /**
@@ -32,5 +34,15 @@ public interface Introspector {
 	 * @return
 	 */
 	MetaEntity extractMetaEntity(@SuppressWarnings("unchecked") Class classToParse);
+	
+	/**
+	 * Is important to run the liking after every meta entity 
+	 * has been read because in this way the linkage is setting all
+	 * the relationship correctly duplicating them to make the life of
+	 * the users of the meta entities easier
+	 * 
+	 * @param metaEntities
+	 */
+	void linking(Map<String, MetaEntity> metaEntities);
 
 }

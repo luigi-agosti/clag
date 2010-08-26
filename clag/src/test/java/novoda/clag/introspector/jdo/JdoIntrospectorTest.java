@@ -8,13 +8,14 @@ import static org.junit.Assert.assertTrue;
 import novoda.clag.introspector.Introspector;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.MetaEntity;
+import novoda.clag.model.MetaProperty;
 
 import org.junit.Test;
 
 /**
  * @author luigi.agosti
  */
-public class JdoIntrospectorTestCase {
+public class JdoIntrospectorTest {
 	
 	@Test
 	public void shouldGetNullResult() {
@@ -29,8 +30,6 @@ public class JdoIntrospectorTestCase {
 		
 		assertTrue(entity.contains("mediaHref"));
 		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaHref").getType());
-		assertTrue(entity.contains("groupId"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("groupId").getType());
 		assertTrue(entity.contains("title"));
 		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("title").getType());
 		assertTrue(entity.contains("mediaImageHref"));
@@ -39,7 +38,14 @@ public class JdoIntrospectorTestCase {
 		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("caption").getType());
 		assertTrue(entity.contains("copy"));
 		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("copy").getType());
+	}
+	
+	@Test
+	public void shouldHidePropertiesMarkedWithIsHidden(){
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(Story.class);
+		assertNotNull(entity);
 		
+		assertFalse(entity.contains("groupId"));
 	}
 
 	@Test
@@ -64,12 +70,14 @@ public class JdoIntrospectorTestCase {
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaHref").getType());
-		assertFalse(entity.getMetaProperty("mediaHref").getIsKey());
+		MetaProperty mp = entity.getMetaProperty("mediaHref");
+		assertEquals(Introspector.Type.STRING, mp.getType());
+		assertFalse(mp.getIsKey());
 		
 		assertTrue(entity.contains("id"));
-		assertEquals(Introspector.Type.INTEGER, entity.getMetaProperty("id").getType());
-		assertTrue(entity.getMetaProperty("id").getIsKey());
+		mp = entity.getMetaProperty("id");
+		assertEquals(Introspector.Type.INTEGER, mp.getType());
+		assertTrue(mp.getIsKey());
 	}
 	
 }

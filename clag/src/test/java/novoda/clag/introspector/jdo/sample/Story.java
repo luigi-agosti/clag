@@ -3,13 +3,12 @@ package novoda.clag.introspector.jdo.sample;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import novoda.clag.introspector.annotation.IsChild;
+import novoda.clag.introspector.annotation.IsHidden;
 
 /**
  * @author Luigi Agosti <luigi.agosti@gmail.com>
  */
 @PersistenceCapable
-@IsChild(of="Group", through="groupId")
 public class Story extends FacebookModel {
 	
 	private static final long serialVersionUID = 1L;
@@ -19,7 +18,10 @@ public class Story extends FacebookModel {
 	@Persistent private String title;
 	@Persistent private String caption;
 	@Persistent private String copy;
-	@Persistent private String groupId;
+	
+	@IsHidden 
+	@Persistent 
+	private String groupId;
 	
 	public String getMediaHref() {return mediaHref; }
 	public void setMediaHref(String mediaHref) { this.mediaHref = mediaHref;}

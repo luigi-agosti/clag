@@ -13,7 +13,7 @@ public class Query implements Action {
 				context.getProjection(), context.getSelection(),
 				context.getSelectionArgs(), context.getSortOrder(), mds,
 				context.getFetchOptions());
-		return context.getConverter().convert(cursor, mds);
+		return context.getConverter().convert(cursor, mds, context);
 	}
 
 }

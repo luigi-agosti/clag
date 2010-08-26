@@ -62,6 +62,11 @@ public abstract class AbstractProvider implements Provider {
 	}
 	
 	@Override
+	public void linkMetaEntities() {
+		introspector.linking(entities);
+	}
+	
+	@Override
 	public void add(MetaEntity entity) {
 		if (entity != null && entity.getName() != null) {
 			entities.put(entity.getName(), entity);

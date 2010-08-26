@@ -36,4 +36,6 @@ public interface Provider extends Configurable {
 	void add(Class<?> clazz);
 
 	void add(MetaEntity entity);
+
+	void linkMetaEntities();
 }

@@ -96,6 +96,7 @@ public class GaeServletConfigurator implements Configurator {
 				logger.debug("adding class to content provider : " + clazz);
 				provider.add(Class.forName(clazz));
 			}
+			provider.linkMetaEntities();
 			isConfigured();
 		} catch (Exception e) {
 			logger.error("Problem in the initialization, see the following stack trace : ", e);

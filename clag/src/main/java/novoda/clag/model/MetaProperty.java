@@ -16,9 +16,17 @@ public class MetaProperty {
 
 	private boolean canBeNull;
 	
+	private boolean isRelation;
+	
+	private boolean include;
+	
+	private String owner;
+	
 	private String parent;
 	
 	private String child;
+	
+	private String from;
 
 	public String getName() {
 		return name;
@@ -83,6 +91,42 @@ public class MetaProperty {
 	}
 
 
+	public void setRelation(boolean isRelation) {
+		this.isRelation = isRelation;
+	}
+
+	public boolean isRelation() {
+		return isRelation;
+	}
+
+
+	public void setFrom(String from) {
+		this.from = from;
+	}
+
+	public String getFrom() {
+		return from;
+	}
+
+
+	public void setInclude(boolean include) {
+		this.include = include;
+	}
+
+	public boolean isInclude() {
+		return include;
+	}
+
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+
 	/**
 	 * Builder
 	 */
@@ -121,6 +165,18 @@ public class MetaProperty {
 
 		public MetaProperty build() {
 			return md;
+		}
+
+		public Builder isRelation(boolean isRelation, String from, boolean include) {
+			md.setRelation(true);
+			md.setFrom(from);
+			md.setInclude(include);
+			return this;
+		}
+
+		public Builder owner(String owner) {
+			md.setOwner(owner);
+			return this;
 		}
 	}
 }

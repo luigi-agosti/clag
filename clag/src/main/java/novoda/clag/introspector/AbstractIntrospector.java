@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import novoda.clag.introspector.annotation.IsHidden;
 import novoda.clag.model.MetaEntity;
+import novoda.clag.model.MetaProperty;
 
 /**
  * @author luigi.agosti
@@ -34,26 +36,47 @@ public abstract class AbstractIntrospector implements Introspector {
 		if(classToParse == null) {
 			return null;
 		}
-		
 		MetaEntity me = analyseClass(classToParse);
-		List<Field> allFields = new ArrayList<Field>();
-		
-		allFields.addAll(Arrays.asList(classToParse.getDeclaredFields()));
-		Class superClass = classToParse.getSuperclass();
-		if(superClass != null) {
-			allFields.addAll(Arrays.asList(superClass.getDeclaredFields()));
-			
-			superClass = superClass.getSuperclass();
-			if(superClass != null) {
-				allFields.addAll(Arrays.asList(superClass.getDeclaredFields()));
-			}
-		}
 		List<Class> classes = new ArrayList<Class>();
 		getClasses(classToParse, classes);
 		for(Field field : getFields(classes)) {
-			filterFields(field, me);
+			if(field.getAnnotation(IsHidden.class) == null) {
+				filterFields(field, me);
+			}
 		}
 		return me;
+	}
+	
+	@Override
+	public void linking(Map<String, MetaEntity> metaEntities) {
+		Map<String, List<MetaProperty>> relations = new HashMap<String, List<MetaProperty>>();
+		for(String key : metaEntities.keySet()) {
+			MetaEntity me = metaEntities.get(key);
+			for(String rKey : me.getRelations()) {
+				MetaProperty mp = me.getMetaProperty(rKey);
+				if(relations.containsKey(mp.getFrom())) {
+					relations.get(mp.getFrom()).add(mp);
+				} else {
+					List<MetaProperty> rs = new ArrayList<MetaProperty>();
+					rs.add(mp);
+					relations.put(mp.getFrom(), rs);
+				}
+			}			
+		}
+		
+		for(String key : metaEntities.keySet()) {
+			MetaEntity me = metaEntities.get(key);
+			me.resetRelations();
+		}
+		
+		for(String key : relations.keySet()) {
+			if(metaEntities.containsKey(key)) {
+				MetaEntity me = metaEntities.get(key);
+				for(MetaProperty mp : relations.get(key)) {
+					me.addRelation(mp.getName(), mp.getOwner(), mp.getFrom(), mp.getType(), mp.isInclude());
+				}
+			}
+		}
 	}
 	
 	protected abstract void filterFields(Field field, MetaEntity mds);
