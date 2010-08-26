@@ -10,6 +10,7 @@ import novoda.clag.model.MetaProperty;
 import novoda.clag.servlet.context.Context;
 import novoda.clag.servlet.context.ServiceInfo;
 
+import com.google.appengine.repackaged.org.json.JSONException;
 import com.google.appengine.repackaged.org.json.JSONStringer;
 
 /**
@@ -53,24 +54,35 @@ public class JsonConverter implements Converter {
 		try {
 			JSONStringer jsonStringer = new JSONStringer();
 			jsonStringer.array();
-			for (Map<String, Object> row : cursor.getRows()) {
-				jsonStringer.object();
-				for (String key : row.keySet()) {
-					Object obj = row.get(key);
-					if (obj instanceof Date) {
-						jsonStringer.key(key).value(((Date) obj).getTime());
-					}  else {
-						jsonStringer.key(key).value(row.get(key));
-					}
-				}
-				jsonStringer.endObject();
-			}
+			convert(jsonStringer, cursor, context);
 			return jsonStringer.endArray().toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
+	private void convert(JSONStringer jsonStringer, Cursor cursor, Context context) throws JSONException {
+		for (Map<String, Object> row : cursor.getRows()) {
+			jsonStringer.object();
+			for (String key : row.keySet()) {
+				Object obj = row.get(key);
+				if (obj instanceof Date) {
+					jsonStringer.key(key).value(((Date) obj).getTime());
+				} else if(obj instanceof Cursor) {
+					Cursor subCursor = (Cursor)obj;
+					jsonStringer.key(subCursor.getName()).array();
+					convert(jsonStringer, subCursor, context);
+					
+					jsonStringer.endArray();
+				} else {
+					jsonStringer.key(key).value(row.get(key));
+				}
+			}
+			jsonStringer.endObject();
+		}
+	}
+	
+	
 	@Override
 	public String describe(Context context) {
 		try {

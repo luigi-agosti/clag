@@ -21,7 +21,7 @@ import org.junit.Test;
 /**
  * @author luigi.agosti
  */
-public class JsonCoverterTest {
+public class JsonConverterTest {
 
 	private static final String EXAMPLE_JSON = "{\"name\":\"Example\",\"columns\":["
 		+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
@@ -97,6 +97,21 @@ public class JsonCoverterTest {
 				"[{\"title\":\"title value\",\"description\":\"description value\",\"cost\":1,\"id\":1},"
 						+ "{\"id\":2,\"title\":\"title value2\",\"description\":\"description value2\",\"cost\":12}]",
 				result);
+	}
+	
+	@Test
+	public void convertCursorWithSubCursor() {
+		Cursor cursor = new Cursor();
+		cursor.add("title", "cursor");
+		Cursor subCursor = new Cursor("Subcursor");
+		subCursor.add("title", "subCursor");
+		subCursor.next();
+		cursor.add("Subcursor", subCursor);
+		cursor.next();
+		
+		String result = converter.convert(cursor, null, context);
+		
+		assertEquals("[{\"title\":\"cursor\",\"Subcursor\":[{\"title\":\"subCursor\"}]}]", result);
 	}
 
 	@Test

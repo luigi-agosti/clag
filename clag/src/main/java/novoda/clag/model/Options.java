@@ -17,9 +17,13 @@ public class Options {
 	
 	public static final int DEFAULT_OFFSET = 0;
 	
+	public static final boolean DEFAULT_SUB_OBJECTS_FETCH = true;
+	
 	private int limit = DEFAULT_LIMIT;
 
 	private int offset = DEFAULT_OFFSET;
+	
+	private boolean subObjectFetch = DEFAULT_SUB_OBJECTS_FETCH;
 	
 	public static final Options getDefault() {
 		return new Options();
@@ -45,6 +49,14 @@ public class Options {
 	
 	public int getOffset() {
 		return offset;
+	}
+
+	public void setSubObjectFetch(boolean subObjectFetch) {
+		this.subObjectFetch = subObjectFetch;
+	}
+
+	public boolean isSubObjectFetch() {
+		return subObjectFetch;
 	}
 	
 }

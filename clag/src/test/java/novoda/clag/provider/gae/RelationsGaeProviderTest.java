@@ -29,17 +29,22 @@ public class RelationsGaeProviderTest {
 	protected DatastoreService ds = DatastoreServiceFactory
 			.getDatastoreService();
 
+	private GaeProvider provider;
+
 	@Before
 	public void setUp() {
 		helper.setUp();
+		provider = new GaeProvider();
+		provider.setIntrospector(new JdoIntrospector());
+		provider.add(Page.class);
+		provider.add(Story.class);
+		provider.linkMetaEntities();
 	}
 
 	@After
 	public void tearDown() {
 		helper.tearDown();
 	}
-
-	private GaeProvider provider = new GaeProvider();
 	
 	@Test
 	public void shouldGetPageWithStories() {
@@ -52,8 +57,6 @@ public class RelationsGaeProviderTest {
 		key = ds.put(e);
 		long storyId = key.getId();
 		
-		provider.setIntrospector(new JdoIntrospector());
-		provider.add(Story.class);
 
 		Cursor cursor = provider.query(Page.class.getSimpleName(), null, null,
 				null, null);
@@ -63,10 +66,14 @@ public class RelationsGaeProviderTest {
 		assertEquals(1, cursor.getRows().size());
 		Map<String, Object> row = cursor.getRows().get(0);
 		assertEquals(pageId, row.get("id"));
-		Cursor c = (Cursor)row.get("Story");
-		assertNotNull(c);
-		c = (Cursor)row.get("Page");
-		assertNotNull(c);
+		Cursor storyCursor = (Cursor)row.get(Story.class.getSimpleName());
+		assertNotNull(storyCursor);
+		assertNotNull(storyCursor.getName());
+		assertEquals("Story", storyCursor.getName());
+		assertNotNull(storyCursor.getRows());
+		assertEquals(1, storyCursor.getRows().size());
+		Map<String, Object> storyRow = storyCursor.getRows().get(0);
+		assertEquals(storyId, storyRow.get("id"));
 	}
 	
 }

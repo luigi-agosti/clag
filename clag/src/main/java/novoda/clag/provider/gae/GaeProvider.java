@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import novoda.clag.model.Cursor;
+import novoda.clag.model.MetaProperty;
 import novoda.clag.model.Options;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.provider.AbstractProvider;
@@ -55,11 +56,29 @@ public class GaeProvider extends AbstractProvider {
 					cursor.add(property, e.getProperty(property));
 				}
 			}
+			if(dataLimitation.isSubObjectFetch()) {
+				for(String relation : entity.getRelations()) {
+					MetaProperty mp = entity.getMetaProperty(relation);
+					addRelations(cursor, mp, dataLimitation, ds);
+				}
+			}
 			cursor.next();
 		}
 		return cursor;
 	}
 	
+	private void addRelations(Cursor cursor, MetaProperty mp, Options dataLimitation, DatastoreService ds) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("fetching relation for : " + mp.getFrom());
+			logger.debug("owner : " + mp.getOwner()); //Story
+			logger.debug("name : " + mp.getName()); //pageId
+		}
+		Long id = ((Long)cursor.getValueOfCurrentRow("id"));
+		Cursor c = query(mp.getOwner(), null, mp.getName() + " = " + id, null, null, dataLimitation);
+		c.setName(mp.getOwner());
+		cursor.add(mp.getOwner(), c);
+	}
+
 	private FetchOptions getFetchOption(Options dl) {
 		return FetchOptions.Builder.withLimit(dl.getLimit()).offset(dl.getOffset());
 	}

@@ -15,9 +15,16 @@ public class Cursor {
 	
 	private Map<String, Object> currentRow;
 	
-	public Cursor() {
+	private String name;
+	
+	public Cursor(String name) {
+		this.name = name;
 		rows = new ArrayList<Map<String,Object>>();
 		currentRow = new LinkedHashMap<String, Object>();
+	}
+
+	public Cursor() {
+		this(null);
 	}
 	
 	public void add(String key, Object value) {
@@ -33,4 +40,15 @@ public class Cursor {
 		return rows;
 	}
 	
+	public Object getValueOfCurrentRow(String property) {
+		return currentRow.get(property);
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 }
