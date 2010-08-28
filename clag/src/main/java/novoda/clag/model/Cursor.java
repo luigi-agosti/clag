@@ -23,6 +23,11 @@ public class Cursor {
 		currentRow = new LinkedHashMap<String, Object>();
 	}
 
+	public Cursor(String name, Map<String, Object> row) {
+		this(name);
+		addRow(row);
+	}
+
 	public Cursor() {
 		this(null);
 	}
@@ -50,5 +55,10 @@ public class Cursor {
 	
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void addRow(Map<String, Object> row) {
+		currentRow = row;
+		next();
 	}
 }

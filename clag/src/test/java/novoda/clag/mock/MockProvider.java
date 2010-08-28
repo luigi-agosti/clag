@@ -29,4 +29,12 @@ public class MockProvider extends AbstractProvider {
 		return null;
 	}
 
+	@Override
+	public Cursor insert(String name, Cursor values, MetaEntity entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+
 }

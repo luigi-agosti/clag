@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import com.meterware.httpunit.GetMethodWebRequest;
+import com.meterware.httpunit.PostMethodWebRequest;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
 import com.meterware.servletunit.ServletRunner;
@@ -61,9 +62,7 @@ public class ClagServletTest {
 		request = new GetMethodWebRequest(
 			"http://test.meterware.com/data/Story");
 		WebResponse response = sc.getResponse(request);
-		assertNotNull("No response received", response);
-		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "query", response.getText());
+		assertResponse("query", response);
 	}
 
 	@Test
@@ -71,9 +70,7 @@ public class ClagServletTest {
 		request = new GetMethodWebRequest(
 		"http://test.meterware.com/data/Story?query");
 		WebResponse response = sc.getResponse(request);
-		assertNotNull("No response received", response);
-		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "query", response.getText());
+		assertResponse("query", response);
 	}
 
 	@Test
@@ -82,9 +79,7 @@ public class ClagServletTest {
 		"http://test.meterware.com/data/Story");
 		request.setParameter("query", new String[] { "true" });
 		WebResponse response = sc.getResponse(request);
-		assertNotNull("No response received", response);
-		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "query", response.getText());
+		assertResponse("query", response);
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -101,9 +96,7 @@ public class ClagServletTest {
 			"http://test.meterware.com/data/Story");
 		request.setParameter("schema", new String[] { "true" });
 		WebResponse response = sc.getResponse(request);
-		assertNotNull("No response received", response);
-		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "schema", response.getText());
+		assertResponse("schema", response);
 	}
 	
 	@Test
@@ -111,19 +104,15 @@ public class ClagServletTest {
 		request = new GetMethodWebRequest(
 		"http://test.meterware.com/data/Story?schema=true");
 		WebResponse response = sc.getResponse(request);
-		assertNotNull("No response received", response);
-		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "schema", response.getText());
+		assertResponse("schema", response);
 	}
 
 	@Test
 	public void shouldRespondOnSchemaMethodWithoutValue() throws IOException, SAXException {
-		request = new GetMethodWebRequest(
-		"http://test.meterware.com/data/Story?schema");
+		request = new GetMethodWebRequest("http://test.meterware.com/data/Story?schema");
 		WebResponse response = sc.getResponse(request);
-		assertNotNull("No response received", response);
-		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "schema", response.getText());
+		
+		assertResponse("schema", response);
 	}
 
 	@Test
@@ -131,9 +120,23 @@ public class ClagServletTest {
 		request = new GetMethodWebRequest(
 		"http://test.meterware.com/data/");
 		WebResponse response = sc.getResponse(request);
+		
+		assertResponse("describe", response);
+	}
+
+	@Test
+	public void shouldRespondToAPost() throws IOException, SAXException {
+		request = new PostMethodWebRequest(
+		"http://test.meterware.com/data/Story");
+		WebResponse response = sc.getResponse(request);
+		
+		assertResponse("query", response);
+	}
+	
+	private void assertResponse(String replay, WebResponse response) throws IOException {
 		assertNotNull("No response received", response);
 		assertEquals("content type", "text/plain", response.getContentType());
-		assertEquals("requested resource", "describe", response.getText());
+		assertEquals("requested resource", replay, response.getText());
 	}
 
 }

@@ -3,8 +3,11 @@ package novoda.clag.provider.gae;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
+import novoda.clag.introspector.jdo.sample.Page;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaProperty;
 import novoda.clag.model.Options;
@@ -15,6 +18,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 
@@ -67,6 +71,28 @@ public class GaeProvider extends AbstractProvider {
 		return cursor;
 	}
 	
+	@Override
+	public Cursor insert(String name, Cursor values, MetaEntity entity) {
+		Cursor result = new Cursor(name);
+		for (Map<String, Object> row : values.getRows()) {
+			Map<String, Object> rowResult = insert(row, entity);
+			if(rowResult != null) {
+				result.addRow(rowResult);
+			}
+		}
+		return result;
+	}
+	
+	private Map<String, Object> insert(Map<String, Object> row, MetaEntity entity) {
+		Entity e = new Entity(entity.getClassName());
+		for (Entry<String, Object> entry : row.entrySet()) {
+			e.setProperty(entry.getKey(), entry.getValue());
+		}
+		Key key = ds.put(e);
+		row.put(entity.getKeyProperty(), key.getId());
+		return row;
+	}
+
 	private void addRelations(Cursor cursor, MetaProperty mp, Options dataLimitation, DatastoreService ds) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("fetching relation for : " + mp.getFrom());
@@ -118,5 +144,5 @@ public class GaeProvider extends AbstractProvider {
 		}
 		return name.substring(index + 1);
 	}
-	
+
 }

@@ -3,6 +3,8 @@ package novoda.clag.servlet.context;
 import javax.servlet.http.HttpServletRequest;
 
 import novoda.clag.converter.Converter;
+import novoda.clag.model.Cursor;
+import novoda.clag.model.MetaEntity;
 import novoda.clag.model.Options;
 import novoda.clag.provider.Provider;
 
@@ -50,5 +52,7 @@ public interface Context {
 	ServiceInfo getServiceInfo();
 
 	void setServiceInfo(ServiceInfo serviceInfo);
+
+	Cursor getCursorFromRequest(MetaEntity me);
 
 }

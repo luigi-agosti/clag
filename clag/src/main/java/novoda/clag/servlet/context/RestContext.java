@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import novoda.clag.converter.Converter;
+import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.Options;
 import novoda.clag.provider.Provider;
@@ -119,6 +120,11 @@ public class RestContext extends RequestWrapper implements Context {
 	@Override
 	public ServiceInfo getServiceInfo() {
 		return serviceInfo;
+	}
+	
+	@Override
+	public Cursor getCursorFromRequest(MetaEntity me) {
+		return new Cursor(me.getName(), getEntity(me));
 	}
 
 	public Map<String, Object> getEntity(MetaEntity me) {

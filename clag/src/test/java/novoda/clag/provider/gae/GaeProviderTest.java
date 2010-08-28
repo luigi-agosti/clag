@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import novoda.clag.introspector.jdo.JdoIntrospector;
@@ -143,6 +144,30 @@ public class GaeProviderTest {
 		assertNotNull(properties);
 		assertTrue(properties.containsKey("groupIds"));
 		assertEquals(Arrays.asList("1", "2"), properties.get("groupIds"));
+	}
+	
+	@Test
+	public void shouldInsertACursor() {
+		MetaEntity me = new MetaEntity("Example", "Example");
+		me.addKey("id", MetaEntity.Type.INTEGER);
+		me.add("textProperty", MetaEntity.Type.STRING);
+		me.add("integerProperty", MetaEntity.Type.INTEGER);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("textProperty", "test");
+		
+		Cursor cursor = new Cursor(me.getName());
+		cursor.addRow(map);
+			
+		Cursor result = provider.insert(me.getName(), cursor, me);
+		
+		assertNotNull(result);
+		assertEquals(1, result.getRows().size());
+		Map<String, Object> row = result.getRows().get(0);  
+		assertTrue(row.containsKey("textProperty"));
+		assertEquals("test", row.get("textProperty"));
+		assertTrue(row.containsKey("id"));
+		assertEquals(Long.valueOf(1), row.get("id"));
 	}
 
 }

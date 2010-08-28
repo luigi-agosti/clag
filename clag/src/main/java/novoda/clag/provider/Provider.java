@@ -28,6 +28,8 @@ public interface Provider extends Configurable {
 	Cursor query(String name, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder,
 			Options dataLimitation);
+	
+	Cursor insert(String name, Cursor values, MetaEntity entity);
 
 	MetaEntity schema(String name);
 	

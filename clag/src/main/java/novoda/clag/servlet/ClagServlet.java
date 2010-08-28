@@ -91,8 +91,9 @@ public class ClagServlet extends HttpServlet {
 			out.println(result);
 			out.close();
 			out.flush();
-		} 
-		throw new RuntimeException("No action implemented for " + name);
+		} else {
+			throw new RuntimeException("No action implemented for " + name);
+		}
 	}
 
 	@Override
