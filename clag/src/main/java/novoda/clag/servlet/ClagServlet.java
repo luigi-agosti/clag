@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import novoda.clag.servlet.action.Describe;
+import novoda.clag.servlet.action.Insert;
 import novoda.clag.servlet.action.Query;
 import novoda.clag.servlet.action.Schema;
 import novoda.clag.servlet.config.Configurator;
@@ -77,8 +78,21 @@ public class ClagServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		logger.debug("Executing post request for : " + req.getRequestURI());
-		// TODO create
-		throw new RuntimeException("Post not implemented yet!");
+		Context context = configurator.getContext();
+		context.setRequest(req);
+		String name = context.getName();
+		if(name != null && name.length() > 0){
+			String result = null;
+			result = new Insert().execute(context);
+			logger.debug("request executed, sending back the result");
+			resp.setContentType(CONTENT_TYPE);
+			resp.setContentLength(result.length());
+			PrintWriter out = resp.getWriter();
+			out.println(result);
+			out.close();
+			out.flush();
+		} 
+		throw new RuntimeException("No action implemented for " + name);
 	}
 
 	@Override

@@ -85,7 +85,7 @@ public class GaeProvider extends AbstractProvider {
 
 	private Collection<String> getPropertyToLookup(String[] projection,
 			MetaEntity entity) {
-		Set<String> keys = entity.getKeys();
+		Set<String> keys = entity.getPropertyNames();
 		if (projection == null) {
 			return keys;
 		}

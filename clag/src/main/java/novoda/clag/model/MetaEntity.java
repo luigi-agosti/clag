@@ -17,6 +17,26 @@ import org.apache.log4j.Logger;
 public class MetaEntity {
 	
 	private static final Logger logger = Logger.getLogger(MetaEntity.class);
+	
+	/**
+	 * Types
+	 * 
+	 * @author luigi.agosti
+	 *
+	 */
+	public interface Type {
+		
+		String STRING = "text";
+	
+		String INTEGER = "integer";
+		
+		String NULL = "null";
+		
+		String REAL = "real";
+		
+		String BLOB = "blob";
+		
+	}
 
 	private Map<String, MetaProperty> mds = new HashMap<String, MetaProperty>();
 	
@@ -97,7 +117,7 @@ public class MetaEntity {
 		return name;
 	}
 	
-	public Set<String> getKeys() {
+	public Set<String> getPropertyNames() {
 		return mds.keySet();
 	}
 	

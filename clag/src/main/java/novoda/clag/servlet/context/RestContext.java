@@ -1,10 +1,12 @@
 package novoda.clag.servlet.context;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import novoda.clag.converter.Converter;
+import novoda.clag.model.MetaEntity;
 import novoda.clag.model.Options;
 import novoda.clag.provider.Provider;
 import novoda.clag.util.RequestWrapper;
@@ -73,7 +75,7 @@ public class RestContext extends RequestWrapper implements Context {
 
 	@Override
 	public String getSelection() {
-		return getParameterAsString(Parameter.SELECTION_ARGS);
+		return getParameterAsString(Parameter.SELECTION);
 	}
 
 	@Override
@@ -117,6 +119,17 @@ public class RestContext extends RequestWrapper implements Context {
 	@Override
 	public ServiceInfo getServiceInfo() {
 		return serviceInfo;
+	}
+
+	public Map<String, Object> getEntity(MetaEntity me) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		for(String key : me.getPropertyNames()) {
+			String value = getParameterAsString(key);
+			if(value != null){
+				map.put(key, value);
+			}
+		}
+		return map;
 	}
 
 }

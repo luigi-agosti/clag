@@ -20,11 +20,11 @@ public abstract class AbstractIntrospector implements Introspector {
 	
 	private static Map<String, String> TYPE_MAP = new HashMap<String, String>();
     static {
-            TYPE_MAP.put(String.class.getName(), Introspector.Type.STRING);
-            TYPE_MAP.put(Integer.class.getName(), Introspector.Type.INTEGER);
-            TYPE_MAP.put(Long.class.getName(), Introspector.Type.INTEGER);
-            TYPE_MAP.put(Date.class.getName(), Introspector.Type.INTEGER);
-            TYPE_MAP.put(List.class.getName(), Introspector.Type.STRING);
+            TYPE_MAP.put(String.class.getName(), MetaEntity.Type.STRING);
+            TYPE_MAP.put(Integer.class.getName(), MetaEntity.Type.INTEGER);
+            TYPE_MAP.put(Long.class.getName(), MetaEntity.Type.INTEGER);
+            TYPE_MAP.put(Date.class.getName(), MetaEntity.Type.INTEGER);
+            TYPE_MAP.put(List.class.getName(), MetaEntity.Type.STRING);
     }
 
     public static final String getType(Class<?> clazz) {

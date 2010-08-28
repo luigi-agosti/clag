@@ -29,15 +29,15 @@ public class JdoIntrospectorTest {
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaHref").getType());
+		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("mediaHref").getType());
 		assertTrue(entity.contains("title"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("title").getType());
+		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("title").getType());
 		assertTrue(entity.contains("mediaImageHref"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("mediaImageHref").getType());
+		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("mediaImageHref").getType());
 		assertTrue(entity.contains("caption"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("caption").getType());
+		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("caption").getType());
 		assertTrue(entity.contains("copy"));
-		assertEquals(Introspector.Type.STRING, entity.getMetaProperty("copy").getType());
+		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("copy").getType());
 	}
 	
 	@Test
@@ -71,12 +71,12 @@ public class JdoIntrospectorTest {
 		
 		assertTrue(entity.contains("mediaHref"));
 		MetaProperty mp = entity.getMetaProperty("mediaHref");
-		assertEquals(Introspector.Type.STRING, mp.getType());
+		assertEquals(MetaEntity.Type.STRING, mp.getType());
 		assertFalse(mp.getIsKey());
 		
 		assertTrue(entity.contains("id"));
 		mp = entity.getMetaProperty("id");
-		assertEquals(Introspector.Type.INTEGER, mp.getType());
+		assertEquals(MetaEntity.Type.INTEGER, mp.getType());
 		assertTrue(mp.getIsKey());
 	}
 	

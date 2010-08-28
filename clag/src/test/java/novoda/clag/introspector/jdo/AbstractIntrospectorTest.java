@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import novoda.clag.introspector.AbstractIntrospector;
-import novoda.clag.introspector.Introspector;
+import novoda.clag.model.MetaEntity;
 
 import org.junit.Test;
 
@@ -14,27 +14,27 @@ public class AbstractIntrospectorTest {
 	
 	@Test
 	public void stringClass() {
-		assertEquals(Introspector.Type.STRING, AbstractIntrospector.getType(String.class));
+		assertEquals(MetaEntity.Type.STRING, AbstractIntrospector.getType(String.class));
 	}
 
 	@Test
 	public void integerClass() {
-		assertEquals(Introspector.Type.INTEGER, AbstractIntrospector.getType(Integer.class));
+		assertEquals(MetaEntity.Type.INTEGER, AbstractIntrospector.getType(Integer.class));
 	}
 
 	@Test
 	public void longClass() {
-		assertEquals(Introspector.Type.INTEGER, AbstractIntrospector.getType(Long.class));
+		assertEquals(MetaEntity.Type.INTEGER, AbstractIntrospector.getType(Long.class));
 	}
 	
 	@Test
 	public void dateClass() {
-		assertEquals(Introspector.Type.INTEGER, AbstractIntrospector.getType(Date.class));	
+		assertEquals(MetaEntity.Type.INTEGER, AbstractIntrospector.getType(Date.class));	
 	}
 
 	@Test
 	public void listOfString() {
-		assertEquals(Introspector.Type.STRING, AbstractIntrospector.getType(List.class));
+		assertEquals(MetaEntity.Type.STRING, AbstractIntrospector.getType(List.class));
 	}
 
 }

@@ -187,13 +187,13 @@ public class JsonConverterTest {
 	private MetaEntity getSampleEntity() {
 		MetaEntity entity = new MetaEntity("novoda.clag.Example", "Example");
 		entity.add(new MetaProperty.Builder("title").type(
-				Introspector.Type.STRING).build());
+				MetaEntity.Type.STRING).build());
 		entity.add(new MetaProperty.Builder("description").type(
-				Introspector.Type.STRING).build());
+				MetaEntity.Type.STRING).build());
 		entity.add(new MetaProperty.Builder("cost").type(
-				Introspector.Type.INTEGER).build());
+				MetaEntity.Type.INTEGER).build());
 		entity.add(new MetaProperty.Builder("id").type(
-				Introspector.Type.INTEGER).isKey(true).build());
+				MetaEntity.Type.INTEGER).isKey(true).build());
 		return entity;
 	}
 

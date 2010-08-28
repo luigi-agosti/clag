@@ -35,6 +35,8 @@ public class JsonConverter implements Converter {
 	private static final String SERVICES = "services";
 	
 	private static final String VERSION = "version";
+	
+	private static final String CHILDREN = "children";
 
 	private static final String GET = "get";
 
@@ -117,7 +119,7 @@ public class JsonConverter implements Converter {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	private void converEntity(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
 			throws Exception {
 		jsonStringer.object().key(TABLE).value(entity.getName()).key(COLUMNS)
@@ -133,7 +135,7 @@ public class JsonConverter implements Converter {
 		jsonStringer.endArray();
 		
 		if(recursive) {
-			jsonStringer.key("children").array();
+			jsonStringer.key(CHILDREN).array();
 			for(String name: entity.getRelations()) {
 				MetaProperty mp = entity.getMetaProperty(name);
 				if(entity.getName().equals(mp.getOwner())) {
