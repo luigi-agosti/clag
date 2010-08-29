@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Date;
 
 import novoda.clag.converter.Converter;
-import novoda.clag.introspector.Introspector;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;

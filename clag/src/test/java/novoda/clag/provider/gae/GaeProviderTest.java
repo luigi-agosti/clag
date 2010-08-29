@@ -169,5 +169,6 @@ public class GaeProviderTest {
 		assertTrue(row.containsKey("id"));
 		assertEquals(Long.valueOf(1), row.get("id"));
 	}
+	
 
 }

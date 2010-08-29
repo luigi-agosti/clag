@@ -9,7 +9,6 @@ import novoda.clag.model.Options;
 import novoda.clag.servlet.context.Context.Parameter;
 import novoda.clag.util.RequestMapBuilder;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RestContextTest {
@@ -132,26 +131,24 @@ public class RestContextTest {
 		assertEquals(10, o.getOffset());
 	}
 
-	@Ignore
 	@Test
 	public void shouldGetSelection() {
 		RestContext rr = new RestContext(new RequestMapBuilder().add(
 				Parameter.SELECTION, "id").build());
 		rr.setUri("/data/Story");
 
-		assertNull(rr.getSelection());
+		assertNotNull(rr.getSelection());
 		assertEquals("id", rr.getSelection());
 	}
 	
-	@Ignore
 	@Test
 	public void shouldGetSelectionArgs() {
 		RestContext rr = new RestContext(new RequestMapBuilder().add(
 				Parameter.SELECTION_ARGS, "id").build());
 		rr.setUri("/data/Story");
 
-		assertNull(rr.getSelectionArgs());
-		assertEquals("id", rr.getSelectionArgs());
+		assertNotNull(rr.getSelectionArgs());
+		assertEquals("id", rr.getSelectionArgs()[0]);
 	}
 	
 }

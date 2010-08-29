@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import novoda.clag.introspector.Introspector;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import novoda.clag.introspector.jdo.sample.Page;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaProperty;
 import novoda.clag.model.Options;
