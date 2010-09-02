@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class RequestWrapper {
 
 	}
 
-	public RequestWrapper(HttpServletRequest request) {
+	protected RequestWrapper(HttpServletRequest request) {
 		setRequest(request);
 	}
 	
@@ -145,4 +146,23 @@ public class RequestWrapper {
 		return strings.toArray(new String[] {});
 	}
 
+	protected void addOrOverwriteParameter(String key, String value) {
+		if(parameterMap == null) {
+			parameterMap = new HashMap<String, String[]>();
+		}
+		parameterMap.put(key, new String[]{value});
+	}
+
+	protected void addOrOverwriteParameter(String key, List<String> values) {
+		String commaSeparatedValue = "";
+		for(String value : values) {
+			commaSeparatedValue = value + ",";
+		}
+		int lenght = commaSeparatedValue.length();
+		if(lenght > 2 && values.size() > 0) {			
+			commaSeparatedValue = commaSeparatedValue.substring(0, lenght - 2);
+		}
+		addOrOverwriteParameter(key, commaSeparatedValue);
+	}
+	
 }

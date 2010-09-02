@@ -94,7 +94,6 @@ public class ETagFilter implements Filter {
 		}
 		byte[] messageDigest = md.digest(bytes);
 		BigInteger number = new BigInteger(1, messageDigest);
-		// prepend a zero to get a "proper" MD5 hash value
 		StringBuffer sb = new StringBuffer('0');
 		sb.append(number.toString(16));
 		return sb.toString();
