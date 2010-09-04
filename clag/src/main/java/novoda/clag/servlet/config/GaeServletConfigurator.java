@@ -6,7 +6,7 @@ import java.util.List;
 import javax.servlet.ServletConfig;
 
 import novoda.clag.converter.Converter;
-import novoda.clag.converter.json.JsonConverter;
+import novoda.clag.converter.json.RestProviderConverter;
 import novoda.clag.introspector.Introspector;
 import novoda.clag.introspector.jdo.JdoIntrospector;
 import novoda.clag.provider.Provider;
@@ -28,7 +28,7 @@ public class GaeServletConfigurator implements Configurator {
 
 	private static final String DEFAULT_PROVIDER = GaeProvider.class.getName();
 
-	private static final String DEFAULT_CONVERTER = JsonConverter.class.getName();
+	private static final String DEFAULT_CONVERTER = RestProviderConverter.class.getName();
 
 	private static final String DEFAULT_INTROSPECTOR = JdoIntrospector.class.getName();
 

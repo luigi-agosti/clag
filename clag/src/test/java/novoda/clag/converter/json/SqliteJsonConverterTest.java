@@ -1,10 +1,6 @@
 package novoda.clag.converter.json;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.Arrays;
-import java.util.Date;
-
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
@@ -20,22 +16,18 @@ import org.junit.Test;
 /**
  * @author luigi.agosti
  */
-public class JsonConverterTest {
-
-	private static final String EXAMPLE_JSON = "{\"name\":\"Example\",\"columns\":["
-		+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
-		+ "{\"name\":\"title\",\"type\":\"text\"}"
-		+ ",{\"name\":\"description\",\"type\":\"text\"}"
-		+ ",{\"name\":\"cost\",\"type\":\"integer\"}],\"children\":[]}";
+public class SqliteJsonConverterTest {
 	
-	private Converter converter = new JsonConverter();
+	private Converter converter = new SqliteJsonConverter();
 	private Context context = new RestContext();
 
 	@Test
 	public void convertMetaDataSet() {
 		String result = converter.convert(getSampleEntity(), context);
 
-		assertEquals(EXAMPLE_JSON, result);
+		assertEquals("{\"dropStatements\":\"drop table Example;\"," +
+				"\"createStatements\":\"create table Example" +
+				"(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\"}", result);
 	}
 
 	@Test
@@ -52,28 +44,6 @@ public class JsonConverterTest {
 		assertEquals(
 				"[{\"title\":\"title value\",\"description\":\"description value\",\"cost\":1,\"id\":1}]",
 				result);
-	}
-
-	@Test
-	public void convertCursorWithDateField() {
-		Cursor cursor = new Cursor();
-		cursor.add("date", new Date(1));
-		cursor.next();
-
-		String result = converter.convert(cursor, getSampleEntity(), context);
-
-		assertEquals("[{\"date\":1}]", result);
-	}
-
-	@Test
-	public void convertCursorWithListOfString() {
-		Cursor cursor = new Cursor();
-		cursor.add("groupIds", Arrays.asList("1", "2"));
-		cursor.next();
-		
-		String result = converter.convert(cursor, getSampleEntity(), context);
-		
-		assertEquals("[{\"groupIds\":[\"1\",\"2\"]}]", result);
 	}
 
 	@Test
@@ -96,21 +66,6 @@ public class JsonConverterTest {
 				"[{\"title\":\"title value\",\"description\":\"description value\",\"cost\":1,\"id\":1},"
 						+ "{\"id\":2,\"title\":\"title value2\",\"description\":\"description value2\",\"cost\":12}]",
 				result);
-	}
-	
-	@Test
-	public void convertCursorWithSubCursor() {
-		Cursor cursor = new Cursor();
-		cursor.add("title", "cursor");
-		Cursor subCursor = new Cursor("Subcursor");
-		subCursor.add("title", "subCursor");
-		subCursor.next();
-		cursor.add("Subcursor", subCursor);
-		cursor.next();
-		
-		String result = converter.convert(cursor, null, context);
-		
-		assertEquals("[{\"title\":\"cursor\",\"Subcursor\":[{\"title\":\"subCursor\"}]}]", result);
 	}
 
 	@Test
@@ -137,33 +92,33 @@ public class JsonConverterTest {
 		String result = converter.describe(context);
 		assertEquals(
 			"{\"name\":\"testApplication\",\"version\":\"1\"," +
-				"\"services\":[" +
-					"{\"get\":[\"Example\"]}" +
+				"\"dropStatements\":[" +
+					"\"drop table Example;\"" +
 				"]," +
-				"\"schema\":[" +
-					EXAMPLE_JSON +
+				"\"createStatements\":[" +
+					"\"create table Example(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\"" +
 				"]" +
 			"}", result);
 	}
 	
-	@Test
-	public void convertWithSelfRelationWithTheOwnerOfTheRelation() {
-		Context context = new RestContext();
-		MetaEntity me = getSampleEntity();
-		me.addRelation("parentId", "Example", "Example1", "text", true);
-		Provider provider = new GaeProvider();
-		provider.add(me);
-		context.setProvider(provider);
-		
-		String result = converter.convert(me, context);
-		assertEquals(
-			"{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}," +
-				"{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
-				"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]," +
-					"\"children\":[{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}" +
-					",{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
-					"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]}]}", result);
-	}
+//	@Test
+//	public void convertWithSelfRelationWithTheOwnerOfTheRelation() {
+//		Context context = new RestContext();
+//		MetaEntity me = getSampleEntity();
+//		me.addRelation("parentId", "Example", "Example1", "text", true);
+//		Provider provider = new GaeProvider();
+//		provider.add(me);
+//		context.setProvider(provider);
+//		
+//		String result = converter.convert(me, context);
+//		assertEquals(
+//			"{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}," +
+//				"{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
+//				"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]," +
+//					"\"children\":[{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}" +
+//					",{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
+//					"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]}]}", result);
+//	}
 
 	@Test
 	public void describeWithNoProvider() {

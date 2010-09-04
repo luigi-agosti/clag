@@ -36,28 +36,16 @@ public class RestContext extends RequestWrapper implements Context {
 	
 	public RestContext(HttpServletRequest request) {
 		super(request);
-		setSelectionFromUrl();
 	}
 	
 	@Override
 	public void setRequest(HttpServletRequest request) {
 		super.setRequest(request);
-		setSelectionFromUrl();
 	}
 	
 	@Override
 	public void setUri(String uri) {
 		super.setUri(uri);
-		setSelectionFromUrl();
-	}
-
-	private void setSelectionFromUrl() {
-		String uri = getUri();
-		if(uri == null || uri.length() <= 0) {
-			return;
-		}
-		
-		addOrOverwriteParameter(Parameter.SELECTION, "id=1");
 	}
 
 	@Override
