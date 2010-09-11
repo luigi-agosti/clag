@@ -14,6 +14,7 @@ import novoda.clag.servlet.config.Configurator;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -124,6 +125,7 @@ public class ClagServletTest {
 		assertResponse("describe", response);
 	}
 
+	@Ignore
 	@Test
 	public void shouldRespondToAPost() throws IOException, SAXException {
 		request = new PostMethodWebRequest(

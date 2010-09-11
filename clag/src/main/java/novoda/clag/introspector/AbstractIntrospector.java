@@ -25,6 +25,7 @@ public abstract class AbstractIntrospector implements Introspector {
             TYPE_MAP.put(Long.class.getName(), MetaEntity.Type.INTEGER);
             TYPE_MAP.put(Date.class.getName(), MetaEntity.Type.INTEGER);
             TYPE_MAP.put(List.class.getName(), MetaEntity.Type.STRING);
+            TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.REAL);
     }
 
     public static final String getType(Class<?> clazz) {

@@ -16,6 +16,8 @@ public class RequestWrapper {
 	private Map<String, String[]> parameterMap;
 
 	private String uri;
+	
+	private HttpServletRequest request;
 
 	public RequestWrapper() {
 
@@ -27,6 +29,7 @@ public class RequestWrapper {
 	
 	@SuppressWarnings("unchecked")
 	public void setRequest(HttpServletRequest request) {
+		this.request = request;
 		this.uri = request.getRequestURI();
 		this.parameterMap = request.getParameterMap();
 	}
@@ -143,6 +146,11 @@ public class RequestWrapper {
 			return null;
 		}
 		return strings.toArray(new String[] {});
+	}
+
+
+	protected String getHeader(String param) {
+		return request.getHeader(param);
 	}
 
 }

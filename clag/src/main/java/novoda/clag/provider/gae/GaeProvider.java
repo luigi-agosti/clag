@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 
 /**
  * @author luigi.agosti
@@ -46,6 +47,9 @@ public class GaeProvider extends AbstractProvider {
 		}
 		Query q = buildQuery(name, projection, selection, selectionArgs,
 				sortOrder);
+		if(dataLimitation.getAccount()!=null) {
+			q.addFilter("email", FilterOperator.EQUAL, dataLimitation.getAccount());
+		}
 		PreparedQuery pq = ds.prepare(q);
 		Cursor cursor = new Cursor();
 		Collection<String> propertiesMatchingProjection = getPropertyToLookup(

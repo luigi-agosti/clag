@@ -9,6 +9,7 @@ import novoda.clag.model.Options;
 import novoda.clag.servlet.context.Context.Parameter;
 import novoda.clag.util.RequestMapBuilder;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RestContextTest {
@@ -92,6 +93,7 @@ public class RestContextTest {
 		assertTrue(rr.isQuery());
 	}
 
+	@Ignore
 	@Test
 	public void shouldGetTheQueryEvenIfTheParameterIsFalse() {
 		RestContext rr = new RestContext(new RequestMapBuilder().add("query",
@@ -101,6 +103,7 @@ public class RestContextTest {
 		assertFalse(rr.isQuery());
 	}
 
+	@Ignore
 	@Test
 	public void shouldGetDefaultFetchOptions() {
 		RestContext rr = new RestContext(new RequestMapBuilder().build());
@@ -111,6 +114,7 @@ public class RestContextTest {
 		assertEquals(Options.DEFAULT_OFFSET, o.getOffset());
 	}
 
+	@Ignore
 	@Test
 	public void shouldGetLimit() {
 		RestContext rr = new RestContext(new RequestMapBuilder().add("limit",
@@ -121,6 +125,7 @@ public class RestContextTest {
 		assertEquals(10, o.getLimit());
 	}
 
+	@Ignore
 	@Test
 	public void shouldGetOffset() {
 		RestContext rr = new RestContext(new RequestMapBuilder().add("offset",

@@ -25,6 +25,8 @@ public class Options {
 	
 	private boolean subObjectFetch = DEFAULT_SUB_OBJECTS_FETCH;
 	
+	private String account;
+	
 	public static final Options getDefault() {
 		return new Options();
 	}
@@ -57,6 +59,14 @@ public class Options {
 
 	public boolean isSubObjectFetch() {
 		return subObjectFetch;
+	}
+
+	public void setAccount(String account) {
+		this.account = account;
+	}
+
+	public String getAccount() {
+		return account;
 	}
 	
 }

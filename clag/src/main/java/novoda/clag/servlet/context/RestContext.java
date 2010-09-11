@@ -109,6 +109,12 @@ public class RestContext extends RequestWrapper implements Context {
 		Options dl = new Options();
 		dl.setLimit(getParameterAsInt(Parameter.LIMIT, Options.DEFAULT_LIMIT));
 		dl.setOffset(getParameterAsInt(Parameter.OFFSET, Options.DEFAULT_OFFSET));
+		
+		String email = getHeader(Parameter.EMAIL);
+		if(email == null) {
+			email = getParameterAsString(Parameter.EMAIL);
+		}
+		dl.setAccount(email);
 		return dl;
 	}
 

@@ -37,4 +37,10 @@ public class AbstractIntrospectorTest {
 		assertEquals(MetaEntity.Type.STRING, AbstractIntrospector.getType(List.class));
 	}
 
+	@Test
+	public void doubleClass() {
+		assertEquals(MetaEntity.Type.REAL, AbstractIntrospector.getType(Double.class));
+	}
+
+	
 }
