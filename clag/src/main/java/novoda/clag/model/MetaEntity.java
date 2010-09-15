@@ -18,12 +18,8 @@ public class MetaEntity {
 	
 	private static final Logger logger = Logger.getLogger(MetaEntity.class);
 	
-	/**
-	 * Types
-	 * 
-	 * @author luigi.agosti
-	 *
-	 */
+	public enum OnConflictPolicy { ROLLBACK, ABORT, FAIL, IGNORE, REPLACE, NOT_DEFINED }
+	
 	public interface Type {
 		
 		String STRING = "text";

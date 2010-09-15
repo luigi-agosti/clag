@@ -5,6 +5,7 @@ import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
+import novoda.clag.model.MetaEntity.OnConflictPolicy;
 import novoda.clag.provider.Provider;
 import novoda.clag.provider.gae.GaeProvider;
 import novoda.clag.servlet.context.Context;
@@ -17,7 +18,7 @@ import org.junit.Test;
  * @author luigi.agosti
  */
 public class SqliteJsonConverterTest {
-	
+
 	private Converter converter = new SqliteJsonConverter();
 	private Context context = new RestContext();
 
@@ -25,9 +26,11 @@ public class SqliteJsonConverterTest {
 	public void convertMetaDataSet() {
 		String result = converter.convert(getSampleEntity(), context);
 
-		assertEquals("{\"dropStatements\":\"drop table Example;\"," +
-				"\"createStatements\":\"create table Example" +
-				"(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\"}", result);
+		assertEquals(
+				"{\"dropStatements\":\"drop table if exists Example;\","
+						+ "\"createStatements\":\"create table if not exists Example"
+						+ "(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\"}",
+				result);
 	}
 
 	@Test
@@ -70,11 +73,12 @@ public class SqliteJsonConverterTest {
 
 	@Test
 	public void convertCursorWithoutObject() {
-		String result = converter.convert(new Cursor(), getSampleEntity(), context);
+		String result = converter.convert(new Cursor(), getSampleEntity(),
+				context);
 
 		assertEquals("[]", result);
 	}
-	
+
 	@Test
 	public void describeWithNullContext() {
 		String result = converter.describe(null);
@@ -91,34 +95,39 @@ public class SqliteJsonConverterTest {
 		context.setServiceInfo(serviceInfo);
 		String result = converter.describe(context);
 		assertEquals(
-			"{\"name\":\"testApplication\",\"version\":\"1\"," +
-				"\"dropStatements\":[" +
-					"\"drop table Example;\"" +
-				"]," +
-				"\"createStatements\":[" +
-					"\"create table Example(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\"" +
-				"]" +
-			"}", result);
+				"{\"name\":\"testApplication\",\"version\":\"1\","
+						+ "\"dropStatements\":["
+						+ "\"drop table if exists Example;\""
+						+ "],"
+						+ "\"createStatements\":["
+						+ "\"create table if not exists Example(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\""
+						+ "]" + "}", result);
 	}
-	
-//	@Test
-//	public void convertWithSelfRelationWithTheOwnerOfTheRelation() {
-//		Context context = new RestContext();
-//		MetaEntity me = getSampleEntity();
-//		me.addRelation("parentId", "Example", "Example1", "text", true);
-//		Provider provider = new GaeProvider();
-//		provider.add(me);
-//		context.setProvider(provider);
-//		
-//		String result = converter.convert(me, context);
-//		assertEquals(
-//			"{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}," +
-//				"{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
-//				"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]," +
-//					"\"children\":[{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}" +
-//					",{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"}," +
-//					"{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]}]}", result);
-//	}
+
+	// @Test
+	// public void convertWithSelfRelationWithTheOwnerOfTheRelation() {
+	// Context context = new RestContext();
+	// MetaEntity me = getSampleEntity();
+	// me.addRelation("parentId", "Example", "Example1", "text", true);
+	// Provider provider = new GaeProvider();
+	// provider.add(me);
+	// context.setProvider(provider);
+	//		
+	// String result = converter.convert(me, context);
+	// assertEquals(
+	// "{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
+	// +
+	// "{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"},"
+	// +
+	// "{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}],"
+	// +
+	// "\"children\":[{\"name\":\"Example\",\"columns\":[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"}"
+	// +
+	// ",{\"name\":\"parentId\",\"type\":\"text\"},{\"name\":\"title\",\"type\":\"text\"},"
+	// +
+	// "{\"name\":\"description\",\"type\":\"text\"},{\"name\":\"cost\",\"type\":\"integer\"}]}]}",
+	// result);
+	// }
 
 	@Test
 	public void describeWithNoProvider() {
@@ -128,10 +137,20 @@ public class SqliteJsonConverterTest {
 		serviceInfo.setVersion("1");
 		context.setServiceInfo(serviceInfo);
 		String result = converter.describe(context);
-		assertEquals(
-				"{\"name\":\"testApplication\",\"version\":\"1\"}", result);
+		assertEquals("{\"name\":\"testApplication\",\"version\":\"1\"}", result);
 	}
-	
+
+	@Test
+	public void convertMetaDataSetWithReplaceUnique() {
+		String result = converter.convert(getComplexEntity(), context);
+
+		assertEquals(
+				"{\"dropStatements\":\"drop table if exists Example;\","
+						+ "\"createStatements\":\"create table if not exists Example"
+						+ "(_id integer primary key autoincrement,id integer unique on conflict replace,title text);\"}",
+				result);
+	}
+
 	private Provider getSampleProvider() {
 		Provider provider = new GaeProvider();
 		provider.add(getSampleEntity());
@@ -146,8 +165,18 @@ public class SqliteJsonConverterTest {
 				MetaEntity.Type.STRING).build());
 		entity.add(new MetaProperty.Builder("cost").type(
 				MetaEntity.Type.INTEGER).build());
-		entity.add(new MetaProperty.Builder("id").type(
-				MetaEntity.Type.INTEGER).isKey(true).build());
+		entity.add(new MetaProperty.Builder("id").type(MetaEntity.Type.INTEGER)
+				.isKey(true).build());
+		return entity;
+	}
+
+	private MetaEntity getComplexEntity() {
+		MetaEntity entity = new MetaEntity("novoda.clag.Example", "Example");
+		entity.add(new MetaProperty.Builder("title").type(
+				MetaEntity.Type.STRING).build());
+		entity.add(new MetaProperty.Builder("id").type(MetaEntity.Type.INTEGER)
+				.unique(true).onConflictPolicy(OnConflictPolicy.REPLACE).isKey(
+						true).build());
 		return entity;
 	}
 

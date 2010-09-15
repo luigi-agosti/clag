@@ -33,11 +33,6 @@ public class AbstractIntrospectorTest {
 	}
 
 	@Test
-	public void doubleClass() {
-		assertEquals(MetaEntity.Type.STRING, AbstractIntrospector.getType(Double.class));	
-	}
-
-	@Test
 	public void listOfString() {
 		assertEquals(MetaEntity.Type.STRING, AbstractIntrospector.getType(List.class));
 	}

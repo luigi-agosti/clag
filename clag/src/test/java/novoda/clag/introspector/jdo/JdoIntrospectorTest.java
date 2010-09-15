@@ -5,9 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import novoda.clag.introspector.jdo.sample.ClagAnnotationModel;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
+import novoda.clag.model.MetaEntity.OnConflictPolicy;
 
 import org.junit.Test;
 
@@ -77,6 +79,27 @@ public class JdoIntrospectorTest {
 		mp = entity.getMetaProperty("id");
 		assertEquals(MetaEntity.Type.INTEGER, mp.getType());
 		assertTrue(mp.getIsKey());
+	}
+	
+	@Test
+	public void shouldUseClagProperly() {
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(ClagAnnotationModel.class);
+		assertNotNull(entity);
+		
+		assertTrue(entity.contains("id"));
+		MetaProperty mp = entity.getMetaProperty("id");
+		assertEquals(MetaEntity.Type.INTEGER, mp.getType());
+		assertEquals(OnConflictPolicy.REPLACE, mp.getOnConflictPolicy());
+		assertTrue(mp.getIsKey());
+		assertTrue(mp.getIsUnique());
+		
+		assertTrue(entity.contains("field"));
+		mp = entity.getMetaProperty("field");
+		assertEquals(MetaEntity.Type.STRING, mp.getType());
+		assertEquals(OnConflictPolicy.NOT_DEFINED, mp.getOnConflictPolicy());
+		assertFalse(mp.getIsKey());
+		assertFalse(mp.getIsUnique());
+		
 	}
 	
 }

@@ -7,6 +7,7 @@ import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
+import novoda.clag.model.MetaEntity.OnConflictPolicy;
 import novoda.clag.servlet.context.Context;
 import novoda.clag.servlet.context.ServiceInfo;
 
@@ -108,10 +109,17 @@ public class SqliteJsonConverter implements Converter {
 	
 	private void createStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
 			throws Exception {
-		StringBuilder createStatement = new StringBuilder("create table " + entity.getName() 
+		StringBuilder createStatement = new StringBuilder("create table if not exists " + entity.getName() 
 				+ "(_id integer primary key autoincrement,");
 		for(MetaProperty prop : entity.getMetaProperties()) {
-			createStatement.append(prop.getName()).append(" ").append(prop.getType()).append(",");
+			createStatement.append(prop.getName()).append(" ").append(prop.getType());
+			if(prop.getIsUnique()) {
+				createStatement.append(" unique");
+				if(prop.getOnConflictPolicy() == OnConflictPolicy.REPLACE) {
+					createStatement.append(" on conflict replace");
+				}
+			}
+			createStatement.append(",");
 		}
 		createStatement.deleteCharAt(createStatement.lastIndexOf(","));
 		createStatement.append(");");
@@ -120,7 +128,7 @@ public class SqliteJsonConverter implements Converter {
 
 	private void dropStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
 		throws Exception {
-		StringBuilder createStatement = new StringBuilder("drop table " + entity.getName() + ";");
+		StringBuilder createStatement = new StringBuilder("drop table if exists " + entity.getName() + ";");
 		jsonStringer.value(createStatement);
 	}
 

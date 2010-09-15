@@ -1,5 +1,7 @@
 package novoda.clag.model;
 
+import novoda.clag.model.MetaEntity.OnConflictPolicy;
+
 /**
  * Property is the atomic piece of information that is forming an entity.
  * 
@@ -18,6 +20,8 @@ public class MetaProperty {
 	
 	private boolean isRelation;
 	
+	private boolean isUnique;
+	
 	private boolean include;
 	
 	private String owner;
@@ -27,6 +31,8 @@ public class MetaProperty {
 	private String child;
 	
 	private String from;
+	
+	private OnConflictPolicy onConflictPolicy;
 
 	public String getName() {
 		return name;
@@ -50,6 +56,14 @@ public class MetaProperty {
 
 	public void setIsKey(boolean isKey) {
 		this.isKey = isKey;
+	}
+	
+	public boolean getIsUnique() {
+		return isUnique;
+	}
+
+	public void setIsUnique(boolean isUnique) {
+		this.isUnique = isUnique;
 	}
 
 	public boolean isCanBeNull() {
@@ -125,6 +139,14 @@ public class MetaProperty {
 	public String getOwner() {
 		return owner;
 	}
+	
+	public void setOnConflictPolicy(OnConflictPolicy onConflictPolicy) {
+		this.onConflictPolicy = onConflictPolicy;
+	}
+
+	public OnConflictPolicy getOnConflictPolicy() {
+		return onConflictPolicy;
+	}
 
 
 	/**
@@ -176,6 +198,16 @@ public class MetaProperty {
 
 		public Builder owner(String owner) {
 			md.setOwner(owner);
+			return this;
+		}
+
+		public Builder unique(boolean unique) {
+			md.setIsUnique(unique);
+			return this;
+		}
+		
+		public Builder onConflictPolicy(OnConflictPolicy onConflictPolicy) {
+			md.setOnConflictPolicy(onConflictPolicy);
 			return this;
 		}
 	}
