@@ -156,4 +156,23 @@ public class RestContextTest {
 		assertEquals("id", rr.getSelectionArgs()[0]);
 	}
 	
+//	@Test
+//	public void shouldGetSelectionArgsFromUri() {
+//		RestContext rr = new RestContext(new RequestMapBuilder().build());
+//		rr.setUri("/data/Story/1");
+//
+//		assertNotNull(rr.getSelection());
+//		assertEquals("id=1", rr.getSelection());
+//	}
+	
+//	@Ignore
+//	@Test
+//	public void shouldGetComplexSelectionArgsFromUri() {
+//		RestContext rr = new RestContext(new RequestMapBuilder().build());
+//		rr.setUri("/data/Page/1/Story/1");
+//
+//		assertNotNull(rr.getUriSelection());
+//		assertEquals("id=1,pageId=1", rr.getSelection());
+//	}
+	
 }

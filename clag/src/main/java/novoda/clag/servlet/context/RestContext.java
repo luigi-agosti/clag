@@ -37,6 +37,16 @@ public class RestContext extends RequestWrapper implements Context {
 	public RestContext(HttpServletRequest request) {
 		super(request);
 	}
+	
+	@Override
+	public void setRequest(HttpServletRequest request) {
+		super.setRequest(request);
+	}
+	
+	@Override
+	public void setUri(String uri) {
+		super.setUri(uri);
+	}
 
 	@Override
 	public boolean isQuery() {

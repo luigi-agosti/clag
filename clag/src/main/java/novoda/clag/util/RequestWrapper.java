@@ -23,7 +23,7 @@ public class RequestWrapper {
 
 	}
 
-	public RequestWrapper(HttpServletRequest request) {
+	protected RequestWrapper(HttpServletRequest request) {
 		setRequest(request);
 	}
 	
@@ -147,7 +147,6 @@ public class RequestWrapper {
 		}
 		return strings.toArray(new String[] {});
 	}
-
 
 	protected String getHeader(String param) {
 		return request.getHeader(param);

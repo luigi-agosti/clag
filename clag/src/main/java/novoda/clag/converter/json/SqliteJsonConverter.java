@@ -16,35 +16,25 @@ import com.google.appengine.repackaged.org.json.JSONStringer;
 /**
  * @author luigi.agosti
  */
-public class JsonConverter implements Converter {
-
-	private static final String TABLE = "name";
-
-	private static final String COLUMNS = "columns";
+public class SqliteJsonConverter implements Converter {
 
 	private static final String NAME = "name";
-
-	private static final String TYPE = "type";
-
-	private static final String KEY = "key";
-
-	private static final String KEY_VALUE = "true";
-
-	private static final String SCHEMA = "schema";
-	
-	private static final String SERVICES = "services";
 	
 	private static final String VERSION = "version";
 	
-	private static final String CHILDREN = "children";
+	private static final String DROP_STATEMENTS = "dropStatements";
 
-	private static final String GET = "get";
+	private static final String CREATE_STATEMENTS = "createStatements";
 
 	@Override
 	public String convert(MetaEntity entity, Context context) {
 		try {
 			JSONStringer jsonStringer = new JSONStringer();
-			converEntity(jsonStringer, entity, context, true);
+			jsonStringer.object().key(DROP_STATEMENTS);
+			dropStm(jsonStringer, entity, context, false);
+			jsonStringer.key(CREATE_STATEMENTS);
+			createStm(jsonStringer, entity, context, false);
+			jsonStringer.endObject();
 			return jsonStringer.toString();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -84,7 +74,6 @@ public class JsonConverter implements Converter {
 		}
 	}
 	
-	
 	@Override
 	public String describe(Context context) {
 		try {
@@ -98,18 +87,15 @@ public class JsonConverter implements Converter {
 				}
 				
 				if(context.getProvider() != null) {
-					jsonStringer.key(SERVICES).array().object();				
-					jsonStringer.key(GET).array();
+					jsonStringer.key(DROP_STATEMENTS).array();
 					for(MetaEntity entity: context.getProvider().schema()) {
-						jsonStringer.value(entity.getName());
+						dropStm(jsonStringer, entity, context, true);
 					}
 					jsonStringer.endArray();
 					
-					jsonStringer.endObject().endArray();
-				
-					jsonStringer.key(SCHEMA).array();
+					jsonStringer.key(CREATE_STATEMENTS).array();
 					for(MetaEntity entity: context.getProvider().schema()) {
-						converEntity(jsonStringer, entity, context, true);
+						createStm(jsonStringer, entity, context, true);
 					}
 					jsonStringer.endArray();
 				}
@@ -120,32 +106,22 @@ public class JsonConverter implements Converter {
 		}
 	}
 	
-	private void converEntity(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
+	private void createStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
 			throws Exception {
-		jsonStringer.object().key(TABLE).value(entity.getName()).key(COLUMNS)
-				.array();
-		for (MetaProperty md : entity.getMetaProperties()) {
-			jsonStringer.object().key(NAME).value(md.getName()).key(TYPE)
-					.value(md.getType());
-			if (md.getIsKey()) {
-				jsonStringer.key(KEY).value(KEY_VALUE);
-			}
-			jsonStringer.endObject();
+		StringBuilder createStatement = new StringBuilder("create table " + entity.getName() 
+				+ "(_id integer primary key autoincrement,");
+		for(MetaProperty prop : entity.getMetaProperties()) {
+			createStatement.append(prop.getName()).append(" ").append(prop.getType()).append(",");
 		}
-		jsonStringer.endArray();
-		
-		if(recursive) {
-			jsonStringer.key(CHILDREN).array();
-			for(String name: entity.getRelations()) {
-				MetaProperty mp = entity.getMetaProperty(name);
-				if(entity.getName().equals(mp.getOwner())) {
-					recursive = false;
-				}
-				converEntity(jsonStringer, context.getProvider().schema(mp.getOwner()), context, recursive);
-			}
-			jsonStringer.endArray();
-		}
-		jsonStringer.endObject();
+		createStatement.deleteCharAt(createStatement.lastIndexOf(","));
+		createStatement.append(");");
+		jsonStringer.value(createStatement);
+	}
+
+	private void dropStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
+		throws Exception {
+		StringBuilder createStatement = new StringBuilder("drop table " + entity.getName() + ";");
+		jsonStringer.value(createStatement);
 	}
 
 }
