@@ -127,7 +127,7 @@ public class RestProviderConverter implements Converter {
 		for (MetaProperty md : entity.getMetaProperties()) {
 			jsonStringer.object().key(NAME).value(md.getName()).key(TYPE)
 					.value(md.getType());
-			if (md.getIsKey()) {
+			if (md.getKey()) {
 				jsonStringer.key(KEY).value(KEY_VALUE);
 			}
 			jsonStringer.endObject();

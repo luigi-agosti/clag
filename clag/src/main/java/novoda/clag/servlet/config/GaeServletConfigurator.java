@@ -12,7 +12,7 @@ import novoda.clag.introspector.jdo.JdoIntrospector;
 import novoda.clag.provider.Provider;
 import novoda.clag.provider.gae.GaeProvider;
 import novoda.clag.servlet.context.Context;
-import novoda.clag.servlet.context.RestContext;
+import novoda.clag.servlet.context.GaeRestContext;
 import novoda.clag.servlet.context.ServiceInfo;
 
 import org.apache.log4j.Logger;
@@ -24,7 +24,7 @@ public class GaeServletConfigurator implements Configurator {
 
 	private static final Logger logger = Logger.getLogger(Configurator.class);
 	
-	private static final String DEFAULT_CONTEXT = RestContext.class.getName();
+	private static final String DEFAULT_CONTEXT = GaeRestContext.class.getName();
 
 	private static final String DEFAULT_PROVIDER = GaeProvider.class.getName();
 

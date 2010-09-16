@@ -16,7 +16,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheNameFromTheUrlNullWhenNotDefined() {
-		RestContext rr = new RestContext();
+		GaeRestContext rr = new GaeRestContext();
 		rr.setUri("/data/");
 
 		assertNull(rr.getName());
@@ -24,7 +24,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheNameFromTheUrl() {
-		RestContext rr = new RestContext();
+		GaeRestContext rr = new GaeRestContext();
 		rr.setUri("/data/Story");
 
 		assertNotNull(rr.getName());
@@ -33,7 +33,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheNameFromTheUrlWithParameter() {
-		RestContext rr = new RestContext();
+		GaeRestContext rr = new GaeRestContext();
 		rr.setUri("/data/Story?schema");
 
 		assertNotNull(rr.getName());
@@ -42,7 +42,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheSchemaEvenIfTheParameterIfNull() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("schema")
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("schema")
 				.build());
 
 		assertNotNull(rr.isSchema());
@@ -51,7 +51,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheSchemaEvenIfTheParameterIsTrue() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("schema",
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("schema",
 				"true").build());
 
 		assertNotNull(rr.isSchema());
@@ -60,7 +60,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheSchemaEvenIfTheParameterIsFalse() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("schema",
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("schema",
 				"false").build());
 
 		assertNotNull(rr.isSchema());
@@ -69,7 +69,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheQueryTrueByDefault() {
-		RestContext rr = new RestContext(new RequestMapBuilder().build());
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().build());
 
 		assertNotNull(rr.isQuery());
 		assertTrue(rr.isQuery());
@@ -77,7 +77,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheQueryEvenIfTheParameterIfNull() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("query")
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("query")
 				.build());
 
 		assertNotNull(rr.isQuery());
@@ -86,7 +86,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetTheQueryEvenIfTheParameterIsTrue() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("query",
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("query",
 				"true").build());
 
 		assertNotNull(rr.isQuery());
@@ -96,7 +96,7 @@ public class RestContextTest {
 	@Ignore
 	@Test
 	public void shouldGetTheQueryEvenIfTheParameterIsFalse() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("query",
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("query",
 				"false").build());
 
 		assertNotNull(rr.isQuery());
@@ -106,7 +106,7 @@ public class RestContextTest {
 	@Ignore
 	@Test
 	public void shouldGetDefaultFetchOptions() {
-		RestContext rr = new RestContext(new RequestMapBuilder().build());
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().build());
 
 		Options o = rr.getFetchOptions();
 		assertNotNull(o);
@@ -117,7 +117,7 @@ public class RestContextTest {
 	@Ignore
 	@Test
 	public void shouldGetLimit() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("limit",
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("limit",
 				"10").build());
 
 		Options o = rr.getFetchOptions();
@@ -128,7 +128,7 @@ public class RestContextTest {
 	@Ignore
 	@Test
 	public void shouldGetOffset() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("offset",
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("offset",
 				"10").build());
 
 		Options o = rr.getFetchOptions();
@@ -138,7 +138,7 @@ public class RestContextTest {
 
 	@Test
 	public void shouldGetSelection() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add(
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add(
 				Parameter.SELECTION, "id").build());
 		rr.setUri("/data/Story");
 
@@ -148,7 +148,7 @@ public class RestContextTest {
 	
 	@Test
 	public void shouldGetSelectionArgs() {
-		RestContext rr = new RestContext(new RequestMapBuilder().add(
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add(
 				Parameter.SELECTION_ARGS, "id").build());
 		rr.setUri("/data/Story");
 

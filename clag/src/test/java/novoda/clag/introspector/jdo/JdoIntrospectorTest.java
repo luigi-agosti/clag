@@ -73,12 +73,12 @@ public class JdoIntrospectorTest {
 		assertTrue(entity.contains("mediaHref"));
 		MetaProperty mp = entity.getMetaProperty("mediaHref");
 		assertEquals(MetaEntity.Type.STRING, mp.getType());
-		assertFalse(mp.getIsKey());
+		assertFalse(mp.getKey());
 		
 		assertTrue(entity.contains("id"));
 		mp = entity.getMetaProperty("id");
 		assertEquals(MetaEntity.Type.INTEGER, mp.getType());
-		assertTrue(mp.getIsKey());
+		assertTrue(mp.getKey());
 	}
 	
 	@Test
@@ -90,16 +90,17 @@ public class JdoIntrospectorTest {
 		MetaProperty mp = entity.getMetaProperty("id");
 		assertEquals(MetaEntity.Type.INTEGER, mp.getType());
 		assertEquals(OnConflictPolicy.REPLACE, mp.getOnConflictPolicy());
-		assertTrue(mp.getIsKey());
-		assertTrue(mp.getIsUnique());
+		assertTrue(mp.getKey());
+		assertTrue(mp.getUnique());
 		
 		assertTrue(entity.contains("field"));
 		mp = entity.getMetaProperty("field");
 		assertEquals(MetaEntity.Type.STRING, mp.getType());
 		assertEquals(OnConflictPolicy.NOT_DEFINED, mp.getOnConflictPolicy());
-		assertFalse(mp.getIsKey());
-		assertFalse(mp.getIsUnique());
+		assertFalse(mp.getKey());
+		assertFalse(mp.getUnique());
 		
+		assertEquals("userId", entity.getUserIdPropertyName());
 	}
 	
 }

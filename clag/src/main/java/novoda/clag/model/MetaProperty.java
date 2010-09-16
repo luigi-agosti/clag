@@ -14,13 +14,13 @@ public class MetaProperty {
 
 	private String type;
 
-	private boolean isKey;
+	private boolean key;
 
 	private boolean canBeNull;
 	
 	private boolean isRelation;
 	
-	private boolean isUnique;
+	private boolean unique;
 	
 	private boolean include;
 	
@@ -31,6 +31,8 @@ public class MetaProperty {
 	private String child;
 	
 	private String from;
+	
+	private boolean userId;
 	
 	private OnConflictPolicy onConflictPolicy;
 
@@ -50,20 +52,20 @@ public class MetaProperty {
 		this.type = type;
 	}
 
-	public boolean getIsKey() {
-		return isKey;
+	public boolean getKey() {
+		return key;
 	}
 
-	public void setIsKey(boolean isKey) {
-		this.isKey = isKey;
+	public void setKey(boolean key) {
+		this.key = key;
 	}
 	
-	public boolean getIsUnique() {
-		return isUnique;
+	public boolean getUnique() {
+		return unique;
 	}
 
-	public void setIsUnique(boolean isUnique) {
-		this.isUnique = isUnique;
+	public void setUnique(boolean unique) {
+		this.unique = unique;
 	}
 
 	public boolean isCanBeNull() {
@@ -130,6 +132,14 @@ public class MetaProperty {
 	public boolean isInclude() {
 		return include;
 	}
+	
+	public void setUserId(boolean userId) {
+		this.userId = userId;
+	}
+
+	public boolean getUserId() {
+		return userId;
+	}
 
 
 	public void setOwner(String owner) {
@@ -170,8 +180,8 @@ public class MetaProperty {
 			return this;
 		}
 
-		public Builder isKey(boolean isKey) {
-			md.setIsKey(isKey);
+		public Builder key(boolean key) {
+			md.setKey(key);
 			return this;
 		}
 
@@ -202,7 +212,12 @@ public class MetaProperty {
 		}
 
 		public Builder unique(boolean unique) {
-			md.setIsUnique(unique);
+			md.setUnique(unique);
+			return this;
+		}
+
+		public Builder userId(boolean userId) {
+			md.setUserId(userId);
 			return this;
 		}
 		

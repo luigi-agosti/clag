@@ -7,14 +7,18 @@ import novoda.clag.model.MetaEntity.OnConflictPolicy;
 @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
 public @interface Clag {
 	
-	OnConflictPolicy onConflictpolicy() default OnConflictPolicy.NOT_DEFINED;
+	OnConflictPolicy onConflictPolicy() default OnConflictPolicy.NOT_DEFINED;
 	
 	boolean unique() default false;
 	
-	boolean isKey() default false;
+	boolean key() default false;
 	
-	boolean isSearchable() default false;
+	boolean searchable() default false;
 	
-	boolean isIndexable() default false;
+	boolean indexable() default false;
+	
+	boolean hidden() default false;
+	
+	boolean userId() default false;
 	
 }

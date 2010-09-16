@@ -9,7 +9,7 @@ import novoda.clag.model.MetaEntity.OnConflictPolicy;
 import novoda.clag.provider.Provider;
 import novoda.clag.provider.gae.GaeProvider;
 import novoda.clag.servlet.context.Context;
-import novoda.clag.servlet.context.RestContext;
+import novoda.clag.servlet.context.GaeRestContext;
 import novoda.clag.servlet.context.ServiceInfo;
 
 import org.junit.Test;
@@ -20,7 +20,7 @@ import org.junit.Test;
 public class SqliteJsonConverterTest {
 
 	private Converter converter = new SqliteJsonConverter();
-	private Context context = new RestContext();
+	private Context context = new GaeRestContext();
 
 	@Test
 	public void convertMetaDataSet() {
@@ -87,7 +87,7 @@ public class SqliteJsonConverterTest {
 
 	@Test
 	public void describe() {
-		Context context = new RestContext();
+		Context context = new GaeRestContext();
 		context.setProvider(getSampleProvider());
 		ServiceInfo serviceInfo = new ServiceInfo();
 		serviceInfo.setName("testApplication");
@@ -131,7 +131,7 @@ public class SqliteJsonConverterTest {
 
 	@Test
 	public void describeWithNoProvider() {
-		Context context = new RestContext();
+		Context context = new GaeRestContext();
 		ServiceInfo serviceInfo = new ServiceInfo();
 		serviceInfo.setName("testApplication");
 		serviceInfo.setVersion("1");
@@ -166,7 +166,7 @@ public class SqliteJsonConverterTest {
 		entity.add(new MetaProperty.Builder("cost").type(
 				MetaEntity.Type.INTEGER).build());
 		entity.add(new MetaProperty.Builder("id").type(MetaEntity.Type.INTEGER)
-				.isKey(true).build());
+				.key(true).build());
 		return entity;
 	}
 
@@ -175,7 +175,7 @@ public class SqliteJsonConverterTest {
 		entity.add(new MetaProperty.Builder("title").type(
 				MetaEntity.Type.STRING).build());
 		entity.add(new MetaProperty.Builder("id").type(MetaEntity.Type.INTEGER)
-				.unique(true).onConflictPolicy(OnConflictPolicy.REPLACE).isKey(
+				.unique(true).onConflictPolicy(OnConflictPolicy.REPLACE).key(
 						true).build());
 		return entity;
 	}

@@ -56,7 +56,7 @@ public class EntityMatchingRestContextTest {
 
 	private Map<String, Object> entityMatchingText(String fristProperty,
 			String firstType, String secondProperty, String secondType) {
-		RestContext rr = new RestContext(new RequestMapBuilder().add("id",
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("id",
 				fristProperty).add("second", secondProperty).build());
 
 		rr.setUri("/data/Story");

@@ -15,7 +15,7 @@ import novoda.clag.util.RequestWrapper;
 /**
  * @author luigi.agosti
  */
-public class RestContext extends RequestWrapper implements Context {
+public class GaeRestContext extends RequestWrapper implements Context {
 	
 	private static final String SEPARATOR = "/";
 	
@@ -27,14 +27,14 @@ public class RestContext extends RequestWrapper implements Context {
 	
 	private ServiceInfo serviceInfo;
 	
-	public RestContext() {
+	public GaeRestContext() {
 	}
 	
-	public RestContext(Map<String, String[]> request) {
+	public GaeRestContext(Map<String, String[]> request) {
 		super(request);
 	}
 	
-	public RestContext(HttpServletRequest request) {
+	public GaeRestContext(HttpServletRequest request) {
 		super(request);
 	}
 	
@@ -119,12 +119,6 @@ public class RestContext extends RequestWrapper implements Context {
 		Options dl = new Options();
 		dl.setLimit(getParameterAsInt(Parameter.LIMIT, Options.DEFAULT_LIMIT));
 		dl.setOffset(getParameterAsInt(Parameter.OFFSET, Options.DEFAULT_OFFSET));
-		
-		String email = getHeader(Parameter.EMAIL);
-		if(email == null) {
-			email = getParameterAsString(Parameter.EMAIL);
-		}
-		dl.setAccount(email);
 		return dl;
 	}
 

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import novoda.clag.introspector.annotation.IsHidden;
+import novoda.clag.introspector.annotation.Clag;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
 
@@ -42,8 +42,11 @@ public abstract class AbstractIntrospector implements Introspector {
 		List<Class> classes = new ArrayList<Class>();
 		getClasses(classToParse, classes);
 		for(Field field : getFields(classes)) {
-			if(field.getAnnotation(IsHidden.class) == null) {
+			Clag c = (Clag)field.getAnnotation(Clag.class);
+			if(c == null || !c.hidden()) {
 				filterFields(field, me);
+			} else if(c != null && c.hidden() && c.userId()) {
+				me.setUserIdPropertyName(field.getName());
 			}
 		}
 		return me;

@@ -8,9 +8,9 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import novoda.clag.model.Cursor;
+import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
 import novoda.clag.model.Options;
-import novoda.clag.model.MetaEntity;
 import novoda.clag.provider.AbstractProvider;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -21,6 +21,9 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 /**
  * @author luigi.agosti
@@ -47,8 +50,12 @@ public class GaeProvider extends AbstractProvider {
 		}
 		Query q = buildQuery(name, projection, selection, selectionArgs,
 				sortOrder);
-		if(dataLimitation.getAccount()!=null) {
-			q.addFilter("email", FilterOperator.EQUAL, dataLimitation.getAccount());
+		
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		
+		if(user != null && entity.getUserIdPropertyName() != null) {
+			q.addFilter(entity.getUserIdPropertyName(), FilterOperator.EQUAL, user.getUserId());
 		}
 		PreparedQuery pq = ds.prepare(q);
 		Cursor cursor = new Cursor();

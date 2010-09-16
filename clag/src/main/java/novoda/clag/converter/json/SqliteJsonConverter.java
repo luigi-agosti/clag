@@ -113,7 +113,7 @@ public class SqliteJsonConverter implements Converter {
 				+ "(_id integer primary key autoincrement,");
 		for(MetaProperty prop : entity.getMetaProperties()) {
 			createStatement.append(prop.getName()).append(" ").append(prop.getType());
-			if(prop.getIsUnique()) {
+			if(prop.getUnique()) {
 				createStatement.append(" unique");
 				if(prop.getOnConflictPolicy() == OnConflictPolicy.REPLACE) {
 					createStatement.append(" on conflict replace");

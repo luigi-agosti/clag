@@ -42,6 +42,8 @@ public class MetaEntity {
 	
 	private String keyProperty;
 	
+	private String userIdPropertyName;
+	
 	private List<String> relations = new ArrayList<String>();
 	
 	public MetaEntity(String className, String name) {
@@ -56,7 +58,7 @@ public class MetaEntity {
 	}
 
 	public void add(String name, MetaProperty property) {
-		if(property.getIsKey()){
+		if(property.getKey()){
 			setKeyProperty(name);
 		} else if (property.isRelation()) {
 			relations.add(name);
@@ -71,6 +73,9 @@ public class MetaEntity {
 
 	public void add(MetaProperty property) {
 		add(property.getName(), property); 
+		if(property.getUserId()) {
+			userIdPropertyName = property.getName();
+		}
 	}
 
 	public void add(String name, String type) {
@@ -86,7 +91,7 @@ public class MetaEntity {
 	}
 	
 	public void addKey(String name, String type) {
-		add(new MetaProperty.Builder(name).type(type).isKey(true).build());
+		add(new MetaProperty.Builder(name).type(type).key(true).build());
 	}
 	
 	public void addRelation(String through, String owner, String from, String type, boolean include) {
@@ -145,6 +150,14 @@ public class MetaEntity {
 
 	public void resetRelations() {
 		relations = new ArrayList<String>(); 
+	}
+
+	public String getUserIdPropertyName() {
+		return userIdPropertyName;
+	}
+
+	public void setUserIdPropertyName(String userIdPropertyName) {
+		this.userIdPropertyName = userIdPropertyName;
 	}
 
 }

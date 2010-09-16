@@ -3,7 +3,7 @@ package novoda.clag.introspector.jdo.sample;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import novoda.clag.introspector.annotation.IsHidden;
+import novoda.clag.introspector.annotation.Clag;
 
 /**
  * @author Luigi Agosti <luigi.agosti@gmail.com>
@@ -19,7 +19,7 @@ public class Story extends FacebookModel {
 	@Persistent private String caption;
 	@Persistent private String copy;
 	
-	@IsHidden 
+	@Clag(hidden=true) 
 	@Persistent 
 	private String groupId;
 	
