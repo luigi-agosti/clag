@@ -3,13 +3,12 @@ package novoda.clag.provider;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import novoda.clag.introspector.Introspector;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.Options;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author luigi.agosti
@@ -17,7 +16,7 @@ import org.apache.log4j.Logger;
 public abstract class AbstractProvider implements Provider {
 
 	protected static final Logger logger = Logger
-			.getLogger(AbstractProvider.class);
+			.getLogger(AbstractProvider.class.getName());
 
 	protected Map<String, MetaEntity> entities = new HashMap<String, MetaEntity>();
 
@@ -25,19 +24,19 @@ public abstract class AbstractProvider implements Provider {
 
 	@Override
 	public void isConfigured() {
-		logger.debug("Checking configuration");
+		logger.info("Checking configuration");
 		if (introspector == null) {
 			throw new RuntimeException(
 					"Introspector has not been set in the content provider");
 		} else {
-			logger.debug("Introspector is set.");
+			logger.info("Introspector is set.");
 		}
 		if (entities.isEmpty()) {
 			throw new RuntimeException(
 					"No Entity has been set in the content provider");
 		} else {
 			for (String entityKey : entities.keySet()) {
-				logger.debug("Entities are : " + entityKey);
+				logger.info("Entities are : " + entityKey);
 			}
 		}
 	}
@@ -51,7 +50,7 @@ public abstract class AbstractProvider implements Provider {
 	public void add(Class<?> clazz) {
 		MetaEntity entity = introspector.extractMetaEntity(clazz);
 		if (entity != null) {
-			logger.debug("Adding Entity : " + clazz.getSimpleName() + ","
+			logger.info("Adding Entity : " + clazz.getSimpleName() + ","
 					+ clazz);
 			entities.put(clazz.getSimpleName(), entity);
 		} else {
@@ -79,7 +78,7 @@ public abstract class AbstractProvider implements Provider {
 	@Override
 	public MetaEntity schema(String name) {
 		if (!entities.containsKey(name)) {
-			logger.warn("Schema for entity name : " + name
+			logger.info("Schema for entity name : " + name
 					+ " CANNOT be found!");
 			return null;
 		}

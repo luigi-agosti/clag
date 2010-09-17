@@ -41,13 +41,11 @@ public class GaeProvider extends AbstractProvider {
 	public Cursor query(String name, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder, MetaEntity entity,
 			Options dataLimitation) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("executing query : " + name);
-			logger.debug("projection : " + projection);
-			logger.debug("selection : " + selection);
-			logger.debug("selectionArgs : " + selectionArgs);
-			logger.debug("sortOrder : " + sortOrder);
-		}
+		logger.info("executing query : " + name);
+		logger.info("projection : " + projection);
+		logger.info("selection : " + selection);
+		logger.info("selectionArgs : " + selectionArgs);
+		logger.info("sortOrder : " + sortOrder);
 		Query q = buildQuery(name, projection, selection, selectionArgs,
 				sortOrder);
 		
@@ -104,11 +102,9 @@ public class GaeProvider extends AbstractProvider {
 	}
 
 	private void addRelations(Cursor cursor, MetaProperty mp, Options dataLimitation, DatastoreService ds) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("fetching relation for : " + mp.getFrom());
-			logger.debug("owner : " + mp.getOwner()); //Story
-			logger.debug("name : " + mp.getName()); //pageId
-		}
+		logger.info("fetching relation for : " + mp.getFrom());
+		logger.info("owner : " + mp.getOwner()); //Story
+		logger.info("name : " + mp.getName()); //pageId
 		Long id = ((Long)cursor.getValueOfCurrentRow("id"));
 		Cursor c = query(mp.getOwner(), null, mp.getName() + " = " + id, null, null, dataLimitation);
 		c.setName(mp.getOwner());

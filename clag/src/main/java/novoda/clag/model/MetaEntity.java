@@ -7,16 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-
 /**
  * Group of metadata information can represent the table.
  * @author luigi.agosti
  *
  */
 public class MetaEntity {
-	
-	private static final Logger logger = Logger.getLogger(MetaEntity.class);
 	
 	public enum OnConflictPolicy { 
 		ROLLBACK, ABORT, FAIL, IGNORE, REPLACE, NOT_DEFINED 
@@ -123,12 +119,6 @@ public class MetaEntity {
 	
 	public Set<String> getPropertyNames() {
 		return mds.keySet();
-	}
-	
-	public void dump() {
-		for(MetaProperty md : mds.values()) {
-			logger.debug(md);
-		}
 	}
 
 	public void setClassName(String className) {

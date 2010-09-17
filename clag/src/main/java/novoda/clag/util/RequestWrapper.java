@@ -1,5 +1,6 @@
 package novoda.clag.util;
 
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -36,6 +37,21 @@ public class RequestWrapper {
 
 	public RequestWrapper(Map<String, String[]> parameterMap) {
 		this.parameterMap = parameterMap;
+	}
+	
+	public String getData() {
+		try {
+			InputStream is = request.getInputStream();
+			if(is == null) {
+				return "";
+			}
+			
+			//TODO
+			
+		} catch (Exception e) {
+			
+		}
+		return "";
 	}
 
 	protected int getParameterAsInteger(String parameterName, int defaultValue) {

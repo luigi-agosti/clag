@@ -10,6 +10,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,11 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import org.apache.log4j.Logger;
-
 public class ETagFilter implements Filter {
 
-	private static final Logger logger = Logger.getLogger(ETagFilter.class);
+	private static final Logger logger = Logger.getLogger(ETagFilter.class.getName());
 	
 	private static final String MD5 = "MD5";
 	

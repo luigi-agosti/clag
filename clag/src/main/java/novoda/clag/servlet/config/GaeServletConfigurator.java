@@ -2,6 +2,7 @@ package novoda.clag.servlet.config;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletConfig;
 
@@ -15,14 +16,12 @@ import novoda.clag.servlet.context.Context;
 import novoda.clag.servlet.context.GaeRestContext;
 import novoda.clag.servlet.context.ServiceInfo;
 
-import org.apache.log4j.Logger;
-
 import com.google.appengine.api.utils.SystemProperty;
 
 @SuppressWarnings("unchecked")
 public class GaeServletConfigurator implements Configurator {
 
-	private static final Logger logger = Logger.getLogger(Configurator.class);
+	private static final Logger logger = Logger.getLogger(Configurator.class.getName());
 	
 	private static final String DEFAULT_CONTEXT = GaeRestContext.class.getName();
 
@@ -55,17 +54,17 @@ public class GaeServletConfigurator implements Configurator {
 	}
 	
 	private void init(ServletConfig config) {
-		logger.debug("Clag Servlet : initialization");
+		logger.info("Clag Servlet : initialization");
 		String converterParam = getInitParameter(config, InitParameters.CONVERTER, DEFAULT_CONVERTER);
 		String providerParam = getInitParameter(config, InitParameters.CONTENT_PROVICER, DEFAULT_PROVIDER);
 		String introspectorParam = getInitParameter(config, InitParameters.INTROSPECTOR, DEFAULT_INTROSPECTOR);
 		String contextParam = getInitParameter(config, InitParameters.CONTEXT, DEFAULT_CONTEXT);
 		String contentClassesParam = config.getInitParameter(InitParameters.CONTENT_CLASSES);
-		logger.debug("context : " + contextParam);
-		logger.debug("converter : " + converterParam);
-		logger.debug("provicer : " + providerParam);
-		logger.debug("introspector : " + introspectorParam);
-		logger.debug("content classes : " + contentClassesParam);
+		logger.info("context : " + contextParam);
+		logger.info("converter : " + converterParam);
+		logger.info("provicer : " + providerParam);
+		logger.info("introspector : " + introspectorParam);
+		logger.info("content classes : " + contentClassesParam);
 		try {
 			if(contextParam == null) {
 				logger.info("Context class is not defined, using default : " + DEFAULT_CONTEXT);
@@ -93,13 +92,13 @@ public class GaeServletConfigurator implements Configurator {
 			
 			List<String> classes = Arrays.asList(contentClassesParam.split(COMMA));
 			for(String clazz : classes) {
-				logger.debug("adding class to content provider : " + clazz);
+				logger.info("adding class to content provider : " + clazz);
 				provider.add(Class.forName(clazz));
 			}
 			provider.linkMetaEntities();
 			isConfigured();
 		} catch (Exception e) {
-			logger.error("Problem in the initialization, see the following stack trace : ", e);
+			logger.severe("Problem in the initialization, see the following stack trace : " + e.getMessage());
 		}
 	}
 
@@ -124,10 +123,10 @@ public class GaeServletConfigurator implements Configurator {
 			context.setConverter(converter);
 			return context;
 		} catch (InstantiationException e) {
-			logger.error("InstantiationException while getting interpreter instance : ", e);
+			logger.severe("InstantiationException while getting interpreter instance : " + e.getMessage());
 			throw new RuntimeException("Interpreter is wrong");
 		} catch (IllegalAccessException e) {
-			logger.error("IllegalAccessException while getting interpreter instance : ", e);
+			logger.severe("IllegalAccessException while getting interpreter instance : " + e.getMessage());
 			throw new RuntimeException("Interpreter is wrong");
 		}
 	}

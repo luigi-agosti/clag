@@ -55,5 +55,7 @@ public interface Context {
 	void setServiceInfo(ServiceInfo serviceInfo);
 
 	Cursor getCursorFromRequest(MetaEntity me);
+	
+	String getData();
 
 }
