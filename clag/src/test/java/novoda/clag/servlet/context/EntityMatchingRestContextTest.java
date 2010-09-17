@@ -17,23 +17,25 @@ public class EntityMatchingRestContextTest {
 	@Test
 	public void shouldGetEntityPropertiesReturnMapWithTextValue() {
 		Map<String, Object> properties = entityMatchingText("key",
-				MetaEntity.Type.STRING, "should be ok", MetaEntity.Type.STRING);
+				MetaEntity.Type.STRING.getValue(), "should be ok",
+				MetaEntity.Type.STRING.getValue());
 
 		assertProperty("id", "key", properties);
 		assertProperty("second", "should be ok", properties);
 	}
-	
+
 	/**
-	 * TODO when the real insert is implemented in the provider I can check 
-	 * if the context is the best place to convert the type
+	 * TODO when the real insert is implemented in the provider I can check if
+	 * the context is the best place to convert the type
 	 */
 
 	@Ignore
 	@Test
 	public void shouldGetEntityPropertiesReturnMapWithLong() {
 		Map<String, Object> properties = entityMatchingText("key",
-				MetaEntity.Type.STRING, "12", MetaEntity.Type.STRING);
-		
+				MetaEntity.Type.STRING.getValue(), "12", MetaEntity.Type.STRING
+						.getValue());
+
 		assertProperty("id", "key", properties);
 		assertProperty("second", "should be ok", properties);
 	}
@@ -42,7 +44,8 @@ public class EntityMatchingRestContextTest {
 	@Test
 	public void shouldGetEntityPropertiesReturnMapWithDate() {
 		Map<String, Object> properties = entityMatchingText("key",
-				MetaEntity.Type.STRING, "122938420", MetaEntity.Type.STRING);
+				MetaEntity.Type.STRING.getValue(), "122938420",
+				MetaEntity.Type.STRING.getValue());
 
 		assertProperty("id", "key", properties);
 		assertProperty("second", "should be ok", properties);
@@ -56,8 +59,8 @@ public class EntityMatchingRestContextTest {
 
 	private Map<String, Object> entityMatchingText(String fristProperty,
 			String firstType, String secondProperty, String secondType) {
-		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add("id",
-				fristProperty).add("second", secondProperty).build());
+		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add(
+				"id", fristProperty).add("second", secondProperty).build());
 
 		rr.setUri("/data/Story");
 
@@ -69,5 +72,5 @@ public class EntityMatchingRestContextTest {
 		assertNotNull(properties);
 		return properties;
 	}
-	
+
 }

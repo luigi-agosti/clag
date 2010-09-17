@@ -157,6 +157,13 @@ public class MetaProperty {
 	public OnConflictPolicy getOnConflictPolicy() {
 		return onConflictPolicy;
 	}
+	
+	public boolean hasConflictPolicy() {
+		if(onConflictPolicy == null) {
+			return false;
+		}
+		return true;
+	}
 
 
 	/**

@@ -8,7 +8,6 @@ import java.util.Date;
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
-import novoda.clag.model.MetaProperty;
 import novoda.clag.provider.Provider;
 import novoda.clag.provider.gae.GaeProvider;
 import novoda.clag.servlet.context.Context;
@@ -20,17 +19,19 @@ import org.junit.Test;
 /**
  * @author luigi.agosti
  */
-public class RestProviderConverterTest {
+public class RestProviderConverterTest extends AbstractConverterTest {
 
 	private static final String EXAMPLE_JSON = "{\"name\":\"Example\",\"columns\":["
 		+ "{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"},"
 		+ "{\"name\":\"title\",\"type\":\"text\"}"
 		+ ",{\"name\":\"description\",\"type\":\"text\"}"
 		+ ",{\"name\":\"cost\",\"type\":\"integer\"}],\"children\":[]}";
-	
-	private Converter converter = new RestProviderConverter();
-	private Context context = new GaeRestContext();
 
+	@Override
+	protected Converter initConverter() {
+		return new RestProviderConverter();
+	}
+	
 	@Test
 	public void convertMetaDataSet() {
 		String result = converter.convert(getSampleEntity(), context);
@@ -177,23 +178,15 @@ public class RestProviderConverterTest {
 				"{\"name\":\"testApplication\",\"version\":\"1\"}", result);
 	}
 	
-	private Provider getSampleProvider() {
-		Provider provider = new GaeProvider();
-		provider.add(getSampleEntity());
-		return provider;
+	@Test
+	public void convertMetaDataSetWithReplaceUnique() {
+		String result = converter.convert(getComplexEntity(), context);
+		assertEquals(
+				"{\"name\":\"Example\",\"columns\":" +
+					"[{\"name\":\"id\",\"type\":\"integer\",\"key\":\"true\"," +
+					"\"unique\":\"true\",\"conflictPolicy\":\"replace\"}," +
+					"{\"name\":\"title\",\"type\":\"text\"}],\"children\":[]}",
+				result);
 	}
-
-	private MetaEntity getSampleEntity() {
-		MetaEntity entity = new MetaEntity("novoda.clag.Example", "Example");
-		entity.add(new MetaProperty.Builder("title").type(
-				MetaEntity.Type.STRING).build());
-		entity.add(new MetaProperty.Builder("description").type(
-				MetaEntity.Type.STRING).build());
-		entity.add(new MetaProperty.Builder("cost").type(
-				MetaEntity.Type.INTEGER).build());
-		entity.add(new MetaProperty.Builder("id").type(
-				MetaEntity.Type.INTEGER).key(true).build());
-		return entity;
-	}
-
+	
 }

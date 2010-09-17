@@ -7,7 +7,6 @@ import javax.jdo.annotations.PrimaryKey;
 
 import novoda.clag.introspector.AbstractIntrospector;
 import novoda.clag.introspector.annotation.Clag;
-import novoda.clag.introspector.annotation.IsKey;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
 
@@ -26,17 +25,19 @@ public class JdoIntrospector extends AbstractIntrospector {
 		if (field.getAnnotation(Clag.class) != null) {
 			logger.debug("Adding field key : " + field.getName());
 			Clag c = (Clag) field.getAnnotation(Clag.class);
-			mds.add(new MetaProperty.Builder(field.getName()).key(c.key())
+			if(c.from().length() > 0) {
+				logger.debug("Adding key for relation : " + field.getName());
+				mds.addRelation(field.getName(), mds.getName(), c.from(),
+						getType(field.getType()), c.include());
+			} else {
+				logger.debug("Adding key for clag property : " + field.getName());
+				mds.add(new MetaProperty.Builder(field.getName()).key(c.key())
 					.unique(c.unique()).onConflictPolicy(c.onConflictPolicy())
 					.type(getType(field.getType())).userId(c.userId()).build());
+			}
 		} else if (field.getAnnotation(PrimaryKey.class) != null) {
 			logger.debug("Adding field key : " + field.getName());
 			mds.addKey(field.getName(), getType(field.getType()));
-		} else if (field.getAnnotation(IsKey.class) != null) {
-			logger.debug("Adding key for relation : " + field.getName());
-			IsKey relation = (IsKey) field.getAnnotation(IsKey.class);
-			mds.addRelation(field.getName(), mds.getName(), relation.from(),
-					getType(field.getType()), relation.include());
 		} else if (field.getAnnotation(Persistent.class) != null) {
 			logger.debug("Adding field : " + field.getName());
 			mds.add(field.getName(), getType(field.getType()));

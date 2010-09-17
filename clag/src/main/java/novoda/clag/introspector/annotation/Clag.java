@@ -21,4 +21,8 @@ public @interface Clag {
 	
 	boolean userId() default false;
 	
+	String from() default "";
+	
+	boolean include() default false;
+	
 }

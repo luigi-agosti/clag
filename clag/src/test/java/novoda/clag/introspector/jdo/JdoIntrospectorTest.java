@@ -30,15 +30,15 @@ public class JdoIntrospectorTest {
 		assertNotNull(entity);
 		
 		assertTrue(entity.contains("mediaHref"));
-		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("mediaHref").getType());
+		assertEquals(MetaEntity.Type.STRING.getValue(), entity.getMetaProperty("mediaHref").getType());
 		assertTrue(entity.contains("title"));
-		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("title").getType());
+		assertEquals(MetaEntity.Type.STRING.getValue(), entity.getMetaProperty("title").getType());
 		assertTrue(entity.contains("mediaImageHref"));
-		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("mediaImageHref").getType());
+		assertEquals(MetaEntity.Type.STRING.getValue(), entity.getMetaProperty("mediaImageHref").getType());
 		assertTrue(entity.contains("caption"));
-		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("caption").getType());
+		assertEquals(MetaEntity.Type.STRING.getValue(), entity.getMetaProperty("caption").getType());
 		assertTrue(entity.contains("copy"));
-		assertEquals(MetaEntity.Type.STRING, entity.getMetaProperty("copy").getType());
+		assertEquals(MetaEntity.Type.STRING.getValue(), entity.getMetaProperty("copy").getType());
 	}
 	
 	@Test
@@ -72,12 +72,12 @@ public class JdoIntrospectorTest {
 		
 		assertTrue(entity.contains("mediaHref"));
 		MetaProperty mp = entity.getMetaProperty("mediaHref");
-		assertEquals(MetaEntity.Type.STRING, mp.getType());
+		assertEquals(MetaEntity.Type.STRING.getValue(), mp.getType());
 		assertFalse(mp.getKey());
 		
 		assertTrue(entity.contains("id"));
 		mp = entity.getMetaProperty("id");
-		assertEquals(MetaEntity.Type.INTEGER, mp.getType());
+		assertEquals(MetaEntity.Type.INTEGER.getValue(), mp.getType());
 		assertTrue(mp.getKey());
 	}
 	
@@ -88,14 +88,14 @@ public class JdoIntrospectorTest {
 		
 		assertTrue(entity.contains("id"));
 		MetaProperty mp = entity.getMetaProperty("id");
-		assertEquals(MetaEntity.Type.INTEGER, mp.getType());
+		assertEquals(MetaEntity.Type.INTEGER.getValue(), mp.getType());
 		assertEquals(OnConflictPolicy.REPLACE, mp.getOnConflictPolicy());
 		assertTrue(mp.getKey());
 		assertTrue(mp.getUnique());
 		
 		assertTrue(entity.contains("field"));
 		mp = entity.getMetaProperty("field");
-		assertEquals(MetaEntity.Type.STRING, mp.getType());
+		assertEquals(MetaEntity.Type.STRING.getValue(), mp.getType());
 		assertEquals(OnConflictPolicy.NOT_DEFINED, mp.getOnConflictPolicy());
 		assertFalse(mp.getKey());
 		assertFalse(mp.getUnique());

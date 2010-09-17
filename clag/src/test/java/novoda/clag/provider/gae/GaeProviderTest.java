@@ -185,9 +185,9 @@ public class GaeProviderTest {
 	@Test
 	public void shouldInsertACursor() {
 		MetaEntity me = new MetaEntity("Example", "Example");
-		me.addKey("id", MetaEntity.Type.INTEGER);
-		me.add("textProperty", MetaEntity.Type.STRING);
-		me.add("integerProperty", MetaEntity.Type.INTEGER);
+		me.addKey("id", MetaEntity.Type.INTEGER.getValue());
+		me.add("textProperty", MetaEntity.Type.STRING.getValue());
+		me.add("integerProperty", MetaEntity.Type.INTEGER.getValue());
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("textProperty", "test");

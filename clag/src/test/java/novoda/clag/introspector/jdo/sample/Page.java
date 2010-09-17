@@ -6,7 +6,7 @@ import java.util.List;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import novoda.clag.introspector.annotation.IsKey;
+import novoda.clag.introspector.annotation.Clag;
 
 /**
  * @author Luigi Agosti <luigi.agosti@gmail.com>
@@ -22,7 +22,7 @@ public class Page extends Model {
 	@Persistent private String headline;
 	@Persistent private String relativeUrl;
 	
-	@IsKey(from="Page",include=false)
+	@Clag(from="Page",include=false)
 	@Persistent 
 	private Long parentKeyId;
 	

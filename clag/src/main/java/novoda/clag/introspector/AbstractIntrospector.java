@@ -18,19 +18,23 @@ import novoda.clag.model.MetaProperty;
 @SuppressWarnings("unchecked")
 public abstract class AbstractIntrospector implements Introspector {
 	
-	private static Map<String, String> TYPE_MAP = new HashMap<String, String>();
+	private static Map<String, MetaEntity.Type> TYPE_MAP = new HashMap<String, MetaEntity.Type>();
     static {
-            TYPE_MAP.put(String.class.getName(), MetaEntity.Type.STRING);
-            TYPE_MAP.put(Integer.class.getName(), MetaEntity.Type.INTEGER);
-            TYPE_MAP.put(Long.class.getName(), MetaEntity.Type.INTEGER);
-            TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.STRING);
-            TYPE_MAP.put(Date.class.getName(), MetaEntity.Type.INTEGER);
-            TYPE_MAP.put(List.class.getName(), MetaEntity.Type.STRING);
-            TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.REAL);
+        TYPE_MAP.put(String.class.getName(), MetaEntity.Type.STRING);
+        TYPE_MAP.put(Integer.class.getName(), MetaEntity.Type.INTEGER);
+        TYPE_MAP.put(Long.class.getName(), MetaEntity.Type.INTEGER);
+        TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.STRING);
+        TYPE_MAP.put(Date.class.getName(), MetaEntity.Type.INTEGER);
+        TYPE_MAP.put(List.class.getName(), MetaEntity.Type.STRING);
+        TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.REAL);
     }
 
     public static final String getType(Class<?> clazz) {
-    	return TYPE_MAP.get(clazz.getName());
+    	MetaEntity.Type value = TYPE_MAP.get(clazz.getName());
+    	if(value != null) {
+    		return value.getValue();
+    	}
+    	return null;
     }
 	
 	@Override

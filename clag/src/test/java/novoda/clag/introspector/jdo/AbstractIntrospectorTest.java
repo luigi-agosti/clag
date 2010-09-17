@@ -14,32 +14,32 @@ public class AbstractIntrospectorTest {
 	
 	@Test
 	public void stringClass() {
-		assertEquals(MetaEntity.Type.STRING, AbstractIntrospector.getType(String.class));
+		assertEquals(MetaEntity.Type.STRING.getValue(), AbstractIntrospector.getType(String.class));
 	}
 
 	@Test
 	public void integerClass() {
-		assertEquals(MetaEntity.Type.INTEGER, AbstractIntrospector.getType(Integer.class));
+		assertEquals(MetaEntity.Type.INTEGER.getValue(), AbstractIntrospector.getType(Integer.class));
 	}
 
 	@Test
 	public void longClass() {
-		assertEquals(MetaEntity.Type.INTEGER, AbstractIntrospector.getType(Long.class));
+		assertEquals(MetaEntity.Type.INTEGER.getValue(), AbstractIntrospector.getType(Long.class));
 	}
 	
 	@Test
 	public void dateClass() {
-		assertEquals(MetaEntity.Type.INTEGER, AbstractIntrospector.getType(Date.class));	
+		assertEquals(MetaEntity.Type.INTEGER.getValue(), AbstractIntrospector.getType(Date.class));	
 	}
 
 	@Test
 	public void listOfString() {
-		assertEquals(MetaEntity.Type.STRING, AbstractIntrospector.getType(List.class));
+		assertEquals(MetaEntity.Type.STRING.getValue(), AbstractIntrospector.getType(List.class));
 	}
 
 	@Test
 	public void doubleClass() {
-		assertEquals(MetaEntity.Type.REAL, AbstractIntrospector.getType(Double.class));
+		assertEquals(MetaEntity.Type.REAL.getValue(), AbstractIntrospector.getType(Double.class));
 	}
 
 	

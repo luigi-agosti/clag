@@ -7,7 +7,7 @@ import javax.jdo.annotations.InheritanceStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 
-import novoda.clag.introspector.annotation.IsKey;
+import novoda.clag.introspector.annotation.Clag;
 
 @PersistenceCapable
 @Inheritance(strategy = InheritanceStrategy.SUBCLASS_TABLE)
@@ -18,7 +18,7 @@ public abstract class FacebookModel extends Model {
 	@Persistent private String facebookId;
 	@Persistent private Date date;
 	
-	@IsKey(from="Page",include=true)
+	@Clag(from="Page",include=true)
 	@Persistent 
 	private Long pageId;
 	

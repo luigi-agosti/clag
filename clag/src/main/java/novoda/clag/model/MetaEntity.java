@@ -18,19 +18,22 @@ public class MetaEntity {
 	
 	private static final Logger logger = Logger.getLogger(MetaEntity.class);
 	
-	public enum OnConflictPolicy { ROLLBACK, ABORT, FAIL, IGNORE, REPLACE, NOT_DEFINED }
+	public enum OnConflictPolicy { 
+		ROLLBACK, ABORT, FAIL, IGNORE, REPLACE, NOT_DEFINED 
+	}
 	
-	public interface Type {
+	public enum Type {
+		STRING("text"),INTEGER("integer"),NULL("null"),REAL("real"),BLOB("blob");
 		
-		String STRING = "text";
-	
-		String INTEGER = "integer";
+		private String value;
 		
-		String NULL = "null";
+		Type(String _value){
+			value = _value; 
+		}
 		
-		String REAL = "real";
-		
-		String BLOB = "blob";
+		public String getValue(){
+			return value;
+		}
 		
 	}
 

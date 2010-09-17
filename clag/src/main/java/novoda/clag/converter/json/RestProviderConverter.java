@@ -27,6 +27,10 @@ public class RestProviderConverter implements Converter {
 	private static final String TYPE = "type";
 
 	private static final String KEY = "key";
+	
+	private static final String UNIQUE = "unique";
+	
+	private static final String CONFLICT_POLICY = "conflictPolicy";
 
 	private static final String KEY_VALUE = "true";
 
@@ -129,6 +133,12 @@ public class RestProviderConverter implements Converter {
 					.value(md.getType());
 			if (md.getKey()) {
 				jsonStringer.key(KEY).value(KEY_VALUE);
+			}
+			if (md.getUnique()) {
+				jsonStringer.key(UNIQUE).value(KEY_VALUE);
+			}
+			if (md.hasConflictPolicy()) {
+				jsonStringer.key(CONFLICT_POLICY).value(md.getOnConflictPolicy().name().toLowerCase());
 			}
 			jsonStringer.endObject();
 		}
