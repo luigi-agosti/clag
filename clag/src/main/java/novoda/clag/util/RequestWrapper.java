@@ -1,16 +1,23 @@
 package novoda.clag.util;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class RequestWrapper {
+	
+	private static final Logger logger = Logger.getLogger(RequestWrapper.class.getName());
 
 	protected static final String DELIMITER = ",";
 
@@ -41,17 +48,32 @@ public class RequestWrapper {
 	
 	public String getData() {
 		try {
-			InputStream is = request.getInputStream();
-			if(is == null) {
-				return "";
-			}
-			
-			//TODO
-			
+			String data = convertStreamToString(request.getInputStream());
+			logger.info("Data of the post is : " + data);
+			return data;
 		} catch (Exception e) {
-			
+			logger.severe("Problem with getting data from the request " + e.getMessage());
 		}
 		return "";
+	}
+	
+	public String convertStreamToString(InputStream is) throws IOException {
+		if (is != null) {
+			StringBuilder sb = new StringBuilder();
+			String line;
+			try {
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(is, "UTF-8"));
+				while ((line = reader.readLine()) != null) {
+					sb.append(line).append("\n");
+				}
+			} finally {
+				is.close();
+			}
+			return sb.toString();
+		} else {
+			return "";
+		}
 	}
 
 	protected int getParameterAsInteger(String parameterName, int defaultValue) {

@@ -1,6 +1,11 @@
 package novoda.clag.servlet.context;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
@@ -55,6 +60,8 @@ public interface Context {
 	void setServiceInfo(ServiceInfo serviceInfo);
 
 	Cursor getCursorFromRequest(MetaEntity me);
+
+	Cursor getCursorFromJsonDataRequest(MetaEntity me) throws JsonParseException, JsonMappingException, IOException;
 	
 	String getData();
 

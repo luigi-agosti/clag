@@ -1,9 +1,16 @@
 package novoda.clag.servlet.context;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
@@ -146,6 +153,26 @@ public class GaeRestContext extends RequestWrapper implements Context {
 			}
 		}
 		return map;
+	}
+	
+	@Override
+	public Cursor getCursorFromJsonDataRequest(MetaEntity me) throws JsonParseException, JsonMappingException, IOException {
+		String data = getData();
+		Cursor c = new Cursor(me.getName());
+		if(data != null && data.length() > 0) {
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode rootNode = mapper.readValue(data, JsonNode.class);
+            Iterator<JsonNode> array = rootNode.getElements();
+            while(array.hasNext()) {
+            	JsonNode node = array.next();
+            	for(String property : me.getPropertyNames()) {
+            		//TODO take into account the class of the entity to convert properly
+            		c.add(property, node.get(property).getValueAsText());
+            	}
+            	c.next();
+            }
+		}	
+		return c;
 	}
 
 }
