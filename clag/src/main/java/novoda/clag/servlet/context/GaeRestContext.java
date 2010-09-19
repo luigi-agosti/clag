@@ -166,8 +166,9 @@ public class GaeRestContext extends RequestWrapper implements Context {
             while(array.hasNext()) {
             	JsonNode node = array.next();
             	for(String property : me.getPropertyNames()) {
-            		//TODO take into account the class of the entity to convert properly
-            		c.add(property, node.get(property).getValueAsText());
+            		if(!property.equals(me.getKeyProperty())) {
+            			c.add(property, node.get(property).getValueAsText());
+            		}
             	}
             	c.next();
             }

@@ -1,5 +1,6 @@
 package novoda.clag.servlet.action;
 
+import static org.junit.Assert.assertEquals;
 import novoda.clag.converter.Converter;
 import novoda.clag.converter.json.RestProviderConverter;
 import novoda.clag.model.MetaEntity;
@@ -38,7 +39,7 @@ public class InsertTest {
 	@Test
 	public void shouldInsertSomeData() {
 		Insert insertAction = new Insert();
-		insertAction.execute(new GaeRestContext() {
+		String result = insertAction.execute(new GaeRestContext() {
 			@Override
 			public String getName() {
 				return "Run";
@@ -47,6 +48,7 @@ public class InsertTest {
 			public Provider getProvider() {
 				GaeProvider gp = new GaeProvider();
 				MetaEntity me = new MetaEntity("Run", "Run");
+				me.addKey("id", "integer");
 				me.add("note", "text");
 				gp.add(me);
 				return gp;
@@ -60,7 +62,7 @@ public class InsertTest {
 				return "[{\"note\":\"test\"}]";
 			}
 		});
-		
+		assertEquals("[{\"note\":\"test\",\"id\":1}]", result);
 	}
 	
 }
