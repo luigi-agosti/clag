@@ -23,22 +23,17 @@ public abstract class AbstractConverterTest {
 	
 	protected MetaEntity getSampleEntity() {
 		MetaEntity entity = new MetaEntity("novoda.clag.Example", "Example");
-		entity.add(new MetaProperty.Builder("title").type(
-				MetaEntity.Type.STRING.getValue()).build());
-		entity.add(new MetaProperty.Builder("description").type(
-				MetaEntity.Type.STRING.getValue()).build());
-		entity.add(new MetaProperty.Builder("cost").type(
-				MetaEntity.Type.INTEGER.getValue()).build());
-		entity.add(new MetaProperty.Builder("id").type(MetaEntity.Type.INTEGER.getValue())
-				.key(true).build());
+		entity.add(new MetaProperty.Builder("title").clazz(String.class).build());
+		entity.add(new MetaProperty.Builder("description").clazz(String.class).build());
+		entity.add(new MetaProperty.Builder("cost").clazz(Integer.class).build());
+		entity.add(new MetaProperty.Builder("id").clazz(Integer.class).key(true).build());
 		return entity;
 	}
 
 	protected MetaEntity getComplexEntity() {
 		MetaEntity entity = new MetaEntity("novoda.clag.Example", "Example");
-		entity.add(new MetaProperty.Builder("title").type(
-				MetaEntity.Type.STRING.getValue()).build());
-		entity.add(new MetaProperty.Builder("id").type(MetaEntity.Type.INTEGER.getValue())
+		entity.add(new MetaProperty.Builder("title").clazz(String.class).build());
+		entity.add(new MetaProperty.Builder("id").clazz(Integer.class)
 				.unique(true).onConflictPolicy(OnConflictPolicy.REPLACE).key(
 						true).build());
 		return entity;

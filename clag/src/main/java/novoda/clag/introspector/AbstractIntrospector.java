@@ -3,7 +3,6 @@ package novoda.clag.introspector;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,26 +16,7 @@ import novoda.clag.model.MetaProperty;
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractIntrospector implements Introspector {
-	
-	private static Map<String, MetaEntity.Type> TYPE_MAP = new HashMap<String, MetaEntity.Type>();
-    static {
-        TYPE_MAP.put(String.class.getName(), MetaEntity.Type.STRING);
-        TYPE_MAP.put(Integer.class.getName(), MetaEntity.Type.INTEGER);
-        TYPE_MAP.put(Long.class.getName(), MetaEntity.Type.INTEGER);
-        TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.STRING);
-        TYPE_MAP.put(Date.class.getName(), MetaEntity.Type.INTEGER);
-        TYPE_MAP.put(List.class.getName(), MetaEntity.Type.STRING);
-        TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.REAL);
-    }
 
-    public static final String getType(Class<?> clazz) {
-    	MetaEntity.Type value = TYPE_MAP.get(clazz.getName());
-    	if(value != null) {
-    		return value.getValue();
-    	}
-    	return null;
-    }
-	
 	@Override
 	public MetaEntity extractMetaEntity(Class classToParse) {
 		if(classToParse == null) {
@@ -82,7 +62,7 @@ public abstract class AbstractIntrospector implements Introspector {
 			if(metaEntities.containsKey(key)) {
 				MetaEntity me = metaEntities.get(key);
 				for(MetaProperty mp : relations.get(key)) {
-					me.addRelation(mp.getName(), mp.getOwner(), mp.getFrom(), mp.getType(), mp.isInclude());
+					me.addRelation(mp.getName(), mp.getOwner(), mp.getFrom(), mp.getClazz(), mp.isInclude());
 				}
 			}
 		}

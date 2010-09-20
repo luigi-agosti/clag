@@ -81,9 +81,16 @@ public class GaeProvider extends AbstractProvider {
 	
 	@Override
 	public Cursor insert(String name, Cursor values, MetaEntity entity) {
+		logger.info("Inserting entity " + name + " with values : " + values);
 		Cursor result = new Cursor(name);
+		String userId = null;
+		if(entity.getUserIdPropertyName() != null) {
+			UserService userService = UserServiceFactory.getUserService();
+			User user = userService.getCurrentUser();
+			userId = user.getUserId();
+		}
 		for (Map<String, Object> row : values.getRows()) {
-			Map<String, Object> rowResult = insert(row, entity);
+			Map<String, Object> rowResult = insert(row, entity, userId);
 			if(rowResult != null) {
 				result.addRow(rowResult);
 			}
@@ -91,10 +98,13 @@ public class GaeProvider extends AbstractProvider {
 		return result;
 	}
 	
-	private Map<String, Object> insert(Map<String, Object> row, MetaEntity entity) {
-		Entity e = new Entity(entity.getClassName());
+	private Map<String, Object> insert(Map<String, Object> row, MetaEntity entity, String userId) {
+		Entity e = new Entity(entity.getName());
 		for (Entry<String, Object> entry : row.entrySet()) {
 			e.setProperty(entry.getKey(), entry.getValue());
+		}
+		if(userId != null) {
+			e.setProperty(entity.getUserIdPropertyName(), userId);
 		}
 		Key key = ds.put(e);
 		row.put(entity.getKeyProperty(), key.getId());

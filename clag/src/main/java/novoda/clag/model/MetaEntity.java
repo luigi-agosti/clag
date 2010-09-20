@@ -2,6 +2,7 @@ package novoda.clag.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,25 @@ public class MetaEntity {
 		}
 		
 	}
+	
+	private static Map<String, MetaEntity.Type> TYPE_MAP = new HashMap<String, MetaEntity.Type>();
+    static {
+        TYPE_MAP.put(String.class.getName(), MetaEntity.Type.STRING);
+        TYPE_MAP.put(Integer.class.getName(), MetaEntity.Type.INTEGER);
+        TYPE_MAP.put(Long.class.getName(), MetaEntity.Type.INTEGER);
+        TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.STRING);
+        TYPE_MAP.put(Date.class.getName(), MetaEntity.Type.INTEGER);
+        TYPE_MAP.put(List.class.getName(), MetaEntity.Type.STRING);
+        TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.REAL);
+    }
+
+    public static final String getType(Class<?> clazz) {
+    	MetaEntity.Type value = TYPE_MAP.get(clazz.getName());
+    	if(value != null) {
+    		return value.getValue();
+    	}
+    	return null;
+    }
 
 	private Map<String, MetaProperty> mds = new HashMap<String, MetaProperty>();
 	
@@ -77,8 +97,8 @@ public class MetaEntity {
 		}
 	}
 
-	public void add(String name, String type) {
-		add(name, new MetaProperty.Builder(name).type(type).build()); 
+	public void add(String name, Class<?> clazz) {
+		add(name, new MetaProperty.Builder(name).clazz(clazz).build()); 
 	}
 	
 	public void addParent(String parent, String property) {
@@ -89,12 +109,12 @@ public class MetaEntity {
 		add(new MetaProperty.Builder(property).child(child).build());
 	}
 	
-	public void addKey(String name, String type) {
-		add(new MetaProperty.Builder(name).type(type).key(true).build());
+	public void addKey(String name, Class<?> clazz) {
+		add(new MetaProperty.Builder(name).clazz(clazz).key(true).build());
 	}
 	
-	public void addRelation(String through, String owner, String from, String type, boolean include) {
-		add(new MetaProperty.Builder(through).owner(owner).type(type).isRelation(true, from, include).build());
+	public void addRelation(String through, String owner, String from, Class<?> clazz, boolean include) {
+		add(new MetaProperty.Builder(through).owner(owner).clazz(clazz).isRelation(true, from, include).build());
 	}
 	
 	public Collection<MetaProperty> getMetaProperties(){

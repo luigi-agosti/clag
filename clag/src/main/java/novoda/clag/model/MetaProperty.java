@@ -13,6 +13,8 @@ public class MetaProperty {
 	private String name;
 
 	private String type;
+	
+	private Class<?> clazz;
 
 	private boolean key;
 
@@ -166,6 +168,15 @@ public class MetaProperty {
 	}
 
 
+	public void setClazz(Class<?> clazz) {
+		this.clazz = clazz;
+	}
+
+	public Class<?> getClazz() {
+		return clazz;
+	}
+
+
 	/**
 	 * Builder
 	 */
@@ -177,10 +188,18 @@ public class MetaProperty {
 			md.setName(name);
 		}
 
-		public Builder type(String type) {
+		public Builder type(Class<?> clazz, String type) {
 			md.setType(type);
+			md.setClazz(clazz);
 			return this;
 		}
+		
+		public Builder clazz(Class<?> clazz){
+			md.setClazz(clazz);
+			md.setType(MetaEntity.getType(clazz));
+			return this;
+		}
+		
 		
 		public Builder parent(String parent) {
 			md.setParent(parent);

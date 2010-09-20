@@ -1,6 +1,7 @@
 package novoda.clag.servlet.context;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
+import novoda.clag.model.MetaProperty;
 import novoda.clag.model.Options;
 import novoda.clag.provider.Provider;
 import novoda.clag.util.RequestWrapper;
@@ -167,7 +169,20 @@ public class GaeRestContext extends RequestWrapper implements Context {
             	JsonNode node = array.next();
             	for(String property : me.getPropertyNames()) {
             		if(!property.equals(me.getKeyProperty())) {
-            			c.add(property, node.get(property).getValueAsText());
+            			MetaProperty mp = me.getMetaProperty(property);
+            			JsonNode attributeNode = node.get(property);
+            			if(attributeNode != null) {
+	            			String value = attributeNode.getValueAsText();
+	            			if(value != null) {
+	            				if(mp.getClazz() == Integer.class) {
+	            					c.add(property, new Integer(value));
+	            				} else if(mp.getClazz() == Date.class) {
+	            					c.add(property, new Date(new Long(value)));
+	            				} else if(mp.getClazz() == String.class) {
+	            					c.add(property, value);
+	            				}            				
+	            			}
+            			}
             		}
             	}
             	c.next();

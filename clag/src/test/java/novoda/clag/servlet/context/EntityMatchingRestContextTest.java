@@ -17,8 +17,7 @@ public class EntityMatchingRestContextTest {
 	@Test
 	public void shouldGetEntityPropertiesReturnMapWithTextValue() {
 		Map<String, Object> properties = entityMatchingText("key",
-				MetaEntity.Type.STRING.getValue(), "should be ok",
-				MetaEntity.Type.STRING.getValue());
+				String.class, "should be ok", String.class);
 
 		assertProperty("id", "key", properties);
 		assertProperty("second", "should be ok", properties);
@@ -33,8 +32,7 @@ public class EntityMatchingRestContextTest {
 	@Test
 	public void shouldGetEntityPropertiesReturnMapWithLong() {
 		Map<String, Object> properties = entityMatchingText("key",
-				MetaEntity.Type.STRING.getValue(), "12", MetaEntity.Type.STRING
-						.getValue());
+				String.class, "12", Integer.class);
 
 		assertProperty("id", "key", properties);
 		assertProperty("second", "should be ok", properties);
@@ -44,8 +42,7 @@ public class EntityMatchingRestContextTest {
 	@Test
 	public void shouldGetEntityPropertiesReturnMapWithDate() {
 		Map<String, Object> properties = entityMatchingText("key",
-				MetaEntity.Type.STRING.getValue(), "122938420",
-				MetaEntity.Type.STRING.getValue());
+				String.class, "122938420", String.class);
 
 		assertProperty("id", "key", properties);
 		assertProperty("second", "should be ok", properties);
@@ -58,15 +55,15 @@ public class EntityMatchingRestContextTest {
 	}
 
 	private Map<String, Object> entityMatchingText(String fristProperty,
-			String firstType, String secondProperty, String secondType) {
+			Class<?> firstClass, String secondProperty, Class<?> secondClass) {
 		GaeRestContext rr = new GaeRestContext(new RequestMapBuilder().add(
 				"id", fristProperty).add("second", secondProperty).build());
 
 		rr.setUri("/data/Story");
 
 		MetaEntity me = new MetaEntity("Example", "Example");
-		me.add("id", firstType);
-		me.add("second", secondType);
+		me.add("id", firstClass);
+		me.add("second", secondClass);
 
 		Map<String, Object> properties = rr.getEntity(me);
 		assertNotNull(properties);

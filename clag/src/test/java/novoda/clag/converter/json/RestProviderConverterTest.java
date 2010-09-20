@@ -151,7 +151,7 @@ public class RestProviderConverterTest extends AbstractConverterTest {
 	public void convertWithSelfRelationWithTheOwnerOfTheRelation() {
 		Context context = new GaeRestContext();
 		MetaEntity me = getSampleEntity();
-		me.addRelation("parentId", "Example", "Example1", "text", true);
+		me.addRelation("parentId", "Example", "Example1", String.class, true);
 		Provider provider = new GaeProvider();
 		provider.add(me);
 		context.setProvider(provider);
