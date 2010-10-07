@@ -59,6 +59,8 @@ public class InsertTest {
 				me.add("note", String.class);
 				me.add("date", Date.class);
 				me.add("cost", Integer.class);
+				me.add("shared", Boolean.class);
+				me.add("distance", Long.class);
 				gp.add(me);
 				return gp;
 			}
@@ -68,10 +70,10 @@ public class InsertTest {
 			}
 			@Override
 			public String getData() {
-				return "[{\"note\":\"test\",\"date\":\"123123\",\"cost\":\"1200\"}]";
+				return "[{\"note\":\"test\",\"date\":\"123123\",\"cost\":\"1200\",\"shared\":true,\"distance\":12}]";
 			}
 		});
-		assertEquals("[{\"date\":123123,\"cost\":1200,\"note\":\"test\",\"id\":1}]", result);
+		assertEquals("[{\"shared\":true,\"distance\":12,\"date\":123123,\"cost\":1200,\"note\":\"test\",\"id\":1}]", result);
 	}
 
 	@Test

@@ -172,16 +172,32 @@ public class GaeRestContext extends RequestWrapper implements Context {
             			MetaProperty mp = me.getMetaProperty(property);
             			JsonNode attributeNode = node.get(property);
             			if(attributeNode != null) {
-	            			String value = attributeNode.getValueAsText();
-	            			if(value != null) {
-	            				if(mp.getClazz() == Integer.class) {
-	            					c.add(property, new Integer(value));
-	            				} else if(mp.getClazz() == Date.class) {
-	            					c.add(property, new Date(new Long(value)));
-	            				} else if(mp.getClazz() == String.class) {
-	            					c.add(property, value);
-	            				}            				
-	            			}
+            				if(mp.getClazz() == Integer.class) {
+            					String value = attributeNode.getValueAsText();
+            					if(value != null) {
+            						c.add(property, new Integer(value));
+            					}
+            				} else if(mp.getClazz() == Date.class) {
+            					String value = attributeNode.getValueAsText();
+            					if(value != null) {
+            						c.add(property, new Date(new Long(value)));
+            					}
+            				} else if(mp.getClazz() == String.class) {
+            					String value = attributeNode.getValueAsText();
+            					if(value != null) {
+            						c.add(property, value);
+            					}
+            				} else if(mp.getClazz() == Boolean.class) {
+            					Boolean value = attributeNode.getBooleanValue();
+            					if(value != null) {
+            						c.add(property, value);
+            					}
+            				} else if(mp.getClazz() == Long.class) {
+            					String value = attributeNode.getValueAsText();
+            					if(value != null) {
+            						c.add(property, new Long(value));
+            					}
+            				}
             			}
             		}
             	}
