@@ -103,4 +103,15 @@ public class JdoIntrospectorTest {
 		assertEquals("userId", entity.getUserIdPropertyName());
 	}
 	
+	@Test
+	public void shouldConvertBooleanPropertyToInteger() {
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(ClagAnnotationModel.class);
+		assertNotNull(entity);
+		
+		assertTrue(entity.contains("enabled"));
+		MetaProperty mp = entity.getMetaProperty("enabled");
+		assertEquals(MetaEntity.Type.BOOLEAN.getValue(), mp.getType());
+	}
+	
+	
 }

@@ -3,6 +3,8 @@ package novoda.clag.converter.json;
 import static org.junit.Assert.assertEquals;
 import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
+import novoda.clag.model.MetaEntity;
+import novoda.clag.model.MetaProperty;
 import novoda.clag.servlet.context.Context;
 import novoda.clag.servlet.context.GaeRestContext;
 import novoda.clag.servlet.context.ServiceInfo;
@@ -122,5 +124,23 @@ public class SqliteJsonConverterTest extends AbstractConverterTest {
 						+ "(_id integer primary key autoincrement,id integer unique on conflict replace,title text);\"}",
 				result);
 	}
+	
+	@Test
+	public void convertCursorWithBooleanValue() {
+		Cursor cursor = new Cursor();
+		cursor.add("title", "title value");
+		cursor.add("description", "description value");
+		cursor.add("cost", 1);
+		cursor.add("id", 1);
+		cursor.add("enabled", Boolean.TRUE);
+		cursor.next();
 
+		MetaEntity me = getSampleEntity();
+		me.add(new MetaProperty.Builder("enabled").clazz(Boolean.class).build());
+		String result = converter.convert(cursor, me, context);
+		
+		assertEquals(
+				"[{\"title\":\"title value\",\"description\":\"description value\",\"cost\":1,\"id\":1,\"enabled\":true}]",
+				result);
+	}
 }

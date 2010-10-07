@@ -13,6 +13,9 @@ public class ClagAnnotationModel {
 	
 	@Clag(userId=true,hidden=true)
 	private String userId;
+	
+	@Clag
+	private Boolean enabled;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -36,6 +39,14 @@ public class ClagAnnotationModel {
 
 	public String getUserId() {
 		return userId;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
 	}
 	
 }

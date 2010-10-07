@@ -20,7 +20,7 @@ public class MetaEntity {
 	}
 	
 	public enum Type {
-		STRING("text"),INTEGER("integer"),NULL("null"),REAL("real"),BLOB("blob");
+		STRING("text"),INTEGER("integer"),NULL("null"),REAL("real"),BLOB("blob"),BOOLEAN("integer");
 		
 		private String value;
 		
@@ -39,10 +39,10 @@ public class MetaEntity {
         TYPE_MAP.put(String.class.getName(), MetaEntity.Type.STRING);
         TYPE_MAP.put(Integer.class.getName(), MetaEntity.Type.INTEGER);
         TYPE_MAP.put(Long.class.getName(), MetaEntity.Type.INTEGER);
-        TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.STRING);
         TYPE_MAP.put(Date.class.getName(), MetaEntity.Type.INTEGER);
         TYPE_MAP.put(List.class.getName(), MetaEntity.Type.STRING);
         TYPE_MAP.put(Double.class.getName(), MetaEntity.Type.REAL);
+        TYPE_MAP.put(Boolean.class.getName(), MetaEntity.Type.BOOLEAN);
     }
 
     public static final String getType(Class<?> clazz) {
