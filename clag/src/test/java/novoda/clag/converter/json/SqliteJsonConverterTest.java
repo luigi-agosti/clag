@@ -96,10 +96,10 @@ public class SqliteJsonConverterTest extends AbstractConverterTest {
 		assertEquals(
 				"{\"name\":\"testApplication\",\"version\":\"1\","
 						+ "\"dropStatements\":["
-						+ "\"drop table if exists Example;\""
+							+ "\"drop table if exists Example;\""
 						+ "],"
 						+ "\"createStatements\":["
-						+ "\"create table if not exists Example(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\""
+							+ "\"create table if not exists Example(_id integer primary key autoincrement,id integer,title text,description text,cost integer);\""
 						+ "]" + "}", result);
 	}
 

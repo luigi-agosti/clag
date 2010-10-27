@@ -52,8 +52,12 @@ public class GaeProvider extends AbstractProvider {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		
-		if(user != null && entity.getUserIdPropertyName() != null) {
-			q.addFilter(entity.getUserIdPropertyName(), FilterOperator.EQUAL, user.getUserId());
+		if(entity.getUserIdPropertyName() != null) {
+			String userId = null;
+			if(user != null) {
+				userId = user.getUserId();
+			}
+			q.addFilter(entity.getUserIdPropertyName(), FilterOperator.EQUAL, userId);
 		}
 		PreparedQuery pq = ds.prepare(q);
 		Cursor cursor = new Cursor();

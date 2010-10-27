@@ -86,19 +86,9 @@ public class SqliteJsonConverter implements Converter {
 					jsonStringer.key(NAME).value(si.getName()).
 						key(VERSION).value(si.getVersion());
 				}
-				
 				if(context.getProvider() != null) {
-					jsonStringer.key(DROP_STATEMENTS).array();
-					for(MetaEntity entity: context.getProvider().schema()) {
-						dropStm(jsonStringer, entity, context, true);
-					}
-					jsonStringer.endArray();
-					
-					jsonStringer.key(CREATE_STATEMENTS).array();
-					for(MetaEntity entity: context.getProvider().schema()) {
-						createStm(jsonStringer, entity, context, true);
-					}
-					jsonStringer.endArray();
+					dropPart(jsonStringer, context);
+					createPart(jsonStringer, context);
 				}
 			}
 			return jsonStringer.endObject().toString();
@@ -107,7 +97,23 @@ public class SqliteJsonConverter implements Converter {
 		}
 	}
 	
-	private void createStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
+	private void dropPart(JSONStringer jsonStringer, Context context) throws Exception {
+		jsonStringer.key(DROP_STATEMENTS).array();
+		for(MetaEntity entity: context.getProvider().schema()) {
+			dropStm(jsonStringer, entity, context, true);
+		}
+		jsonStringer.endArray();
+	}
+	
+	private void createPart(JSONStringer jsonStringer, Context context) throws Exception {
+		jsonStringer.key(CREATE_STATEMENTS).array();
+		for(MetaEntity entity: context.getProvider().schema()) {
+			createStm(jsonStringer, entity, context, true);
+		}
+		jsonStringer.endArray();
+	}
+	
+	private void createStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean withTriggers)
 			throws Exception {
 		StringBuilder createStatement = new StringBuilder("create table if not exists " + entity.getName() 
 				+ "(_id integer primary key autoincrement,");
@@ -126,10 +132,9 @@ public class SqliteJsonConverter implements Converter {
 		jsonStringer.value(createStatement);
 	}
 
-	private void dropStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean recursive)
+	private void dropStm(JSONStringer jsonStringer, MetaEntity entity, Context context, boolean withTriggers)
 		throws Exception {
-		StringBuilder createStatement = new StringBuilder("drop table if exists " + entity.getName() + ";");
-		jsonStringer.value(createStatement);
+		jsonStringer.value(new StringBuilder("drop table if exists " + entity.getName() + ";"));
 	}
 
 }
