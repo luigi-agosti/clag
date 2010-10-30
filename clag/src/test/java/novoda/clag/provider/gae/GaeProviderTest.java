@@ -20,7 +20,6 @@ import novoda.clag.model.Options;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -44,7 +43,8 @@ public class GaeProviderTest {
 	public void setUp() {
 		HashMap<String, Object> envAttr = new HashMap<String, Object>();
 	    envAttr.put("com.google.appengine.api.users.UserService.user_id_key", "10");
-	    helper.setEnvEmail("test@example.com").setEnvAuthDomain("example.com").setEnvAttributes(envAttr);
+	    helper.setEnvEmail("test@example.com").setEnvAuthDomain("example.com")
+	    	.setEnvAttributes(envAttr).setEnvIsLoggedIn(true);
 	    helper.setUp();
 	}
 
@@ -129,8 +129,6 @@ public class GaeProviderTest {
 		assertEquals(key2.getId(), cursor.getRows().get(0).get("id"));
 	}
 	
-	//Need to investigate more the user service
-	@Ignore
 	@Test
 	public void shouldGetFilterByUserId() {
 		Entity e = new Entity(ClagAnnotationModel.class.getSimpleName());
@@ -155,6 +153,34 @@ public class GaeProviderTest {
 		assertTrue(cv.containsKey("field"));
 		assertEquals("ok", cv.get("field"));
 		assertFalse(cv.containsKey("userId"));
+	}
+	
+	@Test
+	public void shouldGetFilterByUserIdIfTheUserIsNotLoggedIn() {
+		HashMap<String, Object> envAttr = new HashMap<String, Object>();
+	    envAttr.put("com.google.appengine.api.users.UserService.user_id_key", "10");
+	    helper.setEnvEmail("test@example.com").setEnvAuthDomain("example.com")
+	    	.setEnvAttributes(envAttr).setEnvIsLoggedIn(false);
+	    helper.setUp();
+	    
+		Entity e = new Entity(ClagAnnotationModel.class.getSimpleName());
+		e.setProperty("userId", "10");
+		e.setProperty("field", "ok");
+		ds.put(e);
+		e = new Entity(ClagAnnotationModel.class.getSimpleName());
+		e.setProperty("userId", "13");
+		e.setProperty("field", "umm wrong");
+		ds.put(e);
+		
+		provider.setIntrospector(new JdoIntrospector());
+		provider.add(ClagAnnotationModel.class);
+		
+		Cursor cursor = provider.query(ClagAnnotationModel.class.getSimpleName(), null, null,
+				null, null, new Options());
+		
+		assertNotNull(cursor);
+		assertNotNull(cursor.getRows());
+		assertEquals(0, cursor.getRows().size());
 	}
 	
 	@Test
