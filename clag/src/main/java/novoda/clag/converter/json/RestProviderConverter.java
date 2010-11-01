@@ -158,4 +158,9 @@ public class RestProviderConverter implements Converter {
 		jsonStringer.endObject();
 	}
 
+	@Override
+	public String convertIdsOnly(Cursor cursor, MetaEntity mds, Context context) {
+		return convert(cursor, mds, context);
+	}
+
 }

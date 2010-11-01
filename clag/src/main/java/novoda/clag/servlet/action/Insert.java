@@ -11,7 +11,7 @@ public class Insert implements Action {
 		MetaEntity mds = context.getProvider().schema(context.getName());
 		try {
 			Cursor cursor = context.getProvider().insert(context.getName(), context.getCursorFromJsonDataRequest(mds), mds);
-			return context.getConverter().convert(cursor, mds, context);
+			return context.getConverter().convertIdsOnly(cursor, mds, context);
 		} catch (Exception e) {
 			throw new RuntimeException("ummm", e);
 		}

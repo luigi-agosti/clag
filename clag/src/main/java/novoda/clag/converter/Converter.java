@@ -33,4 +33,14 @@ public interface Converter {
 	 */
 	String describe(Context context);
 
+	/**
+	 * Convert only the ids and generate a minimal json useful to update verify
+	 * and keep remote ids.
+	 * @param cursor
+	 * @param mds
+	 * @param context
+	 * @return
+	 */
+	String convertIdsOnly(Cursor cursor, MetaEntity mds, Context context);
+
 }

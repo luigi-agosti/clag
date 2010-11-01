@@ -26,6 +26,8 @@ import novoda.clag.util.RequestWrapper;
  */
 public class GaeRestContext extends RequestWrapper implements Context {
 	
+	public static final String CLIENT_ID = "_id";
+	
 	private static final String SEPARATOR = "/";
 	
 	private static final String QUESTION_MARK = "?";
@@ -200,6 +202,13 @@ public class GaeRestContext extends RequestWrapper implements Context {
             				}
             			}
             		}
+            	}
+            	JsonNode attributeNode = node.get(CLIENT_ID);
+            	if(attributeNode != null) {
+            		String value = attributeNode.getValueAsText();
+            		if(value != null) {
+						c.add(CLIENT_ID, new Long(value));
+					}
             	}
             	c.next();
             }

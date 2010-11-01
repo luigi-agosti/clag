@@ -137,4 +137,27 @@ public class SqliteJsonConverter implements Converter {
 		jsonStringer.value(new StringBuilder("drop table if exists " + entity.getName() + ";"));
 	}
 
+	@Override
+	public String convertIdsOnly(Cursor cursor, MetaEntity mds, Context context) {
+		try {
+			JSONStringer jsonStringer = new JSONStringer();
+			jsonStringer.array();
+			convertIdsOnly(jsonStringer, cursor, context);
+			return jsonStringer.endArray().toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	//TODO need to make it right!!! not a copy of the other one
+	private void convertIdsOnly(JSONStringer jsonStringer, Cursor cursor, Context context) throws JSONException {
+		for (Map<String, Object> row : cursor.getRows()) {
+			jsonStringer.object();
+			for (String key : new String[]{"id", "_id"}) {
+				jsonStringer.key(key).value((Long)row.get(key));
+			}
+			jsonStringer.endObject();
+		}
+	}
+
 }

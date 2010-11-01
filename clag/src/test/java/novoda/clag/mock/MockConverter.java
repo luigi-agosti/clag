@@ -24,5 +24,11 @@ public class MockConverter implements Converter {
 	public String describe(Context context) {
 		return "describe";
 	}
+
+	@Override
+	public String convertIdsOnly(Cursor cursor, MetaEntity mds, Context context) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
