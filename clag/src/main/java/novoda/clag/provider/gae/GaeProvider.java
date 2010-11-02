@@ -18,6 +18,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -100,6 +101,13 @@ public class GaeProvider extends AbstractProvider {
 			}
 		}
 		return result;
+	}
+	
+	@Override
+	public void delete(String name, String remoteId, MetaEntity mds) {
+		logger.info("Deleting entity " + name + " with id : " + remoteId);
+		long id = (long)Long.valueOf(remoteId);
+		ds.delete(KeyFactory.createKey(name, id));
 	}
 	
 	private Map<String, Object> insert(Map<String, Object> row, MetaEntity entity, String userId) {

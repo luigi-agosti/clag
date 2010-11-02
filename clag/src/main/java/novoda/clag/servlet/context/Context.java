@@ -27,6 +27,7 @@ public interface Context {
 		String LIMIT = "limit";
 		String OFFSET = "offset";
 		String EMAIL = "account";
+		String REMOTE_ID = "remoteId";
 	}
 	
 	String getName();
@@ -64,5 +65,7 @@ public interface Context {
 	Cursor getCursorFromJsonDataRequest(MetaEntity me) throws JsonParseException, JsonMappingException, IOException;
 	
 	String getData();
+
+	String getRemoteId();
 
 }

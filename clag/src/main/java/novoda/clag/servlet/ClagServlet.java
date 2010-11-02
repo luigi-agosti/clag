@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import novoda.clag.servlet.action.Delete;
 import novoda.clag.servlet.action.Describe;
 import novoda.clag.servlet.action.Insert;
 import novoda.clag.servlet.action.Query;
@@ -99,8 +100,22 @@ public class ClagServlet extends HttpServlet {
 	protected void doDelete(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		logger.info("Executing delete request for : " + req.getRequestURI());
-		// TODO delete
-		throw new RuntimeException("Delete not implemented yet!");
+		Context context = configurator.getContext();
+		context.setRequest(req);
+		String name = context.getName();
+		if(name != null && name.length() > 0){
+			String result = null;
+			result = new Delete().execute(context);
+			logger.info("request executed, sending back the result");
+			resp.setContentType(CONTENT_TYPE);
+			resp.setContentLength(result.length());
+			PrintWriter out = resp.getWriter();
+			out.println(result);
+			out.close();
+			out.flush();
+		} else {
+			throw new RuntimeException("No action implemented for " + name);
+		}
 	}
 
 	@Override

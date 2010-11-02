@@ -40,4 +40,7 @@ public interface Provider extends Configurable {
 	void add(MetaEntity entity);
 
 	void linkMetaEntities();
+
+	void delete(String name, String remoteId, MetaEntity mds);
+	
 }

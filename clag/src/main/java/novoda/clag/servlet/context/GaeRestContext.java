@@ -104,6 +104,11 @@ public class GaeRestContext extends RequestWrapper implements Context {
 	public String[] getProjection() {
 		return getParameterAsStringArray(Parameter.PROJECTION);
 	}
+	
+	@Override
+	public String getRemoteId() {
+		return getParameterAsString(Parameter.REMOTE_ID);
+	}
 
 	@Override
 	public Converter getConverter() {

@@ -34,6 +34,11 @@ public class MockProvider extends AbstractProvider {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void delete(String name, String remoteId, MetaEntity mds) {
+		// TODO Auto-generated method stub
+	}
 	
 	
 
