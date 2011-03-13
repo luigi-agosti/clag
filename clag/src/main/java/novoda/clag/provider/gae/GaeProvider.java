@@ -1,6 +1,7 @@
 package novoda.clag.provider.gae;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import novoda.clag.provider.AbstractProvider;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -35,8 +37,7 @@ public class GaeProvider extends AbstractProvider {
 
 	protected static final GaeQueryHelper QC = new GaeQueryHelper();
 	
-	protected DatastoreService ds = DatastoreServiceFactory
-			.getDatastoreService();
+	protected DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
 	@Override
 	public Cursor query(String name, String[] projection, String selection,
@@ -58,7 +59,18 @@ public class GaeProvider extends AbstractProvider {
 			if(user != null) {
 				userId = user.getUserId();
 			}
-			q.addFilter(entity.getUserIdPropertyName(), FilterOperator.EQUAL, userId);
+			if(entity.getUserIdsPropertyName() != null) {
+				q.addFilter(entity.getUserIdsPropertyName(), FilterOperator.EQUAL, userId);
+			} else {				
+				q.addFilter(entity.getUserIdPropertyName(), FilterOperator.EQUAL, userId);
+			}
+		}
+		if(entity.getEmailPropertyName() != null) {
+			String email = null;
+			if(user != null) {
+				email = user.getEmail();
+			}
+			q.addFilter(entity.getEmailPropertyName(), FilterOperator.EQUAL, email);
 		}
 		PreparedQuery pq = ds.prepare(q);
 		Cursor cursor = new Cursor();
@@ -94,7 +106,11 @@ public class GaeProvider extends AbstractProvider {
 			User user = userService.getCurrentUser();
 			userId = user.getUserId();
 		}
+		if(values.getRows().isEmpty()) {
+			logger.info("There are not results");
+		}
 		for (Map<String, Object> row : values.getRows()) {
+			logger.info("Checking row");
 			Map<String, Object> rowResult = insert(row, entity, userId);
 			if(rowResult != null) {
 				result.addRow(rowResult);
@@ -111,6 +127,15 @@ public class GaeProvider extends AbstractProvider {
 	}
 	
 	private Map<String, Object> insert(Map<String, Object> row, MetaEntity entity, String userId) {
+		logger.info("insert : " + entity.getName());
+		if(row.containsKey("_id")) {
+			try {
+				return update(row, entity);
+			} catch (EntityNotFoundException e1) {
+				logger.info(e1.getMessage());
+			}
+		}
+		logger.info("not using id");
 		Entity e = new Entity(entity.getName());
 		for (Entry<String, Object> entry : row.entrySet()) {
 			e.setProperty(entry.getKey(), entry.getValue());
@@ -118,8 +143,25 @@ public class GaeProvider extends AbstractProvider {
 		if(userId != null) {
 			e.setProperty(entity.getUserIdPropertyName(), userId);
 		}
+		if(userId != null && entity.getUserIdsPropertyName() != null) {
+			e.setProperty(entity.getUserIdsPropertyName(), Arrays.asList(userId));
+		}
 		Key key = ds.put(e);
 		row.put(entity.getKeyProperty(), key.getId());
+		return row;					
+	}
+	
+	private Map<String, Object> update(Map<String, Object> row, MetaEntity entity) throws EntityNotFoundException {
+		logger.info("using id : " );
+		Long id = (Long)row.get("_id");
+		Entity toUpdate = ds.get(KeyFactory.createKey(entity.getName(), id));
+		for (Entry<String, Object> entry : row.entrySet()) {
+			if(entry.getValue() != null && !"_id".equals(entry.getKey())) {
+				toUpdate.setProperty(entry.getKey(), entry.getValue());
+			}
+		}
+		ds.put(toUpdate);
+		row.put(entity.getKeyProperty(), id);
 		return row;
 	}
 

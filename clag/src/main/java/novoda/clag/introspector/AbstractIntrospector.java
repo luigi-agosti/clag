@@ -31,6 +31,8 @@ public abstract class AbstractIntrospector implements Introspector {
 				filterFields(field, me);
 			} else if(c != null && c.hidden() && c.userId()) {
 				me.setUserIdPropertyName(field.getName());
+			} else if(c != null && c.hidden() && c.email()) {
+				me.setEmailPropertyName(field.getName());
 			}
 		}
 		return me;

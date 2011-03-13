@@ -146,4 +146,43 @@ public class InsertTest {
 		
 	}
 	
+	@Test
+	public void shouldUpdateSomeDataWithSqliteJsonConverter() throws EntityNotFoundException {
+		Entity entityToUpdate = new Entity(KeyFactory.createKey("Project", Long.valueOf(3005)));
+		ds.put(entityToUpdate);
+		
+		Insert insertAction = new Insert();
+		String result = insertAction.execute(new GaeRestContext() {
+			@Override
+			public String getName() {
+				return "Project";
+			}
+			@Override
+			public Provider getProvider() {
+				GaeProvider gp = new GaeProvider();
+				MetaEntity me = new MetaEntity("Project", "Project");
+				me.addKey("id", Long.class);
+				me.add("title", String.class);
+				me.add("created", Long.class);
+				me.add("sys", Long.class);
+				me.add("description", String.class);
+				me.add("modified", Long.class);
+				gp.add(me);
+				return gp;
+			}
+			@Override
+			public Converter getConverter() {
+				return new SqliteJsonConverter();
+			}
+			@Override
+			public String getData() {
+				return "[{\"_id\":\"3005\",\"title\":\"gu\",\"created\":1299628992340,\"sys\":0,\"description\":\"test ok 1\",\"modified\":1299628992341}]";
+			}
+		});
+		assertEquals("[{\"id\":3005,\"_id\":3005}]", result);
+		
+		Entity e = ds.get(KeyFactory.createKey("Project", new Long(3005)));
+		assertNotNull(e);
+		assertEquals("gu", e.getProperty("title"));
+	}
 }

@@ -64,6 +64,10 @@ public class MetaEntity {
 	
 	private String userIdPropertyName;
 	
+	private String userIdsPropertyName;
+	
+	private String emailPropertyName;
+	
 	private List<String> relations = new ArrayList<String>();
 	
 	public MetaEntity(String className, String name) {
@@ -95,6 +99,12 @@ public class MetaEntity {
 		add(property.getName(), property); 
 		if(property.getUserId()) {
 			userIdPropertyName = property.getName();
+		}
+		if(property.isEmail()) {
+			emailPropertyName = property.getName();
+		}
+		if(property.isUserIds()) {
+			userIdsPropertyName = property.getName();
 		}
 	}
 
@@ -172,6 +182,22 @@ public class MetaEntity {
 
 	public void setUserIdPropertyName(String userIdPropertyName) {
 		this.userIdPropertyName = userIdPropertyName;
+	}
+	
+	public String getUserIdsPropertyName() {
+		return userIdsPropertyName;
+	}
+
+	public void setUserIdsPropertyName(String userIdsPropertyName) {
+		this.userIdsPropertyName = userIdsPropertyName;
+	}
+	
+	public String getEmailPropertyName() {
+		return emailPropertyName;
+	}
+
+	public void setEmailPropertyName(String emailPropertyName) {
+		this.emailPropertyName = emailPropertyName;
 	}
 
 }

@@ -21,6 +21,10 @@ public @interface Clag {
 	
 	boolean userId() default false;
 	
+	boolean userIds() default false;
+	
+	boolean email() default false;
+	
 	String from() default "";
 	
 	boolean include() default false;

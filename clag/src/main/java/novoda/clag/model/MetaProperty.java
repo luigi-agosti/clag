@@ -36,6 +36,10 @@ public class MetaProperty {
 	
 	private boolean userId;
 	
+	private boolean userIds;
+	
+	private boolean email;
+	
 	private OnConflictPolicy onConflictPolicy;
 
 	public String getName() {
@@ -177,6 +181,23 @@ public class MetaProperty {
 	}
 
 
+	public void setEmail(boolean email) {
+		this.email = email;
+	}
+
+	public boolean isEmail() {
+		return email;
+	}
+	
+	public void setUserIds(boolean userIds) {
+		this.userIds = userIds;
+	}
+
+	public boolean isUserIds() {
+		return userIds;
+	}
+
+
 	/**
 	 * Builder
 	 */
@@ -244,6 +265,16 @@ public class MetaProperty {
 
 		public Builder userId(boolean userId) {
 			md.setUserId(userId);
+			return this;
+		}
+		
+		public Builder email(boolean email) {
+			md.setEmail(email);
+			return this;
+		}
+		
+		public Builder userIds(boolean userIds) {
+			md.setUserIds(userIds);
 			return this;
 		}
 		

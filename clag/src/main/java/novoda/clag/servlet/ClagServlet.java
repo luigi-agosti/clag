@@ -83,7 +83,7 @@ public class ClagServlet extends HttpServlet {
 		String name = context.getName();
 		if(name != null && name.length() > 0){
 			String result = null;
-			result = new Insert().execute(context);
+			result = new Insert().execute(context);	
 			logger.info("request executed, sending back the result");
 			resp.setContentType(CONTENT_TYPE);
 			resp.setContentLength(result.length());
