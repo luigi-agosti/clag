@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import novoda.clag.introspector.jdo.sample.ClagAnnotationModel;
+import novoda.clag.introspector.jdo.sample.PersistUserIdClagAnnotationModel;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
@@ -100,7 +101,29 @@ public class JdoIntrospectorTest {
 		assertFalse(mp.getKey());
 		assertFalse(mp.getUnique());
 		
-		assertEquals("userId", entity.getUserIdPropertyName());
+		assertEquals("userId", entity.getFilterUserIdPropertyName());
+	}
+	
+	@Test
+	public void shouldUseClagProperlyWithPersistUserId() {
+		MetaEntity entity = new JdoIntrospector().extractMetaEntity(PersistUserIdClagAnnotationModel.class);
+		assertNotNull(entity);
+		
+		assertTrue(entity.contains("id"));
+		MetaProperty mp = entity.getMetaProperty("id");
+		assertEquals(MetaEntity.Type.INTEGER.getValue(), mp.getType());
+		assertEquals(OnConflictPolicy.REPLACE, mp.getOnConflictPolicy());
+		assertTrue(mp.getKey());
+		assertTrue(mp.getUnique());
+		
+		assertTrue(entity.contains("field"));
+		mp = entity.getMetaProperty("field");
+		assertEquals(MetaEntity.Type.STRING.getValue(), mp.getType());
+		assertEquals(OnConflictPolicy.NOT_DEFINED, mp.getOnConflictPolicy());
+		assertFalse(mp.getKey());
+		assertFalse(mp.getUnique());
+		
+		assertEquals("userId", entity.getPersistUserIdPropertyName());
 	}
 	
 	@Test

@@ -12,6 +12,7 @@ import java.util.Map;
 import novoda.clag.introspector.jdo.JdoIntrospector;
 import novoda.clag.introspector.jdo.sample.ClagAnnotationModel;
 import novoda.clag.introspector.jdo.sample.Page;
+import novoda.clag.introspector.jdo.sample.PersistUserIdClagAnnotationModel;
 import novoda.clag.introspector.jdo.sample.Story;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
@@ -153,6 +154,28 @@ public class GaeProviderTest {
 		assertTrue(cv.containsKey("field"));
 		assertEquals("ok", cv.get("field"));
 		assertFalse(cv.containsKey("userId"));
+	}
+	
+	@Test
+	public void shouldGetSkipFilterByUserId() {
+		Entity e = new Entity(PersistUserIdClagAnnotationModel.class.getSimpleName());
+		e.setProperty("userId", "10");
+		e.setProperty("field", "ok");
+		ds.put(e);
+		e = new Entity(PersistUserIdClagAnnotationModel.class.getSimpleName());
+		e.setProperty("userId", "13");
+		e.setProperty("field", "umm wrong");
+		ds.put(e);
+		
+		provider.setIntrospector(new JdoIntrospector());
+		provider.add(PersistUserIdClagAnnotationModel.class);
+		
+		Cursor cursor = provider.query(PersistUserIdClagAnnotationModel.class.getSimpleName(), null, null,
+				null, null, new Options());
+		
+		assertNotNull(cursor);
+		assertNotNull(cursor.getRows());
+		assertEquals(2, cursor.getRows().size());
 	}
 	
 	@Test

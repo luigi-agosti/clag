@@ -34,7 +34,9 @@ public class MetaProperty {
 	
 	private String from;
 	
-	private boolean userId;
+	private boolean filterUserId;
+	
+	private boolean persistUserId;
 	
 	private boolean userIds;
 	
@@ -139,12 +141,20 @@ public class MetaProperty {
 		return include;
 	}
 	
-	public void setUserId(boolean userId) {
-		this.userId = userId;
+	public void setFilterUserId(boolean filterUserId) {
+		this.filterUserId = filterUserId;
 	}
 
-	public boolean getUserId() {
-		return userId;
+	public boolean getFilterUserId() {
+		return filterUserId;
+	}
+	
+	public boolean getPersistUserId() {
+		return persistUserId;
+	}
+	
+	public void setPersistUserId(boolean persistUserId) {
+		this.persistUserId = persistUserId;
 	}
 
 
@@ -263,8 +273,13 @@ public class MetaProperty {
 			return this;
 		}
 
-		public Builder userId(boolean userId) {
-			md.setUserId(userId);
+		public Builder persistUserId(boolean persistUserId) {
+			md.setPersistUserId(persistUserId);
+			return this;
+		}
+		
+		public Builder filterUserId(boolean filterUserId) {
+			md.setFilterUserId(filterUserId);
 			return this;
 		}
 		

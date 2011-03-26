@@ -43,4 +43,9 @@ public interface Converter {
 	 */
 	String convertIdsOnly(Cursor cursor, MetaEntity mds, Context context);
 
+	/**
+	 * Retrieve the type of content.
+	 */
+	String getContentType();
+
 }

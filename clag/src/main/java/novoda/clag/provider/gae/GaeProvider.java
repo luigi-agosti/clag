@@ -14,6 +14,8 @@ import novoda.clag.model.MetaProperty;
 import novoda.clag.model.Options;
 import novoda.clag.provider.AbstractProvider;
 
+import com.beoui.geocell.GeocellManager;
+import com.beoui.geocell.model.Point;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -54,7 +56,7 @@ public class GaeProvider extends AbstractProvider {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		
-		if(entity.getUserIdPropertyName() != null) {
+		if(entity.getFilterUserIdPropertyName() != null) {
 			String userId = null;
 			if(user != null) {
 				userId = user.getUserId();
@@ -62,7 +64,7 @@ public class GaeProvider extends AbstractProvider {
 			if(entity.getUserIdsPropertyName() != null) {
 				q.addFilter(entity.getUserIdsPropertyName(), FilterOperator.EQUAL, userId);
 			} else {				
-				q.addFilter(entity.getUserIdPropertyName(), FilterOperator.EQUAL, userId);
+				q.addFilter(entity.getFilterUserIdPropertyName(), FilterOperator.EQUAL, userId);
 			}
 		}
 		if(entity.getEmailPropertyName() != null) {
@@ -101,7 +103,7 @@ public class GaeProvider extends AbstractProvider {
 		logger.info("Inserting entity " + name + " with values : " + values);
 		Cursor result = new Cursor(name);
 		String userId = null;
-		if(entity.getUserIdPropertyName() != null) {
+		if(entity.getFilterUserIdPropertyName() != null || entity.getPersistUserIdPropertyName() != null) {
 			UserService userService = UserServiceFactory.getUserService();
 			User user = userService.getCurrentUser();
 			userId = user.getUserId();
@@ -140,12 +142,26 @@ public class GaeProvider extends AbstractProvider {
 		for (Entry<String, Object> entry : row.entrySet()) {
 			e.setProperty(entry.getKey(), entry.getValue());
 		}
-		if(userId != null) {
-			e.setProperty(entity.getUserIdPropertyName(), userId);
+		if(userId != null && entity.getPersistUserIdPropertyName() != null) {
+			e.setProperty(entity.getPersistUserIdPropertyName(), userId);
+		}
+		if(userId != null && entity.getFilterUserIdPropertyName() != null) {
+			e.setProperty(entity.getFilterUserIdPropertyName(), userId);
 		}
 		if(userId != null && entity.getUserIdsPropertyName() != null) {
 			e.setProperty(entity.getUserIdsPropertyName(), Arrays.asList(userId));
 		}
+		try {
+			double lat = Double.valueOf((String)row.get("lat"));
+			double lon = Double.valueOf((String)row.get("lon"));
+			Point p = new Point(lat, lon);
+	        List<String> cells = GeocellManager.generateGeoCell(p);
+			e.setProperty("geocells", cells);
+		} catch(Exception aaaah) {
+			//TODO
+		}
+		
+		
 		Key key = ds.put(e);
 		row.put(entity.getKeyProperty(), key.getId());
 		return row;					

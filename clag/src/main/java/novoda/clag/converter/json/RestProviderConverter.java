@@ -3,7 +3,6 @@ package novoda.clag.converter.json;
 import java.util.Date;
 import java.util.Map;
 
-import novoda.clag.converter.Converter;
 import novoda.clag.model.Cursor;
 import novoda.clag.model.MetaEntity;
 import novoda.clag.model.MetaProperty;
@@ -16,7 +15,7 @@ import com.google.appengine.repackaged.org.json.JSONStringer;
 /**
  * @author luigi.agosti
  */
-public class RestProviderConverter implements Converter {
+public class RestProviderConverter extends BaseConverter {
 
 	private static final String TABLE = "name";
 

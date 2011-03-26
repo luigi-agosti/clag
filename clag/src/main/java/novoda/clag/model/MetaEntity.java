@@ -62,7 +62,9 @@ public class MetaEntity {
 	
 	private String keyProperty;
 	
-	private String userIdPropertyName;
+	private String filterUserIdPropertyName;
+	
+	private String persistUserIdPropertyName;
 	
 	private String userIdsPropertyName;
 	
@@ -97,8 +99,11 @@ public class MetaEntity {
 
 	public void add(MetaProperty property) {
 		add(property.getName(), property); 
-		if(property.getUserId()) {
-			userIdPropertyName = property.getName();
+		if(property.getFilterUserId()) {
+			filterUserIdPropertyName = property.getName();
+		}
+		if(property.getPersistUserId()) {
+			persistUserIdPropertyName = property.getName();
 		}
 		if(property.isEmail()) {
 			emailPropertyName = property.getName();
@@ -176,12 +181,20 @@ public class MetaEntity {
 		relations = new ArrayList<String>(); 
 	}
 
-	public String getUserIdPropertyName() {
-		return userIdPropertyName;
+	public String getFilterUserIdPropertyName() {
+		return filterUserIdPropertyName;
 	}
 
-	public void setUserIdPropertyName(String userIdPropertyName) {
-		this.userIdPropertyName = userIdPropertyName;
+	public void setFilterUserIdPropertyName(String filterUserIdPropertyName) {
+		this.filterUserIdPropertyName = filterUserIdPropertyName;
+	}
+	
+	public String getPersistUserIdPropertyName() {
+		return persistUserIdPropertyName;
+	}
+
+	public void setPersistUserIdPropertyName(String persistUserIdPropertyName) {
+		this.persistUserIdPropertyName = persistUserIdPropertyName;
 	}
 	
 	public String getUserIdsPropertyName() {

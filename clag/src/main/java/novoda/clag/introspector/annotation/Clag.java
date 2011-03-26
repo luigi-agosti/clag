@@ -19,7 +19,9 @@ public @interface Clag {
 	
 	boolean hidden() default false;
 	
-	boolean userId() default false;
+	boolean filterUserId() default false;
+	
+	boolean persistUserId() default false;
 	
 	boolean userIds() default false;
 	

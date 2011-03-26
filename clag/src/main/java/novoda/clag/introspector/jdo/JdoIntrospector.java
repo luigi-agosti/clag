@@ -32,8 +32,9 @@ public class JdoIntrospector extends AbstractIntrospector {
 				logger.info("Adding key for clag property : " + field.getName());
 				mds.add(new MetaProperty.Builder(field.getName()).key(c.key())
 					.unique(c.unique()).onConflictPolicy(c.onConflictPolicy())
-					.clazz(field.getType()).userId(c.userId())
-					.userIds(c.userIds()).email(c.email()).build());
+					.clazz(field.getType()).filterUserId(c.filterUserId())
+					.persistUserId(c.persistUserId()).userIds(c.userIds())
+					.email(c.email()).build());
 			}
 		} else if (field.getAnnotation(PrimaryKey.class) != null) {
 			logger.info("Adding field key : " + field.getName());

@@ -30,5 +30,11 @@ public class MockConverter implements Converter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public String getContentType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

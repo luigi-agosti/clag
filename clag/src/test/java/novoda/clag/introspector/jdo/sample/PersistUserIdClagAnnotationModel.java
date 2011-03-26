@@ -3,7 +3,7 @@ package novoda.clag.introspector.jdo.sample;
 import novoda.clag.introspector.annotation.Clag;
 import novoda.clag.model.MetaEntity.OnConflictPolicy;
 
-public class ClagAnnotationModel {
+public class PersistUserIdClagAnnotationModel {
 	
 	@Clag(unique=true,key=true,onConflictPolicy=OnConflictPolicy.REPLACE)
 	private Long id;
@@ -11,7 +11,7 @@ public class ClagAnnotationModel {
 	@Clag
 	private String field;
 	
-	@Clag(filterUserId=true,hidden=true)
+	@Clag(persistUserId=true,hidden=true)
 	private String userId;
 	
 	@Clag

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import novoda.clag.converter.json.BaseConverter;
 import novoda.clag.servlet.action.Delete;
 import novoda.clag.servlet.action.Describe;
 import novoda.clag.servlet.action.Insert;
@@ -31,8 +32,6 @@ public class ClagServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger logger = Logger.getLogger(ClagServlet.class.getName());
-
-	private static final String CONTENT_TYPE = "text/plain";
 
 	private Configurator configurator;
 
@@ -66,7 +65,7 @@ public class ClagServlet extends HttpServlet {
 			result = new Describe().execute(context);
 		}
 		logger.info("request executed, sending back the result");
-		resp.setContentType(CONTENT_TYPE);
+		resp.setContentType(getContentType(context));
 		resp.setContentLength(result.length());
 		PrintWriter out = resp.getWriter();
 		out.println(result);
@@ -85,7 +84,7 @@ public class ClagServlet extends HttpServlet {
 			String result = null;
 			result = new Insert().execute(context);	
 			logger.info("request executed, sending back the result");
-			resp.setContentType(CONTENT_TYPE);
+			resp.setContentType(getContentType(context));
 			resp.setContentLength(result.length());
 			PrintWriter out = resp.getWriter();
 			out.println(result);
@@ -107,7 +106,7 @@ public class ClagServlet extends HttpServlet {
 			String result = null;
 			result = new Delete().execute(context);
 			logger.info("request executed, sending back the result");
-			resp.setContentType(CONTENT_TYPE);
+			resp.setContentType(getContentType(context));
 			resp.setContentLength(result.length());
 			PrintWriter out = resp.getWriter();
 			out.println(result);
@@ -124,6 +123,13 @@ public class ClagServlet extends HttpServlet {
 		logger.info("Executing put request for : " + req.getRequestURI());
 		// TODO update or replace
 		throw new RuntimeException("Put not implemented yet!");
+	}
+	
+	private String getContentType(Context context) {
+		if(context == null || context.getConverter() == null || context.getConverter().getContentType() == null) {
+			return BaseConverter.CONTENT_TYPE; 
+		}
+		return context.getConverter().getContentType();
 	}
 
 }

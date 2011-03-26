@@ -29,8 +29,10 @@ public abstract class AbstractIntrospector implements Introspector {
 			Clag c = (Clag)field.getAnnotation(Clag.class);
 			if(c == null || !c.hidden()) {
 				filterFields(field, me);
-			} else if(c != null && c.hidden() && c.userId()) {
-				me.setUserIdPropertyName(field.getName());
+			} else if(c != null && c.hidden() && c.filterUserId()) {
+				me.setFilterUserIdPropertyName(field.getName());
+			} else if(c != null && c.hidden() && c.persistUserId()) {
+				me.setPersistUserIdPropertyName(field.getName());
 			} else if(c != null && c.hidden() && c.email()) {
 				me.setEmailPropertyName(field.getName());
 			}

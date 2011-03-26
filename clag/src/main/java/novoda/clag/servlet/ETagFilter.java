@@ -47,6 +47,7 @@ public class ETagFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
+		logger.info("executing etag filter");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		if(!GET_METHOD.equalsIgnoreCase(req.getMethod())) {
@@ -58,6 +59,7 @@ public class ETagFilter implements Filter {
 		byte[] bytes = baos.toByteArray();
 
 		String token = '"' + getMd5Digest(bytes) + '"';
+		
 		res.setHeader(ETAG_HEADER, token);
 		String previousToken = req.getHeader(ETAG_HEADER);
 		if (previousToken != null && previousToken.equals(token)) {

@@ -54,6 +54,11 @@
             <name>appengine-commons</name>
             <url>http://appengine-commons.googlecode.com/svn/maven-repo/shapshots</url>
         </repository>
+        <repository>
+            <id>javageomodel-repo</id>
+            <name>GeocellJava Repository</name>
+            <url>http://javageomodel.googlecode.com/svn/repository</url>
+        </repository>
 	</repositories>
 
 	<scm>
@@ -197,6 +202,11 @@
 			<version>${httpunit.version}</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>com.beoui</groupId>
+            <artifactId>geocell</artifactId>
+            <version>0.0.6</version>
+        </dependency>
 	</dependencies>
 
 </project>
